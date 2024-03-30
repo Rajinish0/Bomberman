@@ -49,13 +49,14 @@ class Button:
 		self.y = y
 		self.w = width
 		self.h = height
-		self.img = img
+		self.img = self.imgHandler.load(img, (width, height)) if img is not None else img
 		self.color = color
 		self.text = text
 		self.textColor = textColor
 		self.cb = callBack
 		self.onHover = onHover
 		self.drawRect = drawRect
+		self.center = center
 		self.pressed = False
 		self.hovered = False
 		if center: self.centerCords()
@@ -86,11 +87,13 @@ class Button:
 
 	def draw(self, display):
 		if self.img is not None:
-			display.blit(self.imgHandler.load(self.img, (self.w, self.h) ), (self.x, self.y))
+			display.blit(self.img, (self.x, self.y))
 		elif self.drawRect:
 			pygame.draw.rect(display, self.color, (self.x, self.y, self.w, self.h))
 		if self.text is not None:
-			drawText(display, self.text, self.x + self.w/2,
-					 self.y+self.h/2, size = self.w//2,
-					 color=self.textColor)
+			x, y = self.x, self.y
+			if self.center:
+				x = self.x + self.w/2
+				y = self.y + self.h/2
+			drawText(display, self.text, x, y, size = self.w//2,color=self.textColor, center=self.center)
 

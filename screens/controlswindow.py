@@ -10,14 +10,6 @@ class ControlsWindow(Screen):
         self.btn = Button(W / 6, H / 3, 100, 100,
                           callBack=lambda: self.gameMgr.setState(MAIN_WINDOW),
                           img=os.path.join(IMG_PATH, 'start.png'))
-        # self.profile1 = Button(170, H / 3.2, 140, 160,
-        #                   img=os.path.join(IMG_PATH, 'profile-icon.png'))
-        # self.profile2 = Button(170, H / 1.37, 140, 160,
-        #                       img=os.path.join(IMG_PATH, 'profile-icon.png'))
-        # self.name1 = Button(W / 4.5, H / 3.2, 140, 160,
-        #                        img=os.path.join(IMG_PATH, 'profile-icon.png'))
-        # self.name2 = Button(W / 4.5, H / 3.2, 140, 160, "Player 1")
-
         #Buttons PLAYER 1
         self.btnUP1 = Button(550, 140, 50, 50,
                           img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")

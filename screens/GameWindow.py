@@ -9,22 +9,26 @@ from gameObjects.emptySpace import EmptySpace
 from point import Point
 
 class GameWindow(Screen):
-    def __init__(self):
+    def __init__(self, file_path=None):
+        self.file_path = file_path
         self.offSetX = 200
         self.offSetY = 0
         self.boxWidth = (800 - self.offSetX) // NUM_BOXES
         self.boxHeight = (520 - self.offSetY) // NUM_BOXES
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
+
         self.backButton = Button(
             30, 30, 30, 30, text="Back",
             callBack=lambda: self.gameMgr.setState(
                 self.gameMgr.getPrevState()
             )
         )
-        reader = GridReader("sprites\\defaultMap.txt")
-        reader.read_grid()
-        self.grid = reader.get_grid()
+
+        if file_path is not None:
+            reader = GridReader(file_path)
+            reader.read_grid()
+            self.grid = reader.get_grid()
 
     def update(self):
         self.backButton.update()

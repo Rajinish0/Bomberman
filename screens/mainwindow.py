@@ -1,4 +1,4 @@
-from .screen import Screen
+from screens.screen import Screen
 from button import Button 
 from constants import *
 import pygame
@@ -12,14 +12,14 @@ implement Map and Control menu screens
 '''
 class MainWindow(Screen):
 	def __init__(self):
-		self.MapMenu = Button(W/2, H/2 - 150, 50, 50, text="Maps", textColor=WHITE)
+		self.MapMenu = Button(W/2, H/2 - 150, 50, 50, text="Maps", textColor=WHITE,
+								callBack = lambda: self.gameMgr.setState(MAP_WINDOW))
 		self.CntrlMenu = Button(W/2, H/2 - 50, 50, 50, text="Controls", textColor=WHITE,
 								callBack = lambda: self.gameMgr.setState(CONTROLS_WINDOW))
 		self.LvlEditor = Button(W/2, H/2 + 50, 50, 50, text="Editor", textColor=WHITE,
 						  	 	callBack= lambda: self.gameMgr.setState(LEVEL_EDITOR))
 		self.ExitButton = Button(W/2, H/2 + 150, 50, 50, text="Exit", textColor=WHITE,
 						   		 callBack=lambda: pygame.quit())
-
 		self.GameWindowButton = Button(W/2, H/2 + 250, 50, 50, text="Play Game", textColor=WHITE,
 						   		 callBack=lambda: self.gameMgr.setState(GAME_WINDOW))
 	
@@ -46,3 +46,4 @@ class MainWindow(Screen):
 		self.LvlEditor.draw(display)
 		self.ExitButton.draw(display)
 		self.GameWindowButton.draw(display)
+

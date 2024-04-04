@@ -1,7 +1,7 @@
 from gameObjects.gameObject import GameObject
 
 class Box(GameObject):
-    def __init__(self, name, position, image, level):
+    def __init__(self, position, level):
         super().__init__("box", position, "sprites/box.png", level)
         self.hasPowerup = False
         self.powerUp = None

@@ -1,7 +1,7 @@
 from gameObject import GameObject
 
 class Bomb(GameObject):
-    def __init__(self, name, position, image, level, timer, range):
+    def __init__(self, position, level, timer, range):
         super().__init__("bomb", position, "sprites/bomb.png", level)
         self.timer = timer
         self.isExploded = False

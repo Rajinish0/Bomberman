@@ -20,15 +20,12 @@ class MainWindow(Screen):
 						  	 	callBack= lambda: self.gameMgr.setState(LEVEL_EDITOR))
 		self.ExitButton = Button(W/2, H/2 + 150, 50, 50, text="Exit", textColor=WHITE,
 						   		 callBack=lambda: pygame.quit())
-		self.GameWindowButton = Button(W/2, H/2 + 250, 50, 50, text="Play Game", textColor=WHITE,
-						   		 callBack=lambda: self.gameMgr.setState(GAME_WINDOW))
 	
 	def update(self):
 		self.MapMenu.update()
 		self.CntrlMenu.update()
 		self.LvlEditor.update()
 		self.ExitButton.update()
-		self.GameWindowButton.update()
 	
 	def draw(self, display):
 		display.fill((255, 255, 255))
@@ -45,5 +42,4 @@ class MainWindow(Screen):
 		self.CntrlMenu.draw(display)
 		self.LvlEditor.draw(display)
 		self.ExitButton.draw(display)
-		self.GameWindowButton.draw(display)
 

@@ -14,17 +14,29 @@ class MapWindow(Screen):
 		)
 
 		self.Game1 = Button(200, 220, 150, 150,
-								callBack = lambda: (self.gameMgr.set_game_window_file_path("sprites/defaultMap.txt"), self.gameMgr.setState(GAME_WINDOW)),
+								callBack = lambda: (self.gameMgr.set_game_window_file_path("sprites/defaultMap.txt"),
+													self.gameMgr.setState(GAME_WINDOW)),
 							  	img=os.path.join(IMG_PATH, 'Solid_white.png') )
 
+
 		self.Game2 = Button(410, 220, 150, 150,
-							callBack=lambda: self.gameMgr.setState(GAME_WINDOW),
+								callBack = lambda: (self.gameMgr.set_game_window_file_path("sprites/SecondMap.txt"),
+													self.gameMgr.setState(GAME_WINDOW)),
+							  	img=os.path.join(IMG_PATH, 'Solid_white.png') )
+
+
+		self.Game3 = Button(610, 220, 150, 150,
+							callBack=lambda: (self.gameMgr.set_game_window_file_path("sprites/ThirdMap.txt"),
+											  self.gameMgr.setState(GAME_WINDOW)),
 							img=os.path.join(IMG_PATH, 'Solid_white.png'))
+
+
 
 	def update(self):
 		self.btnBack.update()
 		self.Game1.update()
-		# self.Game2.update()
+		self.Game2.update()
+		self.Game3.update()
 
 	def draw(self, display):
 		display.fill((255, 255, 255))
@@ -40,6 +52,7 @@ class MapWindow(Screen):
 		pygame.draw.rect(rect1_surface, (238, 238, 238, 240), rect1_surface.get_rect(), border_radius=8)
 		display.blit(rect1_surface, (50, 62))
 		self.Game1.draw(display)
-		# self.Game2.draw(display)
+		self.Game2.draw(display)
+		self.Game3.draw(display)
 
 		self.btnBack.draw(display)

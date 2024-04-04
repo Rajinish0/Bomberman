@@ -39,20 +39,14 @@ class GameWindow(Screen):
 
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
-                #pygame.draw.rect(display, BLACK, (
-                #98 + j * self.boxWidth, 70 + i * self.boxHeight, self.boxWidth, self.boxHeight), 1)
-                # Calculate position based on grid coordinates
                 pos_x = 98 + j * self.boxWidth
                 pos_y = 70 + i * self.boxHeight
                 position = Point(pos_x, pos_y)
 
-                # Check what's on the grid and initialize the corresponding object
                 if self.grid[i][j] == 'b':
                     element = Box(position, 1, self.boxWidth, self.boxHeight)
                 elif self.grid[i][j] == '#':
                     element = Wall(position, 1, self.boxWidth, self.boxHeight)
                 else:
                     element = EmptySpace(position, 1, self.boxWidth, self.boxHeight)
-
-                # Draw the element (assuming these objects have a draw method)
                 element.draw(display)

@@ -2,6 +2,7 @@ from .screen import Screen
 from constants import *
 from button import Button
 import pygame
+import os
 
 class GameWindow(Screen):
     def __init__(self):
@@ -17,15 +18,29 @@ class GameWindow(Screen):
                 self.gameMgr.getPrevState()
             )
         )
+        self.buttons = []
+        for i in range(NUM_BOXES):
+            row = []
+            for j in range(NUM_BOXES):
+                x = 98 + j * self.boxWidth
+                y = 70 + i * self.boxHeight
+                button = Button(x, y, 10, 10, img = os.path.join (IMG_PATH, 'start.png'))
+                row.append(button)
+            self.buttons.append(row)
 
     def update(self):
         self.backButton.update()
+
+        for row in self.buttons:
+            for button in row:
+                button.update()
 
     def draw(self, display):
         display.fill((239, 233, 222))
         self.backButton.draw(display)
 
-        for i in range(NUM_BOXES):
-            for j in range(NUM_BOXES):
-                pygame.draw.rect(display, BLACK, (
-                98 + j * self.boxWidth, 70 + i * self.boxHeight, self.boxWidth, self.boxHeight), 1)
+        for row in self.buttons:
+            for button in row:
+                button.draw(display)
+
+

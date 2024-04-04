@@ -2,6 +2,7 @@ import pygame, sys
 from handlers import *
 from constants import *
 from screens import *
+from screens.GameWindow import GameWindow
 
 pygame.init()
 
@@ -61,8 +62,8 @@ class Main:
 	'''
 	def init(self):
 		Screen.setMain(self)
-		self.states = {START_WINDOW : StartWindow(), MAIN_WINDOW: MainWindow(), LEVEL_EDITOR: LevelEditor() }
-		self.gameMgr.setState( START_WINDOW )
+		self.states = {START_WINDOW: StartWindow(), MAIN_WINDOW: MainWindow(), LEVEL_EDITOR: LevelEditor(), GAME_WINDOW: GameWindow()}
+		self.gameMgr.setState(START_WINDOW)
 
 	'''
 	basic pygame main loop.

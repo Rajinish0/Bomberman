@@ -1,0 +1,16 @@
+###############
+#     bbb     #
+# w w wbw w w #
+#             #
+#bw w wbw w w #
+#     bb    b #
+#bw wbwbw w wb#
+#     b b     #
+# w wbwbwbw wb#
+#     b bbb bb#
+#     b bbb bb#
+# w w wbwbw w #
+#b       b    #
+# w wbw w w wb#
+#      bbb    #
+###############

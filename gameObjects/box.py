@@ -1,16 +1,19 @@
 from gameObjects.gameObject import GameObject
+import pygame
 
 class Box(GameObject):
-    def __init__(self, position, level):
+    def __init__(self, position, level, width, height):
         super().__init__("box", position, "sprites/box.png", level)
         self.hasPowerup = False
         self.powerUp = None
+        self.image = pygame.image.load("sprites/box.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (width, height))
 
     def update(self, dt):
         pass
 
     def draw(self, display):
-        pass
+        display.blit(self.image, (self.position.x, self.position.y))
 
     def blowUp(self):
         pass

@@ -28,13 +28,12 @@ class ControlsWindow(Screen):
         self.btn.update()
 
     def draw(self, display):
-        background_image = pygame.image.load('sprites/background.png')
-        scaled_image = pygame.transform.scale(background_image, (W, H))
-
-        alpha_value_bg = 140
-        scaled_image.set_alpha(alpha_value_bg)
-
-        display.blit(scaled_image, (0, 0))
+        display.fill((110, 161, 100))
+        # background_image = pygame.image.load('sprites/background.png')
+        # scaled_image = pygame.transform.scale(background_image, (W, H))
+        # alpha_value_bg = 140
+        # scaled_image.set_alpha(alpha_value_bg)
+        # display.blit(scaled_image, (0, 0))
 
         rect1_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
         pygame.draw.rect(rect1_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)

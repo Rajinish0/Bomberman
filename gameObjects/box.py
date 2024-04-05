@@ -3,10 +3,10 @@ import pygame
 
 class Box(GameObject):
     def __init__(self, position, level, width, height):
-        super().__init__("box", position, "sprites/box.png", level)
+        super().__init__("box", position, "sprites/boxImg.jpeg", level)
         self.hasPowerup = False
         self.powerUp = None
-        self.image = pygame.image.load("sprites/box.png").convert_alpha()
+        self.image = pygame.image.load("sprites/boxImg.jpeg").convert_alpha()
         self.image = pygame.transform.scale(self.image, (width, height))
 
     def update(self, dt):

@@ -16,7 +16,6 @@ class GameStateMgr(Singleton):
 	def __init__(self):
 		self.curState = None
 		self.prevState = None
-		self.game_window_file_path = None
 
 	def setState(self, state):
 		resetCursor()
@@ -29,9 +28,8 @@ class GameStateMgr(Singleton):
 	def getPrevState(self):
 		return self.prevState
 
-	def set_game_window_file_path(self, file_path):
-		self.game_window_file_path = file_path
 	def get_game_window_file_path(self):
+		print(self.game_window_file_path)
 		return self.game_window_file_path
 
 class EventMgr(Singleton):

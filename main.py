@@ -2,7 +2,6 @@ import pygame, sys
 from handlers import *
 from constants import *
 from screens import *
-from screens.GameWindow import GameWindow
 from screens.mapwindow import MapWindow
 
 pygame.init()
@@ -63,15 +62,8 @@ class Main:
 	'''
 	def init(self):
 		Screen.setMain(self)
-		self.states = {START_WINDOW: StartWindow(), MAIN_WINDOW: MainWindow(), LEVEL_EDITOR: LevelEditor(), MAP_WINDOW: MapWindow(), GAME_WINDOW: self.update_game_window_state()}
+		self.states = {START_WINDOW: StartWindow(), MAIN_WINDOW: MainWindow(), LEVEL_EDITOR: LevelEditor(), MAP_WINDOW: MapWindow(), CONTROLS_WINDOW: ControlsWindow()}
 		self.gameMgr.setState(START_WINDOW)
-
-	def update_game_window_state(self):
-		game_window_file_path = self.gameMgr.get_game_window_file_path()
-		if game_window_file_path is not None:
-			return GameWindow(game_window_file_path)
-		else:
-			return GameWindow()
 
 	'''
 	basic pygame main loop.

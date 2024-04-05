@@ -28,15 +28,13 @@ class MainWindow(Screen):
 		self.ExitButton.update()
 	
 	def draw(self, display):
-		display.fill((255, 255, 255))
+		display.fill((110, 161, 100))
 
-		background_image = pygame.image.load('sprites/background.png')
-		scaled_image = pygame.transform.scale(background_image, (W, H))
-
-		alpha_value_bg = 200
-		scaled_image.set_alpha(alpha_value_bg)
-
-		display.blit(scaled_image, (0, 0))
+		# background_image = pygame.image.load('sprites/background.png')
+		# scaled_image = pygame.transform.scale(background_image, (W, H))
+		# alpha_value_bg = 200
+		# scaled_image.set_alpha(alpha_value_bg)
+		# display.blit(scaled_image, (0, 0))
 
 		self.MapMenu.draw(display)
 		self.CntrlMenu.draw(display)

@@ -79,7 +79,8 @@ class Button:
 			resetCursor()
 			self.hovered = False
 			
-			
+	def setCallBack(self, cb):
+		self.cb = cb
 
 	def mouseInside(self):
 		(mx, my) = pygame.mouse.get_pos()

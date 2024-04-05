@@ -7,6 +7,18 @@ from .screen import Screen
 import os
 
 class MapWindow(Screen):
+	def start_game(self, file_path):
+		self.gameMgr.set_game_window_file_path(file_path)
+		game_window = GameWindow(file_path)
+		self.gameMgr.setState(GAME_WINDOW, game_window)
+
+	def __init__(self):
+		# ... existing code ...
+		self.Game1 = Button(
+			200, 220, 150, 150,
+			callBack=lambda: self.start_game("sprites/defaultMap.txt"),
+			img=os.path.join(IMG_PATH, 'Solid_white.png')
+		)
 	def __init__(self):
 		self.btnBack = Button(
 			30, 30, 30, 30, text="Back",

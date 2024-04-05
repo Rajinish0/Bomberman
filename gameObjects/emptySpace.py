@@ -8,3 +8,6 @@ class EmptySpace(GameObject):
         self.image = pygame.transform.scale(self.image, (width, height))
     def draw(self, display):
         display.blit(self.image, (self.position.x, self.position.y))
+
+    def bomb_explode(self, display):
+        display.blit("sprites/orange.png", (self.position.x, self.position.y))

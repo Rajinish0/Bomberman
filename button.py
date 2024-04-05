@@ -41,10 +41,10 @@ class Button:
 	img and drawRect are mutually exclusive for now; i.e you can either draw an image or a bounding box,
 	but it can be edited if necessary.
 	'''
-	def __init__(self, x, y, width, height, text = None,
+	def __init__(self, x, y, width, height, *, text = None,
 			     textColor = WHITE, img = None, color = RED,
 				 callBack=None, onHover=_defHover, center=True,
-				 drawRect = False):
+				 drawRect = False, textSize = None):
 		self.x = x
 		self.y = y
 		self.w = width
@@ -59,6 +59,7 @@ class Button:
 		self.center = center
 		self.pressed = False
 		self.hovered = False
+		self.textSize = textSize
 		if center: self.centerCords()
 	def centerCords(self):
 		self.x -= self.w/2
@@ -95,5 +96,6 @@ class Button:
 			if self.center:
 				x = self.x + self.w/2
 				y = self.y + self.h/2
-			drawText(display, self.text, x, y, size = self.w//2,color=self.textColor, center=self.center)
+			sz = self.textSize or self.w//2
+			drawText(display, self.text, x, y, size = sz,color=self.textColor, center=self.center)
 

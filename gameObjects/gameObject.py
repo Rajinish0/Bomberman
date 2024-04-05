@@ -1,11 +1,11 @@
 from point import Point
 
 class GameObject:
-    def __init__(self, name, position, image, level):
-        self.name = name
+    image = None
+    level = None
+    def __init__(self, position):
         self.position = position # Point
-        self.image = image
-        self.level = level
+
 
     def draw(self, display):
         pass

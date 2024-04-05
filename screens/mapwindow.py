@@ -12,6 +12,7 @@ class MapWindow(Screen):
 			30, 30, 30, 30, text="Back",
 			callBack=lambda: self.gameMgr.setState(MAIN_WINDOW)
 		)
+
 		self.buttons = []
 
 	def update(self):

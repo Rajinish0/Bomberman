@@ -6,11 +6,8 @@ from .screen import Screen
 import os
 
 class ControlsWindow(Screen):
+
     def __init__(self):
-        self.btn = Button(W / 6, H / 3, 100, 100,
-                          callBack=lambda: self.gameMgr.setState(MAIN_WINDOW),
-                          img=os.path.join(IMG_PATH, 'start.png'))
-        #Buttons PLAYER 1
         self.btnUP1 = Button(550, 140, 50, 50,
                           img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
         self.btnDOWN1 = Button(550, 210, 50, 50,
@@ -25,8 +22,7 @@ class ControlsWindow(Screen):
         # Buttons PLAYER 2
 
     def update(self):
-        self.btn.update()
-
+        self.btnUP1.update()
     def draw(self, display):
         display.fill((110, 161, 100))
         # background_image = pygame.image.load('sprites/background.png')

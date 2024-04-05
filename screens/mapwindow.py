@@ -37,9 +37,9 @@ class MapWindow(Screen):
 		display.blit(rect1_surface, (50, 62))
 
 		button_data = [
-			{"x": 200, "y": 220, "map_file": 'sprites/defaultMap.txt', "img": 'sprites/maps/map1.png'},
-			{"x": 410, "y": 220, "map_file": 'sprites/SecondMap.txt',  "img": 'sprites/maps/map2.png'},
-			{"x": 610, "y": 220, "map_file": 'sprites/ThirdMap.txt',   "img": 'sprites/maps/map3.png'}
+			{"x": 200, "y": 220, "map_file": 'sprites/levels/defaultMap.txt', "img": 'sprites/maps/map1.png'},
+			{"x": 410, "y": 220, "map_file": 'sprites/levels/SecondMap.txt',  "img": 'sprites/maps/map2.png'},
+			{"x": 610, "y": 220, "map_file": 'sprites/levels/ThirdMap.txt',   "img": 'sprites/maps/map3.png'}
 		]
 
 		self.btnBack.draw(display)

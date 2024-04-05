@@ -43,8 +43,6 @@ class EventMgr(Singleton):
 		self.mousePressed = False
 
 
-
-
 '''
 a cached class for loading images, alternatively this could also be just a single cached function in utils.
 '''

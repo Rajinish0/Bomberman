@@ -19,6 +19,7 @@ class Main:
 		self.gameMgr = GameStateMgr()
 		self.eventMgr = EventMgr()
 		self.init()
+		self.pressed_key = None
 
 	'''
 	this gets the events from the display. If the mouse button was pressed
@@ -35,13 +36,16 @@ class Main:
 				self.run = False
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				self.eventMgr.setMousePressed(True)
+			if event.type == pygame.KEYDOWN:
+				self.pressed_key = pygame.key.name(event.key)
 			self.states[self.gameMgr.getState()].handleEvent(event)
-	
+
 	'''
 	the update function is called before draw on all screens!!!
 	'''
+
 	def update(self):
-		self.states[self.gameMgr.getState()].update()	
+		self.states[self.gameMgr.getState()].update()
 
 	def draw(self):
 		self.display.fill(BLACK)

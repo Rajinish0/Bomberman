@@ -3,50 +3,67 @@ import pygame
 from button import Button
 from constants import *
 from .screen import Screen
+from gamelevel import loadKeys
 import os
+import pickle
+
 
 class ControlsWindow(Screen):
 
     def __init__(self):
         self.btnBack = Button(
             30, 30, 30, 30, text="Back",
-            callBack=lambda: self.gameMgr.setState(MAIN_WINDOW)
+            callBack=lambda: (self.gameMgr.setState(MAIN_WINDOW), self.saveKeys())
         )
+
         self.curr_pressed_key = None
-
         self.curr_pressed_button = None
+        self.keys = loadKeys()
 
-        self.player1commands = []
-        self.player2commands = []
+        button_img = os.path.join(IMG_PATH, 'Solid_white.png')
+        self.players_command = {
+            "p1": {
+                "UP": Button(550, 140, 50, 50, img=button_img, textColor=BLACK),
+                "DOWN": Button(550, 210, 50, 50, img=button_img, textColor=BLACK),
+                "LEFT": Button(480, 210, 50, 50, img=button_img, textColor=BLACK),
+                "RIGHT": Button(620, 210, 50, 50, img=button_img, textColor=BLACK),
+                "BOMB": Button(550, 280, 200, 45, img=button_img, textColor=BLACK, textSize=25)
+            },
+            "p2": {
+                "UP": Button(550, 390, 50, 50, img=button_img, textColor=BLACK),
+                "DOWN": Button(550, 460, 50, 50, img=button_img, textColor=BLACK),
+                "LEFT": Button(480, 460, 50, 50, img=button_img, textColor=BLACK),
+                "RIGHT": Button(620, 460, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "BOMB": Button(550, 530, 200, 45, img=button_img, textColor=BLACK, textSize=25)
+            }
+        }
 
-        self.button_list = [
-            Button(550, 140, 50, 50, textColor=GREEN),
-            Button(550, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnDOWN1
-            Button(550, 280, 200, 45, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnBOMB1
-            Button(480, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnLEFT1
-            Button(620, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnRIGHT1
-            Button(550, 390, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnUP2
-            Button(550, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnDOWN2
-            Button(550, 530, 200, 45, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnBOMB2
-            Button(480, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnLEFT2
-            Button(620, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN)  # self.btnRIGHT2
-        ]
+        for player, playerDiction in self.players_command.items():
+            for key, button in playerDiction.items():
+                button.text = pygame.key.name(self.keys[player][key])
 
-    def handleEvent(self, event):
+    def saveKeys(self):
+        for player, playerDiction in self.players_command.items():
+            for key, button in playerDiction.items():
+                 self.keys[player][key] = pygame.key.key_code(button.text)
+
+        with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
+            keys = pickle.dump(self.keys, f)
+
+    def handleEvent(self, event): # every frame every event
         if event.type == pygame.KEYDOWN:
-            self.curr_pressed_key = str(pygame.key.name(event.key))
+            self.curr_pressed_key = pygame.key.name(event.key)
             if self.curr_pressed_button:
                 self.curr_pressed_button.text = self.curr_pressed_key
-
-    def update(self):
+    def update(self): # every frame before draw
         self.btnBack.update()
-        for button in self.button_list:
-            button.update()
-            if button.pressed:
-                self.curr_pressed_button = button
+        for player_commands in self.players_command.values():
+            for button in player_commands.values():
+                button.update()
+                if button.pressed:
+                    self.curr_pressed_button = button
 
-
-    def draw(self, display):
+    def draw(self, display): # Draw is called every frame
         display.fill((110, 161, 100))
         # background_image = pygame.image.load('sprites/background.png')
         # scaled_image = pygame.transform.scale(background_image, (W, H))
@@ -70,7 +87,8 @@ class ControlsWindow(Screen):
         pygame.draw.rect(rect4_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
         display.blit(rect4_surface, (50, 336))
 
-        for button in self.button_list:
-            button.draw(display)
+        for player_commands in self.players_command.values():
+            for button in player_commands.values():
+                    button.draw(display)
 
         self.btnBack.draw(display)

@@ -44,4 +44,5 @@ class Monster(GameCharacter):
         player.Destroy()
 
     def Destroy(self):
+        self.level.monsters.remove(self)
         self.alive=False

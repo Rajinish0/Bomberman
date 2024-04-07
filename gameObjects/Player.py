@@ -57,8 +57,8 @@ class Player(GameCharacter):
 
     def placeBomb(self):
         if self.bombCount>0:
-            bomb=Bomb(self.position,self.bombRange)
+            bomb=Bomb(self.position,self.bombRange, self)
             self.level.gameobjs[self.position.y//self.level.bh][self.position.x//self.level.bw]=bomb
-
+            self.decBombCount()
 
 

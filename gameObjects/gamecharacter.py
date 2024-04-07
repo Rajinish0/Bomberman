@@ -3,6 +3,7 @@ import os
 from point import Point
 from .wall import Wall
 from .emptySpace import EmptySpace
+from .powerup import *
 
 class GameCharacter(GameObject):
     def __init__(self,position,speed):
@@ -28,10 +29,26 @@ class GameCharacter(GameObject):
 
             if isPlayer:
                 for pl in self.level.players:
+
                     if(pl.position.x == p.x and pl.position.y == p.y):
+
                         return False
 
             self.position=p
+            return True
+        if (isinstance(self.level.gameobjs[p.y // self.level.bh][p.x // self.level.bw], PowerUp)):
+            self.position = p
+            print("ABC")
+            if isPlayer:
+                print("Is player")
+                for pl in self.level.players:
+
+                    print(pl.position.x, p.x, pl.position.y, p.y)
+                    if(pl.position.x == p.x and pl.position.y == p.y):
+                        print("Correct position")
+                        self.level.gameobjs[p.y // self.level.bh][p.x // self.level.bw].empower(pl)
+
+
             return True
 
         return False

@@ -35,13 +35,11 @@ class ControlsWindow(Screen):
     def handleEvent(self, event):
         if event.type == pygame.KEYDOWN:
             self.curr_pressed_key = str(pygame.key.name(event.key))
-            print(self.curr_pressed_key)
             if self.curr_pressed_button:
                 self.curr_pressed_button.text = self.curr_pressed_key
 
     def update(self):
         self.btnBack.update()
-
         for button in self.button_list:
             button.update()
             if button.pressed:
@@ -75,5 +73,4 @@ class ControlsWindow(Screen):
         for button in self.button_list:
             button.draw(display)
 
-        self.main.pollEvents()
         self.btnBack.draw(display)

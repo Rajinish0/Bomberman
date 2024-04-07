@@ -46,8 +46,9 @@ class EventMgr(Singleton):
 '''
 a cached class for loading images, alternatively this could also be just a single cached function in utils.
 '''
+
+
 class ImageHandler(Singleton):
-	
 	def __init__(self):
 		pass
 

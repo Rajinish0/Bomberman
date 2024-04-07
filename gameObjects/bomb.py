@@ -2,8 +2,8 @@ from .gameObject import GameObject
 
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
-    def __init__(self, position, timer, range):
-        super().__init__(position)
+    def __init__(self, position, timer, range, width, height):
+        super().__init__(position, width, height)
         self.timer = timer
         self.isExploded = False
         self.range = range

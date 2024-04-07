@@ -1,10 +1,15 @@
 from point import Point
+from handlers import ImageHandler
 
 class GameObject:
     image = None
     level = None
-    def __init__(self, position):
+    imageHandler = ImageHandler()
+
+    def __init__(self, position, width, height):
         self.position = position # Point
+        self.width = width
+        self.height = height
 
 
     def draw(self, display):

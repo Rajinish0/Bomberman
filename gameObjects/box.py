@@ -4,11 +4,10 @@ import pygame
 class Box(GameObject):
     image = "sprites/gameobjects/boxImg.JPEG"
     def __init__(self, position, width, height):
-        super().__init__(position)
+        super().__init__(position, width, height)
         self.hasPowerup = False
         self.powerUp = None
-        self.image = pygame.image.load(self.image).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (width, height))
+        self.image = self.imageHandler.load(self.image, (self.width, self.height))
 
     def update(self, dt):
         pass

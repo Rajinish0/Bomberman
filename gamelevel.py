@@ -57,7 +57,7 @@ class GameLevel:
         self.bh = boxheight
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
         if(len(self.monsters)==0):
-            self.monsters=self.initMonster(4)
+            self.monsters=self.initMonster(0)
 
         GameObject.setLevel(self)
         self.winTimer=10
@@ -103,10 +103,18 @@ class GameLevel:
 
     def draw(self, display):
 
+        bombs = []
+
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
-                pygame.draw.rect(display, (255, 0, 0), (j * self.bw, i * self.bh, self.bw, self.bh), 1)
-                self.gameobjs[i][j].draw(display)
+                if not isinstance(self.gameobjs[i][j], Bomb):
+                # pygame.draw.rect(display, (255, 0, 0), (j * self.bw, i * self.bh, self.bw, self.bh), 1)
+                    self.gameobjs[i][j].draw(display)
+                else:
+                    bombs.append((i, j))
+
+        for i, j in bombs:
+            self.gameobjs[i][j].draw(display)
 
         for player in self.players:
             player.draw(display)
@@ -144,7 +152,6 @@ class GameLevel:
                     spots.append((i, j))
 
         powups=random.choices(spots,k=(len(spots)//5))
-
         for pow in powups:
             self.gameobjs[pow[0]][pow[1]].generatePowerUp()
 

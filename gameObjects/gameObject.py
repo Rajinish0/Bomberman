@@ -16,3 +16,6 @@ class GameObject:
 
     def update(self):
         pass
+
+    def Destroy(self):
+        pass

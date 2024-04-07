@@ -57,7 +57,7 @@ class GameLevel:
         self.bh = boxheight
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
         if(len(self.monsters)==0):
-            self.monsters=self.initMonster(0)
+            self.monsters=self.initMonster(2)
 
         GameObject.setLevel(self)
         self.winTimer=10

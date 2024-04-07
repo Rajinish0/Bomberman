@@ -19,8 +19,14 @@ class Monster(GameCharacter):
     def update(self):
         if self.t < 0:
             self.randomDecision()
-            if(not self.move(self.direction)):
+            if(not self.move(self.direction,isPlayer=False)):
                 self.makeDecision()
+            else:
+                for pl in self.level.players:
+                    if(pl.position.x == self.position.x and pl.position.y == self.position.y):
+                        self.kill(pl)
+
+
             self.t = 1
         self.t -= 0.5
 

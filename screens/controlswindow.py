@@ -1,5 +1,5 @@
 import pygame.draw
-
+import pygame
 from button import Button
 from constants import *
 from .screen import Screen
@@ -8,21 +8,46 @@ import os
 class ControlsWindow(Screen):
 
     def __init__(self):
-        self.btnUP1 = Button(550, 140, 50, 50,
-                          img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
-        self.btnDOWN1 = Button(550, 210, 50, 50,
-                          img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
-        self.btnBOMB1 = Button(550, 280, 200, 45,
-                               img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
-        self.btnLEFT1 = Button(480, 210, 50, 50,
-                          img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
-        self.btnRIGHT1 = Button(620, 210, 50, 50,
-                               img=os.path.join(IMG_PATH, 'Solid_white.png'), text="")
+        self.btnBack = Button(
+            30, 30, 30, 30, text="Back",
+            callBack=lambda: self.gameMgr.setState(MAIN_WINDOW)
+        )
+        self.curr_pressed_key = None
 
-        # Buttons PLAYER 2
+        self.curr_pressed_button = None
+
+        self.player1commands = []
+        self.player2commands = []
+
+        self.button_list = [
+            Button(550, 140, 50, 50, textColor=GREEN),
+            Button(550, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnDOWN1
+            Button(550, 280, 200, 45, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnBOMB1
+            Button(480, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnLEFT1
+            Button(620, 210, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnRIGHT1
+            Button(550, 390, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnUP2
+            Button(550, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnDOWN2
+            Button(550, 530, 200, 45, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnBOMB2
+            Button(480, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN),  # self.btnLEFT2
+            Button(620, 460, 50, 50, img=os.path.join(IMG_PATH, 'Solid_white.png'), textColor=GREEN)  # self.btnRIGHT2
+        ]
+
+    def handleEvent(self, event):
+        if event.type == pygame.KEYDOWN:
+            self.curr_pressed_key = str(pygame.key.name(event.key))
+            print(self.curr_pressed_key)
+            if self.curr_pressed_button:
+                self.curr_pressed_button.text = self.curr_pressed_key
 
     def update(self):
-        self.btnUP1.update()
+        self.btnBack.update()
+
+        for button in self.button_list:
+            button.update()
+            if button.pressed:
+                self.curr_pressed_button = button
+
+
     def draw(self, display):
         display.fill((110, 161, 100))
         # background_image = pygame.image.load('sprites/background.png')
@@ -47,9 +72,8 @@ class ControlsWindow(Screen):
         pygame.draw.rect(rect4_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
         display.blit(rect4_surface, (50, 336))
 
-        # Buttons player 1
-        self.btnUP1.draw(display)
-        self.btnDOWN1.draw(display)
-        self.btnBOMB1.draw(display)
-        self.btnLEFT1.draw(display)
-        self.btnRIGHT1.draw(display)
+        for button in self.button_list:
+            button.draw(display)
+
+        self.main.pollEvents()
+        self.btnBack.draw(display)

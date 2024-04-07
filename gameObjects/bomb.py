@@ -12,7 +12,7 @@ class Bomb(GameObject):
         self.finished = False
         self.positionOnBoard = (0, 0)
 
-    def update(self, dt):
+    def update(self):
         pass
 
     def draw(self, display):

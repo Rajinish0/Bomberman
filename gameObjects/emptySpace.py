@@ -2,9 +2,10 @@ from gameObjects.gameObject import GameObject
 import pygame
 
 class EmptySpace(GameObject):
-    def __init__(self, position, level, width, height):
-        super().__init__("empty", position, "sprites/gameobjects/grass.jpg", level)
-        self.image = pygame.image.load("sprites/gameobjects/grass.jpg").convert_alpha()
+    image = "sprites/gameobjects/grass.jpg"
+    def __init__(self, position,width, height):
+        super().__init__(position)
+        self.image = pygame.image.load(self.image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (width, height))
     def draw(self, display):
         display.blit(self.image, (self.position.x, self.position.y))

@@ -46,11 +46,11 @@ class GameWindow(Screen):
                 pos_y = 70 + i * self.boxHeight
                 position = Point(pos_x, pos_y)
                 if self.grid[i][j] == 'b':
-                    element = Box(position, 1, self.boxWidth, self.boxHeight)
+                    element = Box(position, self.boxWidth, self.boxHeight)
                 elif self.grid[i][j] == '#':
-                    element = Wall(position, 1, self.boxWidth, self.boxHeight)
+                    element = Wall(position, self.boxWidth, self.boxHeight)
                 else:
-                    element = EmptySpace(position, 1, self.boxWidth, self.boxHeight)
+                    element = EmptySpace(position, self.boxWidth, self.boxHeight)
                 element.draw(display)
 
         self.backButton.draw(display)

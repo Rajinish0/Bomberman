@@ -1,32 +1,37 @@
 import random
 
-from .gameobject import GameCharacter
-from .gameobject import Player
+from .gameObject import GameObject
+from point import Point
+from .gamecharacter import GameCharacter
+from .Player import Player
 
-class Player(GameCharacter):
-    def __init__(self,x,y,w,h,speed,image,direction):
-        super().__init__(x,y,w,h,speed)
+class Monster(GameCharacter):
+    def __init__(self,position,speed,image,direction,w,h):
+        super().__init__(position,speed)
         self.img=self.imgHandler.load(image, (w,h))
         self.direction=direction
         self.alive=True
+        self.t = 1
 
     def draw(self, display):
-        display.blit(self.img, (self.x, self.y))
+        display.blit(self.img, (self.position.x, self.position.y))
 
     def update(self):
-        if self.direction=="UP":
-            self.y -= 0.1
-        elif self.direction=="DOWN":
-            self.y += 0.1
-        elif self.direction=="RIGHT":
-            self.x += 0.1
-        elif self.direction=="LEFT":
-            self.x -= 0.1
+        if self.t < 0:
+            self.randomDecision()
+            if(not self.move(self.direction)):
+                self.makeDecision()
+            self.t = 1
+        self.t -= 0.5
 
     def makeDecision(self):
-        directions=["UP","DOWN","RIGHT","LEFT"]
-        directions.remove(self.direction)
+        directions=[Point(0,-1),Point(0,1),Point(1,0),Point(-1,0)]
         self.direction=random.choice(directions)
+
+    def randomDecision(self):
+        x=random.choice(range(0,100))
+        if(x>90):
+            self.makeDecision()
 
 
     def kill(self,player):

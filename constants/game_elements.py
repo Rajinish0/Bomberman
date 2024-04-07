@@ -1,3 +1,6 @@
-EMPTY = 0
-BOX   = 1
-WALL  = 2
+EMPTY = " "
+BOX   = "b"
+WALL  = "#"
+PLAYER1= "a"
+PLAYER2="c"
+BASE_MONSTER="m"

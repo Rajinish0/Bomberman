@@ -10,7 +10,10 @@ class Point:
         return Point(self.x - v.x, self.y - v.y)
 
     def mul(self, d):
+        if isinstance(d, Point):
+            return Point(self.x * d.x, self.y * d.y)
         return Point(self.x * d, self.y * d)
 
     def div(self, d):
         return Point(self.x / d, self.y / d)
+

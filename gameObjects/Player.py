@@ -1,38 +1,45 @@
-from .gameobject import GameCharacter
-from .gameobject import Bomb
+from .gameObject import GameObject
+from .gamecharacter import GameCharacter
+from .bomb import Bomb
 import pygame
+from point import Point
+
 
 class Player(GameCharacter):
-    def __init__(self,x,y,w,h,speed,keys,image):
-        super().__init__(x,y,w,h,speed)
-        self.img=self.imgHandler.load(image, (w,h))
-        self.keys = keys
+    def __init__(self,position,speed,image,keys,w,h):
+        super().__init__(position,speed)
+        self.image=self.imgHandler.load(image,(w,h))
         self.wins=0
+        self.keys=keys
         self.bombCount=0
         self.bombRange=1
         self.alive=True
         self.bombs=[]
 
     def update(self):
-        if self.eventMgr.keyPressed:
-            if self.eventMgr.keyPressed(self.keys['UP']):
-                self.y -= 0.1
-            elif self.eventMgr.keyPressed(self.keys['DOWN']):
-                self.y += 0.1
-            elif self.eventMgr.keyPressed(self.keys['RIGHT']):
-                self.x += 0.1
-            elif self.eventMgr.keyPressed(self.keys['LEFT']):
-                self.x -= 0.1
-            elif self.eventMgr.keyPressed(self.keys['BOMB']):
-                self.placeBomb()
+        keys = pygame.key.get_pressed()
+
+        if keys[self.keys["UP"]]:
+
+
+            self.move(Point(0,-1),True)
+
+        elif keys[self.keys["DOWN"]]:
+            self.move(Point(0,1))
+
+        elif keys[self.keys["LEFT"]]:
+            self.move(Point(-1,0))
+        elif keys[self.keys["RIGHT"]]:
+            self.move(Point(1,0))
+
 
         for b in self.bombs:
-            if b.hasFinished():
+            if b.has_finished():
                 self.bombs.remove(b)
                 self.incBombCount()
 
     def draw(self, display):
-        display.blit(self.img, (self.x, self.y))
+        display.blit(self.image, (self.position.x, self.position.y))
 
     def incBombCount(self):
         self.bombCount+=1
@@ -48,7 +55,7 @@ class Player(GameCharacter):
 
     def placeBomb(self):
         if self.bombCount>0:
-            bomb=Bomb(self.x,self.y,self.bombRange)
+            bomb=Bomb(self.position,5,1)
             self.bombs.append(bomb)
             self.decBombCount()
 

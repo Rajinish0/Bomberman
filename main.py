@@ -76,10 +76,11 @@ class Main:
 	def mainLoop(self):
 		try:
 			while self.run:
+				self.pollEvents()
 				self.update()
 				self.draw()
 				pygame.display.flip()
-				self.pollEvents()
+				self.clock.tick(10)
 		except pygame.error:
 			sys.exit()
 

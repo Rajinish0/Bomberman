@@ -16,7 +16,7 @@ class GameCharacter(GameObject):
     def draw(self,display):
         pass
 
-    def move(self,p, print_=False):
+    def move(self,p, isPlayer=True):
         p= p.mul(Point(self.level.bw, self.level.bh)).add(self.position)
         # if print_:
         #     print(p.x,p.y)
@@ -24,6 +24,13 @@ class GameCharacter(GameObject):
         if(isinstance(self.level.gameobjs[p.y // self.level.bh][p.x // self.level.bw],EmptySpace)):
             # if print_:
             #     print("hello2")
+
+
+            if isPlayer:
+                for pl in self.level.players:
+                    if(pl.position.x == p.x and pl.position.y == p.y):
+                        return False
+
             self.position=p
             return True
 

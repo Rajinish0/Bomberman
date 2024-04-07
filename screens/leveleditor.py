@@ -1,4 +1,5 @@
 from .screen import Screen
+from screens.GameWindow import GameWindow
 from constants import *
 from button import Button
 from gameObjects import *
@@ -12,17 +13,26 @@ TEMPORARY CLASS FOR EXPERIMENTATION PURPOSES.
 
 imgs = {
   BOX  : Box.image,
-  WALL : Wall.image
-} 
+  WALL : Wall.image,
+	EMPTY : EmptySpace.image
+}
 
+borders = [0, NUM_BOXES-1]
+
+
+# Checks whether the mouse click was within a rectangular grid or not
 def inBound(x, y, lx, ly, w, h):
 	return ( lx <= x <= lx + w and 
 		 ly <= y <= ly + h )
 
+
+# Converts the co-ordinates of the mouse click to indices of the grid
 def ScreenCrdToIdx(x, y, width, height):
 	return (y // height, x//width) 
 
+
 class LevelEditor(Screen):
+
 	def __init__(self):
 		self.offSetX = 200
 		self.offSetY = 0
@@ -31,28 +41,46 @@ class LevelEditor(Screen):
 		self.grid = [[EMPTY for i in range(NUM_BOXES)]
 			         for j in range(NUM_BOXES)]
 		self.backButton = Button(
-			0, 0, 30, 30, text = "Back",
+			10, 10, 30, 30, text = "Back",
 			callBack=lambda:self.gameMgr.setState(
 				self.gameMgr.getPrevState(),
             		),	
 			center=False
         	)
 		self.boxButton = Button(
-			0, 50, self.boxWidth, self.boxHeight, img=Box.image,
+			80, 70, self.boxWidth, self.boxHeight, img=Box.image,
 			callBack=lambda:self.setSelected(BOX),
 			center=False
 		)
 
 		self.wallButton = Button(
-			100, 50, self.boxWidth, self.boxHeight, img=Wall.image,
+			80, 150, self.boxWidth, self.boxHeight, img=Wall.image,
 			callBack=lambda:self.setSelected(WALL),
 			center=False
 		)
+
+
+		"""self.startButton = Button(
+			x=300, y=500, width=200, height=100, img=BOX.image,
+			callBack= lambda: self.start_game("sprites/defaultMap.txt"),
+			center=False,
+			text="Start Game",
+			textSize=15,
+			textColor=BLACK,
+
+		)"""
 		self.selected = None	
 	
 	def setSelected(self, elem):
 		self.selected = elem
-	
+
+	def start_game(self, file_path):
+		self.gameMgr.set_game_window_file_path(file_path)
+		game_window = GameWindow(file_path)
+		self.gameMgr.setState(GAME_WINDOW, game_window)
+
+	# Gets the co-ordinates of where the mouse was pressed, checks if it is in bound
+	# Converts the co-ordinates to indices of the grid and then places the selected element there
 	def handlePlacement(self):
 		(mx, my) = pygame.mouse.get_pos()
 		if self.selected and inBound(mx, my, self.offSetX, self.offSetY, 
@@ -62,12 +90,18 @@ class LevelEditor(Screen):
 			return True
 		else:
 			return False
-	
+
+	# If the mouse was pressed but the co-ordinates clicked later were not part of the grid
+	# Then set selected to None
 	def handleMouse(self):
 		if self.evMgr.mousePressed:
 			if not self.handlePlacement():
 				self.setSelected(None)			
 
+	# Updates the mouse function after each frame
+	# The update function will call the callback function of the buttons
+	# backButton goes back to the previous state
+	# For box and wall it will set them as the selected element incase the mouse was clicked
 	def update(self):
 		self.handleMouse()
 		self.backButton.update()
@@ -75,26 +109,35 @@ class LevelEditor(Screen):
 		self.wallButton.update()
 	
 	def load(self, img):
-		return self.imgHandler.load(img, (self.boxWidth, self.boxHeight) )
+		return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
 
 	def draw(self, display):
-		display.fill((125, 0, 125))
+		display.fill((110, 161, 100))
 		self.backButton.draw(display)
 		self.boxButton.draw(display)
 		self.wallButton.draw(display)
+
+		# Draws the rectangular lines
 		for i in range(NUM_BOXES):
 			for j in range(NUM_BOXES):
 				x = self.offSetX + j*self.boxWidth;
 				y = self.offSetY + i*self.boxHeight;
-				pygame.draw.rect(display, RED, (x, y, self.boxWidth, self.boxHeight), 1)
-				if self.grid[i][j] != EMPTY:
-					display.blit( self.load(imgs[self.grid[i][j]]), (x, y) )
-					
 
+				if i in borders or j in borders:
+					display.blit(self.load(imgs[WALL]), (x,y))
+				else:
+					# If the grid is not empty draws the respective image
+					if self.grid[i][j] != EMPTY:
+						display.blit( self.load(imgs[self.grid[i][j]]), (x, y))
+					else:
+						display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
+					pygame.draw.rect(display, (225, 225, 225), (x, y, self.boxWidth, self.boxHeight), 1)
 
+		# Provides the visual of the selected element when the mouse is moving around
 		if self.selected is not None:
 			(mx, my) = pygame.mouse.get_pos()
-			img = self.load(imgs[self.selected])
-			img.set_alpha(150)
-			display.blit(img, (mx-self.boxWidth/2, my-self.boxHeight/2))
-			img.set_alpha(255)
+			if inBound(mx, my, self.offSetX, self.offSetY, W-self.offSetX, H-self.offSetY):
+				img = self.load(imgs[self.selected])
+				img.set_alpha(150)
+				display.blit(img, (mx-self.boxWidth/2, my-self.boxHeight/2))
+				img.set_alpha(255)

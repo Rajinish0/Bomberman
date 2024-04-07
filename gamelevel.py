@@ -93,8 +93,8 @@ class GameLevel:
                         self.player2Wins+=1
                     self.isOver()
                 else:
-                    print(self.winTimer)
-                    self.winTimer-=0.1
+                    if(len(self.players)>0):
+                        self.winTimer-=0.1
 
 
 
@@ -144,14 +144,14 @@ class GameLevel:
                     spots.append((i, j))
 
         powups=random.choices(spots,k=(len(spots)//5))
-        print(powups)
+
         for pow in powups:
             self.gameobjs[pow[0]][pow[1]].generatePowerUp()
 
         return powups
 
     def isOver(self):
-        print("Game is over!")
+
         self.endStart=False
         self.gameEnd=True
 
@@ -159,7 +159,9 @@ class GameLevel:
     def startEnd(self,pl):
         self.players.remove(pl)
         self.endStart=True
-        print("End Game Started")
+        if(len(self.players)==0):
+            self.gameEnd=True
+
     # def unpredictableMonster(self,monster):
     #     rand_num=random.randint(0,100)
     #     if(rand_num>90):

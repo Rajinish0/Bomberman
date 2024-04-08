@@ -2,19 +2,20 @@ from .gameObject import GameObject
 from .emptySpace import  EmptySpace
 from constants import *
 from .wall import Wall
+from point import Point
 
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
     expImage = "sprites/gameobjects/Bomb.png"
     TIMER_CONST = 5
     EXPLODE_CONST = 3
-    def __init__(self, position, range, player):
-        super().__init__(position)
+    def __init__(self, position,range, player):
+        super().__init__(position, self.level.bw, self.level.bh)
 
         self.isExploded = False
         self.range = range
         self.finished = False
-        self.i, self.j = (position.y // self.level.bh, position.x // self.level.bw)
+        self.i, self.j = (position.y, position.x)
         self.player = player
         self.timer = Bomb.TIMER_CONST
         self.explodeTimer = Bomb.EXPLODE_CONST
@@ -35,7 +36,8 @@ class Bomb(GameObject):
 
     def draw(self, display):
         if not self.isExploded:
-            display.blit(self.image, (self.position.x, self.position.y))
+            super().draw(display)
+            # display.blit(self.image, (self.position.x, self.position.y))
         else:
             # for i in range(max(0,self.i-self.player.bombRange), min(NUM_BOXES, self.i+self.player.bombRange+1)):
             for i in range(self.i, min(NUM_BOXES, self.i + self.player.bombRange + 1)):
@@ -72,16 +74,18 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position.x == self.j * self.level.bw and \
-                    player.position.y == i * self.level.bh:
+                if player.position == Point(self.j, i):
                     player.Destroy()
                     break
 
             for monster in self.level.monsters:
-                if monster.position.x == self.j * self.level.bw and \
-                    monster.position.y == i * self.level.bh:
+                if monster.position == Point(self.j, i):
                     monster.Destroy()
                     break
+                # if monster.position.x == self.j * self.level.bw and \
+                    # monster.position.y == i * self.level.bh:
+                    # monster.Destroy()
+                    # break
 
             self.level.gameobjs[i][self.j].Destroy()
 
@@ -92,16 +96,22 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position.x == self.j * self.level.bw and \
-                        player.position.y == i * self.level.bh:
+                if player.position == Point(self.j, i):
                     player.Destroy()
                     break
+                # if player.position.x == self.j * self.level.bw and \
+                #         player.position.y == i * self.level.bh:
+                #     player.Destroy()
+                #     break
 
             for monster in self.level.monsters:
-                if monster.position.x == self.j * self.level.bw and \
-                        monster.position.y == i * self.level.bh:
+                if monster.position == Point(self.j, i):
                     monster.Destroy()
                     break
+                # if monster.position.x == self.j * self.level.bw and \
+                #         monster.position.y == i * self.level.bh:
+                #     monster.Destroy()
+                #     break
 
             self.level.gameobjs[i][self.j].Destroy()
 
@@ -110,16 +120,22 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position.x == j * self.level.bw and \
-                        player.position.y == self.i * self.level.bh:
+                if player.position == Point(j, self.i):
                     player.Destroy()
                     break
+                # if player.position.x == j * self.level.bw and \
+                #         player.position.y == self.i * self.level.bh:
+                #     player.Destroy()
+                #     break
 
             for monster in self.level.monsters:
-                if monster.position.x == j * self.level.bw and \
-                        monster.position.y == self.i * self.level.bh:
+                if monster.position == Point(j, self.i):
                     monster.Destroy()
                     break
+                # if monster.position.x == j * self.level.bw and \
+                #         monster.position.y == self.i * self.level.bh:
+                #     monster.Destroy()
+                #     break
 
             self.level.gameobjs[self.i][j].Destroy()
 
@@ -128,27 +144,37 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position.x == j * self.level.bw and \
-                        player.position.y == self.i * self.level.bh:
+                if player.position == Point(j, self.i):
                     player.Destroy()
                     break
+                # if player.position.x == j * self.level.bw and \
+                #         player.position.y == self.i * self.level.bh:
+                #     player.Destroy()
+                #     break
 
             for monster in self.level.monsters:
-                if monster.position.x == j * self.level.bw and \
-                        monster.position.y == self.i * self.level.bh:
+                if monster.position == Point(j, self.i):
                     monster.Destroy()
                     break
+                # if monster.position.x == j * self.level.bw and \
+                #         monster.position.y == self.i * self.level.bh:
+                #     monster.Destroy()
+                #     break
 
             self.level.gameobjs[self.i][j].Destroy()
 
-        if self.player.position.x == self.j * self.level.bw and \
-            self.player.position.y == self.i * self.level.bh:
-            if self.player in self.level.players:
-                self.player.Destroy()
+        if (self.player.position == self.position and \
+            self.player in self.level.players):
+
+            self.player.Destroy()
+
+        # if self.player.position.x == self.j * self.level.bw and \
+        #     self.player.position.y == self.i * self.level.bh:
+        #     if self.player in self.level.players:
+        #         self.player.Destroy()
 
     def explode(self):
         self.isExploded = True
-        pass
 
     def has_finished(self):
         return self.finished

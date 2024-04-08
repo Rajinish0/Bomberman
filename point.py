@@ -17,3 +17,7 @@ class Point:
     def div(self, d):
         return Point(self.x / d, self.y / d)
 
+    def __eq__(self, other):
+        return (self.x == other.x and 
+                self.y == other.y)
+

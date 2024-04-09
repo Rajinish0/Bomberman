@@ -20,6 +20,7 @@ class Player(GameCharacter):
 
     def update(self):
         keys = pygame.key.get_pressed()
+        self.checkForDeath()
 
         if keys[self.keys["UP"]]:
             self.move(Point(0,-1))
@@ -36,6 +37,11 @@ class Player(GameCharacter):
         elif keys[self.keys["BOMB"]]:
             self.placeBomb()
 
+    def checkForDeath(self):
+        for monster in self.level.monsters:
+            if monster.position == self.position:
+                monster.kill(self)
+                return
 
     def move(self, p):
         p= p.add(self.position)

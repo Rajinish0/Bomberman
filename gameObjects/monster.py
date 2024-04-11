@@ -1,4 +1,4 @@
-import random
+import random, pygame
 
 from .gameObject import GameObject
 from point import Point
@@ -11,33 +11,36 @@ class Monster(GameCharacter):
     def __init__(self,position,speed,image,direction,w,h):
         super().__init__(position,speed)
         self.image=self.imgHandler.load(image, (w,h))
+        self.rw = .9999
+        self.rh = .9999
         self.direction=direction
         self.alive=True
         self.t = 1
 
     def update(self):
-        if self.t < 0:
-            self.randomDecision()
-            if(not self.move(self.direction)):
-                self.makeDecision()
-            else:
-                for pl in self.level.players:
-                    if (pl.position - self.position).norm() < 1e-7:
-                        self.kill(pl)
-                    # if (pl.position.x == self.position.x and pl.position.y == self.position.y):
-                    #     self.kill(pl)
+        # self.randomDecision()
+        if(not self.move(self.direction*0.05)):
+            self.makeDecision()
+        else:
+            for pl in self.level.players:
+                if Point.int(pl.position) == Point.int(self.position):
+                    self.kill(pl)
 
 
-            self.t = 1
-        self.t -= 0.5
+    def isValid(self, coord):
+        mvi, mvj = coord         
+        return isinstance(self.level.gameobjs[mvi][mvj],(EmptySpace, PowerUp))
 
 
     def move(self,p):
-        p= p.add(self.position)
+        dp= p.add(self.position)
 
-        if (isinstance(self.level.gameobjs[int(p.y)][int(p.x)], (EmptySpace, PowerUp))):
-            self.position=p
-            return True
+        if self.isValid( ( int(dp.y+self.rh/2), int(dp.x+self.rw/2) ) ) and\
+           self.isValid( ( int(dp.y-self.rh/2), int(dp.x-self.rw/2) ) ) and\
+           self.isValid( ( int(dp.y-self.rh/2), int(dp.x+self.rw/2) ) ) and\
+           self.isValid( ( int(dp.y+self.rh/2), int(dp.x-self.rw/2) ) ):
+           self.position = dp 
+           return True 
 
         return False
 
@@ -47,8 +50,14 @@ class Monster(GameCharacter):
 
     def randomDecision(self):
         x=random.choice(range(0,100))
-        if(x>90):
+        if(x>96):
             self.makeDecision()
+
+    # def draw(self, display):
+    #     pygame.draw.rect(
+    #         display, (0, 0, 121), ( (self.position.x-self.rw/2)*self.level.bw, (self.position.y-self.rh/2)*self.level.bh, self.rw*self.level.bw, self.rh*self.level.bh )
+    #         )
+    #     super().draw(display)
 
 
     def kill(self,player):

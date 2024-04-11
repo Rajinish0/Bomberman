@@ -27,33 +27,41 @@ class Player(GameCharacter):
         self.checkForDeath()
 
         if keys[self.keys["UP"]]:
-            self.move(Point(0,-1)*(0.1))
+            self.move(Point(0,-1)*(self.speed))
 
         if keys[self.keys["DOWN"]]:
-            self.move(Point(0,1)*(0.1))
+            self.move(Point(0,1)*(self.speed))
 
         if keys[self.keys["LEFT"]]:
-            self.move(Point(-1,0)*(0.1))
+            self.move(Point(-1,0)*(self.speed))
 
         if keys[self.keys["RIGHT"]]:
-            self.move(Point(1,0)*(0.1))
+            self.move(Point(1,0)*(self.speed))
 
         if keys[self.keys["BOMB"]]:
             self.placeBomb()
 
     def checkForDeath(self):
         for monster in self.level.monsters:
-            if (monster.position - self.position).norm() < 1e-7:
+            if Point.int(monster.position) == Point.int(self.position):
                 monster.kill(self)
                 return
 
-    ## NEED COLLISION B/W TWO RECTANGLES
+    ## COLLISION B/W TWO RECTANGLES
     def collides(self, p):
         return rectsCollide(
                 (self.position.x - self.rw/2, self.position.y - self.rh/2, self.rw, self.rh),
                 (p.x - self.rw/2, p.y - self.rh/2, self.rw, self.rh),
             )
 
+    def isValid(self, coord, any_):
+        mvi, mvj = coord         
+        if isinstance(self.level.gameobjs[mvi][mvj],(EmptySpace, PowerUp)):
+            return True
+        elif self.bombBox and (mvi == self.bombBox[0]) and (mvj == self.bombBox[1]):
+            any_[0] = True
+            return True
+        return False
     '''
     There's an invariant here: the player is basically a rectangle which has 4 corners.
     The invariant is that the matrix coordinates that these 4 corners refer to are EmptySpaces or
@@ -69,19 +77,14 @@ class Player(GameCharacter):
         # print(self.position)
         dp= p.add(self.position)
 
-        if isinstance(self.level.gameobjs[int(self.position.y)][int(self.position.x)], Bomb):
-            self.position = p.add(self.position) 
-            return
-        # print(dp)
-        # print(dp.y+self.rh/2, dp.x+self.rh/2)
-        # print(dp.y-self.rh/2, dp.x-self.rh/2)
-        # print(dp.y-self.rh/2, dp.x+self.rw/2)
-        # print(dp.y+self.rh/2, dp.x-self.rh/2)
+        any_ = [False]
 
-        if (isinstance(self.level.gameobjs[int(dp.y+self.rh/2)][int(dp.x+self.rw/2)],(EmptySpace, PowerUp)) and 
-            isinstance(self.level.gameobjs[int(dp.y-self.rh/2)][int(dp.x-self.rw/2)],(EmptySpace, PowerUp)) and
-            isinstance(self.level.gameobjs[int(dp.y-self.rh/2)][int(dp.x+self.rw/2)],(EmptySpace, PowerUp)) and 
-            isinstance(self.level.gameobjs[int(dp.y+self.rh/2)][int(dp.x-self.rw/2)],(EmptySpace, PowerUp)) ):
+        if self.isValid( ( int(dp.y+self.rh/2), int(dp.x+self.rw/2) ), any_ ) and\
+           self.isValid( ( int(dp.y-self.rh/2), int(dp.x-self.rw/2) ), any_ ) and\
+           self.isValid( ( int(dp.y-self.rh/2), int(dp.x+self.rw/2) ), any_ ) and\
+           self.isValid( ( int(dp.y+self.rh/2), int(dp.x-self.rw/2) ), any_ ):
+
+            if not any_[0]: self.bombBox = None
 
             for pl in self.level.players:
                 if (not pl is self) and (pl.collides(dp)):
@@ -91,9 +94,9 @@ class Player(GameCharacter):
 
         ## IoU > .5
 
-        if (isinstance(self.level.gameobjs[int(p.y)][int(p.x)], PowerUp)):
+        if (isinstance(self.level.gameobjs[int(dp.y)][int(dp.x)], PowerUp)):
             self.position = p.add(self.position)
-            self.level.gameobjs[int(p.y)][int(p.x)].empower(self)
+            self.level.gameobjs[int(dp.y)][int(dp.x)].empower(self)
 
             # for pl in self.level.players:
             #     if pl.position == p:
@@ -114,13 +117,15 @@ class Player(GameCharacter):
         self.alive=False
 
     def placeBomb(self):
-        if self.bombCount>0:
-            bomb=Bomb(Point(int(self.position.x), int(self.position.y)),self.bombRange, self)
-            self.level.gameobjs[int(self.position.y)][int(self.position.x)]=bomb
+        i, j = (int(self.position.y), int(self.position.x))
+        if self.bombCount>0 and (not (self.bombBox and i == self.bombBox[0] and j == self.bombBox[1])):
+            bomb=Bomb(Point(j, i),self.bombRange, self)
+            self.level.gameobjs[i][j]=bomb
             self.decBombCount()
+            self.bombBox = (i, j)
 
-    def draw(self, display):
-        pygame.draw.rect(
-            display, (0, 0, 121), ( (self.position.x-self.rw/2)*self.level.bw, (self.position.y-self.rh/2)*self.level.bh, self.rw*self.level.bw, self.rh*self.level.bh )
-            )
-        super().draw(display)
+    # def draw(self, display):
+    #     pygame.draw.rect(
+    #         display, (0, 0, 121), ( (self.position.x-self.rw/2)*self.level.bw, (self.position.y-self.rh/2)*self.level.bh, self.rw*self.level.bw, self.rh*self.level.bh )
+    #         )
+    #     super().draw(display)

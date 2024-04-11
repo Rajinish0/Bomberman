@@ -7,7 +7,7 @@ from point import Point
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
     expImage = "sprites/gameobjects/Bomb.png"
-    TIMER_CONST = 5
+    TIMER_CONST = 10
     EXPLODE_CONST = 3
     def __init__(self, position,range, player):
         super().__init__(position, self.level.bw, self.level.bh)
@@ -74,12 +74,12 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position == Point(self.j, i):
+                if Point.int(player.position) == Point(self.j, i):
                     player.Destroy()
                     break
 
             for monster in self.level.monsters:
-                if monster.position == Point(self.j, i):
+                if Point.int(monster.position) == Point(self.j, i):
                     monster.Destroy()
                     break
                 # if monster.position.x == self.j * self.level.bw and \
@@ -96,7 +96,7 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position == Point(self.j, i):
+                if Point.int(player.position) == Point(self.j, i):
                     player.Destroy()
                     break
                 # if player.position.x == self.j * self.level.bw and \
@@ -105,7 +105,7 @@ class Bomb(GameObject):
                 #     break
 
             for monster in self.level.monsters:
-                if monster.position == Point(self.j, i):
+                if Point.int(monster.position) == Point(self.j, i):
                     monster.Destroy()
                     break
                 # if monster.position.x == self.j * self.level.bw and \
@@ -120,7 +120,7 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position == Point(j, self.i):
+                if Point.int(player.position) == Point(j, self.i):
                     player.Destroy()
                     break
                 # if player.position.x == j * self.level.bw and \
@@ -129,7 +129,7 @@ class Bomb(GameObject):
                 #     break
 
             for monster in self.level.monsters:
-                if monster.position == Point(j, self.i):
+                if Point.int(monster.position )== Point(j, self.i):
                     monster.Destroy()
                     break
                 # if monster.position.x == j * self.level.bw and \
@@ -144,7 +144,7 @@ class Bomb(GameObject):
                 break
 
             for player in self.level.players:
-                if player.position == Point(j, self.i):
+                if Point.int(player.position) == Point(j, self.i):
                     player.Destroy()
                     break
                 # if player.position.x == j * self.level.bw and \
@@ -153,7 +153,7 @@ class Bomb(GameObject):
                 #     break
 
             for monster in self.level.monsters:
-                if monster.position == Point(j, self.i):
+                if Point.int(monster.position) == Point(j, self.i):
                     monster.Destroy()
                     break
                 # if monster.position.x == j * self.level.bw and \
@@ -163,7 +163,7 @@ class Bomb(GameObject):
 
             self.level.gameobjs[self.i][j].Destroy()
 
-        if (self.player.position == self.position and \
+        if (Point.int(self.player.position) == self.position and \
             self.player in self.level.players):
 
             self.player.Destroy()

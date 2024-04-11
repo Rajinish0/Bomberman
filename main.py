@@ -80,7 +80,7 @@ class Main:
 				self.update()
 				self.draw()
 				pygame.display.flip()
-				self.clock.tick(10)
+				self.clock.tick(60)
 		except pygame.error:
 			sys.exit()
 

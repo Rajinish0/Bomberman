@@ -8,11 +8,21 @@ from .powerup import *
 class GameCharacter(GameObject):
     def __init__(self,position,speed):
         super().__init__(position, self.level.bw, self.level.bh)
+        self.position = self.position.add(Point(0.5, 0.5))
         self.speed=speed
 
 
     def update(self):
         pass
+
+    def draw(self, display):
+        x = self.position.x * self.w
+        y = self.position.y * self.h
+        x -= self.w //2 
+        y -= self.h // 2
+
+        display.blit(self.image, (x, y))
+
 
     # def move(self,p, isPlayer=True):
     #     p= p.add(self.position)

@@ -15,7 +15,7 @@ class Bomb(GameObject):
         self.isExploded = False
         self.range = range
         self.finished = False
-        self.i, self.j = (position.y, position.x)
+        self.i, self.j = (int(position.y), int(position.x))
         self.player = player
         self.timer = Bomb.TIMER_CONST
         self.explodeTimer = Bomb.EXPLODE_CONST

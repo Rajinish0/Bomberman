@@ -22,7 +22,7 @@ class Monster(GameCharacter):
                 self.makeDecision()
             else:
                 for pl in self.level.players:
-                    if pl.position == self.position:
+                    if (pl.position - self.position).norm() < 1e-7:
                         self.kill(pl)
                     # if (pl.position.x == self.position.x and pl.position.y == self.position.y):
                     #     self.kill(pl)
@@ -35,7 +35,7 @@ class Monster(GameCharacter):
     def move(self,p):
         p= p.add(self.position)
 
-        if (isinstance(self.level.gameobjs[p.y][p.x], (EmptySpace, PowerUp))):
+        if (isinstance(self.level.gameobjs[int(p.y)][int(p.x)], (EmptySpace, PowerUp))):
             self.position=p
             return True
 

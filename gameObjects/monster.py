@@ -18,7 +18,7 @@ class Monster(GameCharacter):
         self.t = 1
 
     def update(self):
-        # self.randomDecision()
+        self.randomDecision()
         if(not self.move(self.direction*0.05)):
             self.makeDecision()
         else:

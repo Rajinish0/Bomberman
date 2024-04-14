@@ -12,15 +12,15 @@ class Player(GameCharacter):
     def __init__(self,n,position,speed,image,keys,w,h):
         super().__init__(position, speed)
         self.image=self.imgHandler.load(image,(w,h))
-        self.rw = 0.5
-        self.rh = 0.7
+        self.rw = .999
+        self.rh = .999
         self.wins=0
         self.keys=keys
         self.bombCount=1
         self.bombRange=1
         self.alive=True
         self.name=n
-        self.bombBox = None
+        self.bombBox = []
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -58,8 +58,10 @@ class Player(GameCharacter):
         mvi, mvj = coord         
         if isinstance(self.level.gameobjs[mvi][mvj],(EmptySpace, PowerUp)):
             return True
-        elif self.bombBox and (mvi == self.bombBox[0]) and (mvj == self.bombBox[1]):
-            any_[0] = True
+        elif coord in self.bombBox:
+            any_.append((mvi, mvj))
+        # elif self.bombBox and (mvi == self.bombBox[0]) and (mvj == self.bombBox[1]):
+            # any_[0] = True
             return True
         return False
     '''
@@ -77,14 +79,18 @@ class Player(GameCharacter):
         # print(self.position)
         dp= p.add(self.position)
 
-        any_ = [False]
+        any_ = []
 
         if self.isValid( ( int(dp.y+self.rh/2), int(dp.x+self.rw/2) ), any_ ) and\
            self.isValid( ( int(dp.y-self.rh/2), int(dp.x-self.rw/2) ), any_ ) and\
            self.isValid( ( int(dp.y-self.rh/2), int(dp.x+self.rw/2) ), any_ ) and\
            self.isValid( ( int(dp.y+self.rh/2), int(dp.x-self.rw/2) ), any_ ):
 
-            if not any_[0]: self.bombBox = None
+            for coord in self.bombBox:
+                if coord not in any_:
+                    self.bombBox.remove(coord)
+
+            # if not any_[0]: self.bombBox = []
 
             for pl in self.level.players:
                 if (not pl is self) and (pl.collides(dp)):
@@ -118,11 +124,12 @@ class Player(GameCharacter):
 
     def placeBomb(self):
         i, j = (int(self.position.y), int(self.position.x))
-        if self.bombCount>0 and (not (self.bombBox and i == self.bombBox[0] and j == self.bombBox[1])):
+        if self.bombCount>0 and (not ( (i,j) in self.bombBox ) ):
             bomb=Bomb(Point(j, i),self.bombRange, self)
             self.level.gameobjs[i][j]=bomb
             self.decBombCount()
-            self.bombBox = (i, j)
+            self.bombBox.append((i, j))
+            # self.bombBox = (i, j)
 
     # def draw(self, display):
     #     pygame.draw.rect(

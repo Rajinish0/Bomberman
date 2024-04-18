@@ -4,6 +4,15 @@ from constants import *
 from .wall import Wall
 from point import Point
 
+
+'''
+SHOULD BE FIXED:
+
+when the bomb explodes, and there is another bomb in its explosion radius, it should call explode on that bomb, 
+currently it's calling destroy on it which just completely eradicates the second bomb.
+
+'''
+
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
     expImage = "sprites/gameobjects/Bomb.png"

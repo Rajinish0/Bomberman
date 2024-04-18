@@ -31,6 +31,9 @@ class Monster(GameCharacter):
         mvi, mvj = coord         
         return isinstance(self.level.gameobjs[mvi][mvj],(EmptySpace, PowerUp))
 
+    '''
+    READ Player.move, the same invariant is used here.
+    '''
 
     def move(self,p):
         dp= p.add(self.position)

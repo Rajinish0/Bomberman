@@ -12,8 +12,8 @@ class Player(GameCharacter):
     def __init__(self,n,position,speed,image,keys,w,h):
         super().__init__(position, speed)
         self.image=self.imgHandler.load(image,(w,h))
-        self.rw = .999
-        self.rh = .999
+        self.rw = .7
+        self.rh = .7
         self.wins=0
         self.keys=keys
         self.bombCount=1
@@ -69,6 +69,16 @@ class Player(GameCharacter):
     The invariant is that the matrix coordinates that these 4 corners refer to are EmptySpaces or
     Powerups. This is true obv at the start because all 4 corners are in the same grid block, the player is moved
     such that this invariant always holds.
+
+
+    Logic for player on top of bomb:
+    So, when the player plants a bomb it can move around in that box, when it leaves that box it cannot enter that box again (so long as the bomb is there).
+    Everytime a player plants a bomb the coordinates of that bomb are stored in bombBox array and then if any of the 4 corners of the player
+    are in bombBox array it can still move around; however if none of the 4 corners of the players are in bombBox array
+    then the coordinates of the bomb are removed from the bombBox array - this stops the player from moving back into the box 
+    with the bomb.
+
+    A bomb's coords will not be in bombBox array after it has exploded because other wise the player would have died.
     '''
 
     def move(self, p):

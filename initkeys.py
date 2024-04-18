@@ -20,5 +20,11 @@ key_dic = {
     }
 }
 
-with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
-    keys = pickle.dump(key_dic, f)
+
+def reset():
+    with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
+        pickle.dump(key_dic, f)
+    return key_dic
+
+if __name__ == '__main__':
+    reset()

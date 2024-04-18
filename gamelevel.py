@@ -30,7 +30,7 @@ def init(map_, bw, bh):
         L = []
         for j in range(NUM_BOXES):
             elem = None
-            p=Point(j*bw,i*bh)
+            p=Point(j,i)
             match map_[i][j]:
                 case game_elements.BOX:
                     elem = Box(p, bw, bh);
@@ -55,11 +55,13 @@ class GameLevel:
     def __init__(self,mp,boxwidth,boxheight):
         self.bw = boxwidth
         self.bh = boxheight
+        GameObject.setLevel(self)
+
+
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
         if(len(self.monsters)==0):
             self.monsters=self.initMonster(2)
 
-        GameObject.setLevel(self)
         self.winTimer=10
         self.endStart=False
 
@@ -132,13 +134,13 @@ class GameLevel:
                     spots.append((i,j))
 
         for pl in self.players:
-            spots.remove((int(pl.position.y // self.bh), int(pl.position.x // self.bw)))
+            spots.remove((int(pl.position.y), int(pl.position.x)))
 
 
         final_spots=random.choices(spots,k=x)
 
         for f in final_spots:
-            p=Point(f[0]*self.bw,f[1]*self.bh)
+            p=Point(f[0],f[1])
             monsters.append(
                 Monster(p, 1, os.path.join(IMG_PATH,'monsters' ,'m1.jpg'),Point(0,1),self.bw,self.bh))
 

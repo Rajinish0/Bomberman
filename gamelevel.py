@@ -37,13 +37,13 @@ def init(map_, bw, bh):
                 case game_elements.WALL:
                     elem = Wall(p, bw, bh);
                 case game_elements.PLAYER1:
-                    players.append(Player(game_elements.PLAYER1_NAME,p,1,os.path.join(IMG_PATH, 'players', 'Gamer1.png'),keys["p1"],bw,bh))
+                    players.append(Player(game_elements.PLAYER1_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'g1.png'),keys["p1"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PLAYER2:
-                    players.append(Player(game_elements.PLAYER2_NAME,p,1,os.path.join(IMG_PATH, 'players', 'Gamer2.png'),keys["p2"],bw,bh))
+                    players.append(Player(game_elements.PLAYER2_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'g2.png'),keys["p2"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.BASE_MONSTER:
-                    monsters.append(Monster(p,1,os.path.join(IMG_PATH, 'monsters', 'm1.jpg'),default_direction,bw,bh))
+                    monsters.append(Monster(p,1,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -140,9 +140,9 @@ class GameLevel:
         final_spots=random.choices(spots,k=x)
 
         for f in final_spots:
-            p=Point(f[0],f[1])
+            p=Point(f[1],f[0])
             monsters.append(
-                Monster(p, 1, os.path.join(IMG_PATH,'monsters' ,'m1.jpg'),Point(0,1),self.bw,self.bh))
+                Monster(p, 1, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
 
         return monsters
 

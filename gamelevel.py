@@ -36,6 +36,8 @@ def init(map_, bw, bh):
                     elem = Box(p, bw, bh);
                 case game_elements.WALL:
                     elem = Wall(p, bw, bh);
+                case game_elements.BORDER_WALL:
+                    elem = BorderWall(p, bw, bh);
                 case game_elements.PLAYER1:
                     players.append(Player(game_elements.PLAYER1_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'g1.png'),keys["p1"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
@@ -43,7 +45,19 @@ def init(map_, bw, bh):
                     players.append(Player(game_elements.PLAYER2_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'g2.png'),keys["p2"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.BASE_MONSTER:
-                    monsters.append(Monster(p,1,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
+                    monsters.append(Monster(p,0.038,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
+                    elem = EmptySpace(p, bw, bh)
+                case game_elements.GHOST_MONSTER:
+                    monsters.append(
+                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                    elem = EmptySpace(p, bw, bh)
+                case game_elements.FAST_MONSTER:
+                    monsters.append(
+                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                    elem = EmptySpace(p, bw, bh)
+                case game_elements.PSEUDOINTELLIGENT_MONSTER:
+                    monsters.append(
+                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -142,7 +156,7 @@ class GameLevel:
         for f in final_spots:
             p=Point(f[1],f[0])
             monsters.append(
-                Monster(p, 1, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+                GhostMonster(p, 0.025, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
 
         return monsters
 

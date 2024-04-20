@@ -23,7 +23,7 @@ class ControlsWindow(Screen):
 
         self.menuBtn = Button(
             660, 60, 30, 35, text="Menu",
-            callBack=lambda: (self.gameMgr.setState(MAIN_WINDOW))
+            callBack=lambda: (self.setUp(), self.gameMgr.setState(MAIN_WINDOW))
         )
 
         self.helpBtn = Button(
@@ -40,6 +40,8 @@ class ControlsWindow(Screen):
         self.curr_pressed_key = None
         self.curr_pressed_button = None
         self.keys = loadKeys()
+        self.assigned_keys = set()
+        self.save_pressed = False
 
         self.players_command = {
             "p1": {
@@ -61,8 +63,10 @@ class ControlsWindow(Screen):
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
                 button.text = pygame.key.name(self.keys[player][key])
+                self.assigned_keys.add(pygame.key.name(self.keys[player][key]))
 
     def saveKeys(self):
+        self.save_pressed = True
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
                 key_code = pygame.key.key_code(button.text)
@@ -70,6 +74,10 @@ class ControlsWindow(Screen):
 
         with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
             keys = pickle.dump(self.keys, f)
+
+    def setUp(self):
+        if not self.save_pressed:
+            self.defaultKeys()
 
     def defaultKeys(self):
         self.keys = {
@@ -93,15 +101,23 @@ class ControlsWindow(Screen):
             for key, button in playerDiction.items():
                 button.text = pygame.key.name(self.keys[player][key])
 
+
         with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
             keys = pickle.dump(self.keys, f)
 
 
     def handleEvent(self, event): # every frame every event
         if event.type == pygame.KEYDOWN:
-            self.curr_pressed_key = pygame.key.name(event.key)
-            if self.curr_pressed_button:
-                self.curr_pressed_button.text = self.curr_pressed_key
+            if pygame.key.name(event.key) not in self.assigned_keys:
+                self.curr_pressed_key = pygame.key.name(event.key)
+                if self.curr_pressed_button:
+                    if self.curr_pressed_button.text:
+                        self.assigned_keys.remove(self.curr_pressed_button.text)
+                        self.curr_pressed_button.text = self.curr_pressed_key
+                        self.assigned_keys.add(self.curr_pressed_button.text)
+            else:
+                pass
+                # print("no duplicates allowed")
     def update(self): # every frame before draw
         self.menuBtn.update()
         self.saveBtn.update()

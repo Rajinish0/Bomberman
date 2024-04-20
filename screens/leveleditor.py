@@ -60,17 +60,23 @@ class LevelEditor(Screen):
 		)
 
 
-		"""self.startButton = Button(
-			x=300, y=500, width=200, height=100, img=BOX.image,
-			callBack= lambda: self.start_game("sprites/defaultMap.txt"),
+		self.startButton = Button(
+			x=80, y=250, width=200, height=100,
+			callBack= lambda: self.handleStartButton(),
 			center=False,
 			text="Start Game",
 			textSize=15,
 			textColor=BLACK,
 
-		)"""
-		self.selected = None	
-	
+		)
+		self.selected = None
+		self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+	def handleStartButton(self):
+		self.newMap()
+		for row in self.map:
+			print(row)
+
 	def setSelected(self, elem):
 		self.selected = elem
 
@@ -107,15 +113,32 @@ class LevelEditor(Screen):
 		self.backButton.update()
 		self.boxButton.update()
 		self.wallButton.update()
+		self.startButton.update()
 	
 	def load(self, img):
 		return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
+
+	def newMap(self):
+		for i in range(NUM_BOXES):
+			for j in range(NUM_BOXES):
+				if i in borders or j in borders:
+					self.map[i][j] = "#"
+				elif self.grid[i][j] == EMPTY:
+					self.map[i][j] = ' '
+				elif self.grid[i][j] == BOX:
+					self.map[i][j] = 'b'
+				elif self.grid[i][j] == WALL:
+					self.map[i][j] = '#'
+
+	#def saveToFile(self):
+	#	with open()
 
 	def draw(self, display):
 		display.fill((110, 161, 100))
 		self.backButton.draw(display)
 		self.boxButton.draw(display)
 		self.wallButton.draw(display)
+		self.startButton.draw(display)
 
 		# Draws the rectangular lines
 		for i in range(NUM_BOXES):
@@ -126,11 +149,7 @@ class LevelEditor(Screen):
 				if i in borders or j in borders:
 					display.blit(self.load(imgs[WALL]), (x,y))
 				else:
-					# If the grid is not empty draws the respective image
-					if self.grid[i][j] != EMPTY:
-						display.blit( self.load(imgs[self.grid[i][j]]), (x, y))
-					else:
-						display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
+					display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
 					pygame.draw.rect(display, (225, 225, 225), (x, y, self.boxWidth, self.boxHeight), 1)
 
 		# Provides the visual of the selected element when the mouse is moving around

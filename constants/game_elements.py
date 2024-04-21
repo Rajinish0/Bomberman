@@ -1,3 +1,5 @@
-EMPTY = 0
 BOX   = 1
 WALL  = 2
+EMPTY = 3
+PLAYER1 = 4
+PLAYER2 = 5

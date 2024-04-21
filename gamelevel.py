@@ -67,6 +67,7 @@ def init(map_, bw, bh):
 
 class GameLevel:
     def __init__(self,mp,boxwidth,boxheight):
+        self.mp=mp
         self.bw = boxwidth
         self.bh = boxheight
         GameObject.setLevel(self)
@@ -85,6 +86,7 @@ class GameLevel:
         self.player1Wins=0;
         self.player2Wins=0;
         self.randomizePowerUps()
+        self.finished=False
 
 
     def update(self):
@@ -139,6 +141,21 @@ class GameLevel:
             monster.draw(display)
 
 
+    def nextRound(self):
+        self.gameobjs, self.players, self.monsters = init(self.mp, self.bw, self.bh)
+        if (len(self.monsters) == 0):
+            self.monsters = self.initMonster(2)
+
+        self.winTimer = 10
+        self.endStart = False
+
+        self.gameEnd = False
+        # self.powUps=self.randomizePowerUps()
+        self.bombs = []
+        self.randomizePowerUps()
+
+    def restart(self):
+        self.__init__(self.mp,self.bw,self.bh)
     def initMonster(self,x):
         spots=[]
         monsters=[]
@@ -174,9 +191,10 @@ class GameLevel:
         return powups
 
     def isOver(self):
-
         self.endStart=False
         self.gameEnd=True
+        self.finished = self.player1Wins == 2 or self.player2Wins == 2
+
 
 
     def startEnd(self,pl):

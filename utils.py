@@ -10,7 +10,7 @@ center : if true then x, y define the center coords of the text otherwise,
 def drawText(screen : pygame.Surface, text: str, x : float, y : float, 
 			 size : int =30, color: tuple =(255, 0, 0), 
 			 font_type: str = "Comic Sans MS",
-			 center: bool =True):
+			 center: bool =True,right:bool=False):
 	text = str(text)
 	font = pygame.font.SysFont(font_type, size)
 	surface = font.render(text, True, color)
@@ -18,6 +18,8 @@ def drawText(screen : pygame.Surface, text: str, x : float, y : float,
 	if center:
 		x = x-text_width/2
 		y = y-text_height/2
+	elif right:
+		x=x-text_width
 	screen.blit(surface, (x, y))
 
 '''
@@ -32,10 +34,4 @@ def rectsCollide(r1 : tuple , r2 : tuple) -> bool:
 	(x1, y1, w1, h1) = r1
 	(x2, y2, w2, h2) = r2
 
-	# return (
-	# 	(x1 <= x2 <= x1 + w1 and y2 <= y1 + h1 and y1 <= y2 +h2) or
-	# 	(x1 <= x2 + w1 <= x1 + w1 and y2 <= h1 + h1 and y1 <= h2 + h2) or
-	# 	(y1 <= y2 + h2 <= y1 + h1 and x2 <= x1 + w1 and x1<=x2 + w2) or
-	# 	(y1 <= y2 <= y1 + h1 and x2 <= x1 + w1 and x1 <= x2 + w2)
-	# 	)
 	return (x2-w1<x1<x2+w2 and y2-h1<y1<y2+h2)

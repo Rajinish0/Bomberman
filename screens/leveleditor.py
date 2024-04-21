@@ -10,7 +10,6 @@ from copy import deepcopy
 '''
 TEMPORARY CLASS FOR EXPERIMENTATION PURPOSES.
 '''
-
 # For all the images
 imgs = {
     BOX: Box.image,
@@ -26,7 +25,6 @@ imgs = {
 
 # The surrounding borders
 borders = [0, NUM_BOXES - 1]
-
 
 # Checks whether the mouse click was within a rectangular grid or not
 def inBound(x, y, lx, ly, w, h):
@@ -119,7 +117,8 @@ class LevelEditor(Screen):
 
         self.startButton = Button(
             x=80, y=580, width=200, height=100,
-            callBack=lambda: self.handleStartButton(),
+            callBack=lambda: (self.handleStartButton(),
+                              ),
             center=False,
             text="Start Game",
             textSize=15,
@@ -128,15 +127,51 @@ class LevelEditor(Screen):
 
         self.selected = None
         self.clicked = False
-
         self.player1 = False
         self.player2 = False
         self.player1Coordinates = " "
         self.player2Coordinates = " "
         self.monsterCount = 0
-
-
+        self.levels = 3
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+    def handleStartButton(self):
+        self.newMap()
+        for row in self.map:
+            print(row)
+        self.levels += 1
+
+        with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
+            for row in self.map:
+                f.write(''.join(row) + '\n')
+
+        file = f'sprites/levels/level{self.levels}.txt'
+        self.main.setState(GAME_WINDOW, GameWindow(file)),
+        self.gameMgr.setState(GAME_WINDOW)
+
+    def newMap(self):
+        for i in range(NUM_BOXES):
+            for j in range(NUM_BOXES):
+                if i in borders or j in borders:
+                    self.map[i][j] = "@"
+                elif self.grid[i][j] == EMPTY:
+                    self.map[i][j] = ' '
+                elif self.grid[i][j] == BOX:
+                    self.map[i][j] = 'b'
+                elif self.grid[i][j] == WALL:
+                    self.map[i][j] = '#'
+                elif self.grid[i][j] == BASE_MONSTER:
+                    self.map[i][j] = "m"
+                elif self.grid[i][j] == GHOST_MONSTER:
+                    self.map[i][j] = "g"
+                elif self.grid[i][j] == FAST_MONSTER:
+                    self.map[i][j] = "f"
+                elif self.grid[i][j] == PSEUDOINTELLIGENT_MONSTER:
+                    self.map[i][j] = "p"
+                elif self.grid[i][j] == PLAYER1:
+                    self.map[i][j] = "a"
+                elif self.grid[i][j] == PLAYER2:
+                    self.map[i][j] = "c"
 
     def handlePlayer(self):
         if self.selected in ("a", "c"):
@@ -150,7 +185,6 @@ class LevelEditor(Screen):
                     self.player1 = True
                 elif ((self.selected == "a" and self.player1)):
                     (k, l) = self.player1Coordinates
-                    print(self.player1Coordinates)
                     self.grid[k][l] = " "
                     self.grid[i][j] = self.selected
                     self.player1Coordinates = (i, j)
@@ -161,16 +195,10 @@ class LevelEditor(Screen):
                     self.player2 = True
                 elif ((self.selected == "c" and self.player2)):
                     (k, l) = self.player2Coordinates
-                    print(self.player2Coordinates)
                     self.grid[k][l] = " "
                     self.grid[i][j] = self.selected
                     self.player2Coordinates = (i, j)
         return True
-
-    def handleStartButton(self):
-        self.newMap()
-        for row in self.map:
-            print(row)
 
     def setSelected(self, elem):
         self.selected = elem
@@ -205,7 +233,6 @@ class LevelEditor(Screen):
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell
                 self.grid[i][j] = self.selected
-
 
     def handleMousePos(self):
         if self.evMgr.mousePressed:
@@ -247,25 +274,6 @@ class LevelEditor(Screen):
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
 
-    def newMap(self):
-        for i in range(NUM_BOXES):
-            for j in range(NUM_BOXES):
-                if i in borders or j in borders:
-                    self.map[i][j] = "@"
-                elif self.grid[i][j] == EMPTY:
-                    self.map[i][j] = ' '
-                elif self.grid[i][j] == BOX:
-                    self.map[i][j] = 'b'
-                elif self.grid[i][j] == WALL:
-                    self.map[i][j] = '#'
-                elif self.grid[i][j] == BASE_MONSTER:
-                    self.map[i][j] = "m"
-                elif self.grid[i][j] == GHOST_MONSTER:
-                    self.map[i][j] = "g"
-                elif self.grid[i][j] == FAST_MONSTER:
-                    self.map[i][j] = "f"
-                elif self.grid[i][j] == PSEUDOINTELLIGENT_MONSTER:
-                    self.map[i][j] = "p"
 
     # def saveToFile(self):
     #	with open()

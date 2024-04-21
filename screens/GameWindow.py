@@ -20,21 +20,15 @@ class GameWindow(Screen):
         self.level = GameLevel(file_path,self.boxWidth,self.boxHeight)
         self.gamesurface = pygame.Surface((800-self.offSetX, 520-self.offSetY))
 
-
         self.backButton = Button(
             30, 30, 30, 30, text="Back",
             callBack=lambda: self.gameMgr.setState(MAP_WINDOW)
         )
 
 
-
-
-
     def update(self):
         self.backButton.update()
         self.level.update()
-
-
 
     def draw(self, display):
         display.fill((110, 161, 100))

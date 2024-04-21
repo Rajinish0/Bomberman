@@ -7,7 +7,6 @@ from gamelevel import loadKeys
 import os
 import pickle
 
-
 class ControlsWindow(Screen):
 
     def __init__(self):

@@ -13,7 +13,6 @@ def loadKeys():
         keys = pickle.load(f)
     return keys
 
-
 def init(map_, bw, bh):
 
     reader = GridReader(map_)

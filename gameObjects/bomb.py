@@ -4,15 +4,6 @@ from constants import *
 from .wall import Wall
 from point import Point
 
-
-'''
-SHOULD BE FIXED:
-
-when the bomb explodes, and there is another bomb in its explosion radius, it should call explode on that bomb, 
-currently it's calling destroy on it which just completely eradicates the second bomb.
-
-'''
-
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
     expImage = "sprites/gameobjects/Bomb.png"
@@ -96,7 +87,10 @@ class Bomb(GameObject):
                     # monster.Destroy()
                     # break
 
-            self.level.gameobjs[i][self.j].Destroy()
+            if isinstance(self.level.gameobjs[i][self.j], Bomb):
+                self.level.gameobjs[i][self.j].explode()
+            else:
+                self.level.gameobjs[i][self.j].Destroy()
 
 
 
@@ -122,6 +116,9 @@ class Bomb(GameObject):
                 #     monster.Destroy()
                 #     break
 
+        if isinstance(self.level.gameobjs[i][self.j], Bomb):
+            self.level.gameobjs[i][self.j].explode()
+        else:
             self.level.gameobjs[i][self.j].Destroy()
 
         for j in range(self.j+1, min(NUM_BOXES, self.j + self.player.bombRange + 1)):
@@ -146,6 +143,9 @@ class Bomb(GameObject):
                 #     monster.Destroy()
                 #     break
 
+        if isinstance(self.level.gameobjs[self.i][j], Bomb):
+            self.level.gameobjs[self.i][j].explode()
+        else:
             self.level.gameobjs[self.i][j].Destroy()
 
         for j in range(self.j-1, max(0, self.j - self.player.bombRange - 1), -1):
@@ -170,6 +170,9 @@ class Bomb(GameObject):
                 #     monster.Destroy()
                 #     break
 
+        if isinstance(self.level.gameobjs[self.i][j], Bomb):
+            self.level.gameobjs[self.i][j].explode()
+        else:
             self.level.gameobjs[self.i][j].Destroy()
 
         if (Point.int(self.player.position) == self.position and \

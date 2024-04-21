@@ -38,7 +38,6 @@ def inBound(x, y, lx, ly, w, h):
 def ScreenCrdToIdx(x, y, width, height):
     return (y // height, x // width)
 
-
 class LevelEditor(Screen):
 
     def __init__(self):
@@ -132,8 +131,39 @@ class LevelEditor(Screen):
 
         self.player1 = False
         self.player2 = False
+        self.player1Coordinates = " "
+        self.player2Coordinates = " "
 
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+    def handlePlayer(self):
+        if self.selected in ("a", "c"):
+            (mx, my) = pygame.mouse.get_pos()
+            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+
+                if (self.selected == "a" and not self.player1):
+                    self.grid[i][j] = self.selected
+                    self.player1Coordinates = (i,j)
+                    self.player1 = True
+                elif ((self.selected == "a" and self.player1)):
+                    (k, l) = self.player1Coordinates
+                    print(self.player1Coordinates)
+                    self.grid[k][l] = " "
+                    self.grid[i][j] = self.selected
+                    self.player1Coordinates = (i, j)
+
+                if (self.selected == "c" and not self.player2):
+                    self.grid[i][j] = self.selected
+                    self.player2Coordinates = (i,j)
+                    self.player2 = True
+                elif ((self.selected == "c" and self.player2)):
+                    (k, l) = self.player2Coordinates
+                    print(self.player2Coordinates)
+                    self.grid[k][l] = " "
+                    self.grid[i][j] = self.selected
+                    self.player2Coordinates = (i, j)
+        return True
 
     def handleStartButton(self):
         self.newMap()
@@ -148,39 +178,10 @@ class LevelEditor(Screen):
         game_window = GameWindow(file_path)
         self.gameMgr.setState(GAME_WINDOW, game_window)
 
-
-    # Gets the co-ordinates of where the mouse was pressed, checks if it is in bound
-    # Converts the co-ordinates to indices of the grid and then places the selected element there
-    def handlePlayer(self):
-        if self.selected in ("Aunt May", "Uncle Ben"):
-            (mx, my) = pygame.mouse.get_pos()
-            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
-                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
-                print(i,j)
-
-            if ((self.selected == "Aunt May" and not self.player1) or (self.selected == "Uncle Ben" and not self.player2)):
-                self.grid[i][j] = self.selected
-                if (self.selected == 4):
-                    self.player1 = True
-                else:
-                    self.player2 = True
-                return True
-            else:
-                self.replacePlayer(i, j)
-                return True
-        return False
-
-    def replacePlayer(self, i, j):
-        if self.grid[i][j] =="Aunt May" and self.player1:
-            self.player1 = False
-        elif self.grid[i][j] == "Uncle Ben" and self.player2:
-            self.player2 = False
-        self.grid[i][j] = " "
-
     # If the mouse was pressed but the co-ordinates clicked later were not part of the grid
     # Then set selected to None
     def handlePlayerMouse(self):
-        if self.selected in ("Aunt May", "Uncle Ben") and self.evMgr.mousePressed:
+        if self.selected in ("a", "c") and self.evMgr.mousePressed:
             if not self.handlePlayer():
                 self.setSelected(None)
 
@@ -197,7 +198,7 @@ class LevelEditor(Screen):
             return None
 
     def continousDraw(self):
-        if self.selected and ((self.selected != "Aunt May") and (self.selected != "Uncle Ben")):
+        if self.selected and ((self.selected != "a") and (self.selected != "c")):
             hovered_cell = self.getHoveredCell()
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell

@@ -2,18 +2,26 @@ from point import Point
 from handlers import ImageHandler
 
 class GameObject:
+    imgHandler=ImageHandler()
     image = None
     level = None
-    imageHandler = ImageHandler()
 
     def __init__(self, position, width, height):
         self.position = position # Point
-        self.width = width
-        self.height = height
+        self.w = width
+        self.h = height
+
+    @staticmethod
+    def setLevel(lev):
+        GameObject.level=lev
 
 
     def draw(self, display):
+        display.blit(self.image, (self.position.x*self.w,
+                                  self.position.y*self.h)) 
+
+    def update(self):
         pass
 
-    def update(self, dt):
+    def Destroy(self):
         pass

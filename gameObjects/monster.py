@@ -209,11 +209,11 @@ class FastMonster(Monster):
 
         return Point(0,0)
 
-class PseudoIntelligentMonster(Monster):
+class PseudoIntelligentMonster(FastMonster):
     def randomDecision(self):
         x=round(self.position.x,2)
         y=round(self.position.y,2)
-        if(str(x).endswith(".5") and str(y).endswith(".5")):
+        if(x-int(x)==0.5 and y-int(y)==0.5):
             directions = self.decisionList()
 
             if(self.isFork(directions)):
@@ -242,86 +242,3 @@ class PseudoIntelligentMonster(Monster):
 
 
 
-    def shortestPath(self):
-        p=Point.int(self.position)
-        queue=[]
-        visited_nodes={}
-        visited_nodes[p] = Point(0, 0)
-        if isinstance(self.level.gameobjs[p.y+1][p.x],(EmptySpace,PowerUp)):
-            for pl in self.level.players:
-                if Point.int(pl.position) == p.add(Point(0, 1)):
-                    return Point(0,1)
-            visited_nodes[p.add(Point(0, 1))] = Point(0, 1)
-            queue.append(p.add(Point(0, 1)))
-        if isinstance(self.level.gameobjs[p.y-1][p.x],(EmptySpace,PowerUp)):
-            for pl in self.level.players:
-                if Point.int(pl.position) == p.add(Point(0, 1)):
-                    return Point(0,-1)
-            visited_nodes[p.add(Point(0, -1))] = Point(0, -1)
-            queue.append(p.add(Point(0, -1)))
-        if isinstance(self.level.gameobjs[p.y][p.x+1],(EmptySpace,PowerUp)):
-            for pl in self.level.players:
-                if Point.int(pl.position) == p.add(Point(0, 1)):
-                    return Point(1,0)
-            visited_nodes[p.add(Point(1, 0))] = Point(1, 0)
-            queue.append(p.add(Point(1, 0)))
-        if isinstance(self.level.gameobjs[p.y][p.x-1],(EmptySpace,PowerUp)):
-            for pl in self.level.players:
-                if Point.int(pl.position) == p.add(Point(0, 1)):
-                    return Point(-1, 0)
-            visited_nodes[p.add(Point(-1, 0))] = Point(-1, 0)
-            queue.append(p.add(Point(-1, 0)))
-
-        while len(queue)>0:
-            temp=queue.pop(0)
-            for pl in self.level.players:
-                if Point.int(pl.position) == temp:
-                    return visited_nodes.get(temp)
-
-            i=temp.y
-            j=temp.x
-
-            if not visited_nodes.get(temp.add(Point(0,1))):
-
-                for pl in self.level.players:
-                    if Point.int(pl.position)==temp.add(Point(0,1)):
-                        return visited_nodes.get(temp)
-                if isinstance(self.level.gameobjs[i+1][j],(EmptySpace,PowerUp)):
-                    visited_nodes[temp.add(Point(0, 1))] = visited_nodes[temp]
-                    queue.append(temp.add(Point(0, 1)))
-
-            if not visited_nodes.get(temp.add(Point(0,-1))):
-
-                for pl in self.level.players:
-                    if Point.int(pl.position)==temp.add(Point(0,-1)):
-                        return visited_nodes.get(temp)
-                if isinstance(self.level.gameobjs[i-1][j],(EmptySpace,PowerUp)):
-                    visited_nodes[temp.add(Point(0, -1))] = visited_nodes[temp]
-                    queue.append(temp.add(Point(0,-1)))
-
-            if not visited_nodes.get(temp.add(Point(1,0))):
-
-
-                for pl in self.level.players:
-
-
-                    if Point.int(pl.position)==temp.add(Point(1,0)):
-
-                        return visited_nodes.get(temp)
-                if isinstance(self.level.gameobjs[i][j+1],(EmptySpace,PowerUp)):
-                    visited_nodes[temp.add(Point(1, 0))] = visited_nodes[temp]
-                    queue.append(temp.add(Point(1, 0)))
-
-            if not visited_nodes.get(temp.add(Point(-1,0))):
-                for pl in self.level.players:
-                    if Point.int(pl.position)==temp.add(Point(-1,0)):
-                        return visited_nodes.get(temp)
-                if isinstance(self.level.gameobjs[i][j-1],(EmptySpace,PowerUp)):
-                    visited_nodes[temp.add(Point( -1,0))] = visited_nodes[temp]
-                    queue.append(temp.add(Point(-1,0)))
-
-
-
-
-
-        return Point(0,0)

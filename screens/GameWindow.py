@@ -1,3 +1,5 @@
+import math
+
 from screens.screen import Screen
 from constants import *
 from button import Button
@@ -27,18 +29,19 @@ class GameWindow(Screen):
         self.popUpWindow = pygame.Surface(  (self.pWidth, self.pHeight), pygame.SRCALPHA )
         self.pl1Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70) )
         self.pl2Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70) )
-
+        self.timer=5
+        self.timeList=[3,2,1]
 
         self.backButton = Button(
             30, 30, 30, 30, text="Back",
             callBack=lambda: self.gameMgr.setState(MAP_WINDOW)
         )
 
-        self.nextButton=Button(
-            W/2,H/2+40,30,30,text="Next Round",
-            callBack=lambda :(self.level.nextRound(),
-                              resetCursor())
-        )
+        # self.nextButton=Button(
+        #     W/2,H/2+40,30,30,text="Next Round",
+        #     callBack=lambda :(self.level.nextRound(),
+        #                       resetCursor())
+        # )
         self.menuButton=Button(
             W / 2, H / 2 + 40, 30, 30, text="Go to Menu",
             callBack=lambda: self.gameMgr.setState(MAIN_WINDOW),
@@ -62,7 +65,10 @@ class GameWindow(Screen):
             self.menuButton.update()
             self.restartButton.update()
         elif self.level.gameEnd:
-            self.nextButton.update()
+            if self.timer>0:
+                self.timer-=1/FPS
+            else:
+                self.level.nextRound()
 
 
 
@@ -79,6 +85,7 @@ class GameWindow(Screen):
         drawText(self.infosurface, PLAYER2_NAME, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
         drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
         if self.level.finished:
+            self.timer=5
             pygame.draw.rect(self.popUpWindow, (238, 238, 238, 240), self.popUpWindow.get_rect(), border_radius=8)
             text=self.level.players[0].name+ " has won the game!!!"
             self.level.draw(self.gamesurface)
@@ -89,14 +96,21 @@ class GameWindow(Screen):
             self.menuButton.draw(display)
             self.restartButton.draw(display)
         elif self.level.gameEnd:
+            self.level.draw(self.gamesurface)
+
             text = "No one won this round!!!"
             if self.level.players:
                 text = self.level.players[0].name+" has won the round!!!"
 
             display.blit(self.infosurface, (98, 0))
-            drawText(display ,text,W/2,H/2)
+            display.blit(self.gamesurface, (98, 70))
+            drawText(display,text,W/2,H/2,color=WHITE,size=30)
+            drawText(display,math.ceil(self.timer), W / 2, H / 2 +100,color=WHITE,size=50)
 
-            self.nextButton.draw(display)
+
+
+
+            # self.nextButton.draw(display)
         else:
             self.level.draw(self.gamesurface)
             display.blit(self.infosurface, (98, 0))

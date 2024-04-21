@@ -133,6 +133,8 @@ class LevelEditor(Screen):
         self.player2 = False
         self.player1Coordinates = " "
         self.player2Coordinates = " "
+        self.monsterCount = 0
+
 
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
 

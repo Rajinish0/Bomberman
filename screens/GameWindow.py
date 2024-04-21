@@ -34,7 +34,8 @@ class GameWindow(Screen):
 
         self.nextButton=Button(
             W/2,H/2+40,30,30,text="Next Round",
-            callBack=lambda :self.level.nextRound()
+            callBack=lambda :(self.level.nextRound(),
+                              resetCursor())
         )
         self.menuButton=Button(
             W / 2, H / 2 + 40, 30, 30, text="Go to Menu",
@@ -42,7 +43,8 @@ class GameWindow(Screen):
         )
         self.restartButton=Button(
             W / 2, H / 2 + 80, 30, 30, text="Restart Game",
-            callBack=lambda: self.level.restart()
+            callBack=lambda: (self.level.restart(),
+                              resetCursor())
         )
 
 
@@ -72,28 +74,25 @@ class GameWindow(Screen):
         drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
         drawText(self.infosurface, PLAYER2_NAME, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
         drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
-        if not self.level.finished:
-            if not self.level.gameEnd:
-                self.level.draw(self.gamesurface)
-                display.blit(self.infosurface, (98, 0))
-                display.blit(self.gamesurface, (98, 70))
-
-
-            else:
-                text = "No one won this round!!!"
-                if self.level.players:
-                    text = self.level.players[0].name+" has won the round!!!"
-
-                display.blit(self.infosurface, (98, 0))
-                drawText(display ,text,W/2,H/2)
-
-                self.nextButton.draw(display)
-        else:
+        if self.level.finished:
             text=self.level.players[0].name+ " has won the game!!!"
             display.blit(self.infosurface, (98, 0))
             drawText(display, text, W / 2, H / 2)
             self.menuButton.draw(display)
             self.restartButton.draw(display)
+        elif self.level.gameEnd:
+            text = "No one won this round!!!"
+            if self.level.players:
+                text = self.level.players[0].name+" has won the round!!!"
+
+            display.blit(self.infosurface, (98, 0))
+            drawText(display ,text,W/2,H/2)
+
+            self.nextButton.draw(display)
+        else:
+            self.level.draw(self.gamesurface)
+            display.blit(self.infosurface, (98, 0))
+            display.blit(self.gamesurface, (98, 70))
 
 
 

@@ -121,13 +121,13 @@ class LevelEditor(Screen):
     # Gets the co-ordinates of where the mouse was pressed, checks if it is in bound
     # Converts the co-ordinates to indices of the grid and then places the selected element there
     def handlePlayer(self):
-        if self.selected in (4, 5):
+        if self.selected in ("Aunt May", "Uncle Ben"):
             (mx, my) = pygame.mouse.get_pos()
             if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
                 (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
                 print(i,j)
 
-            if ((self.selected == 4 and not self.player1) or (self.selected == 5 and not self.player2)):
+            if ((self.selected == "Aunt May" and not self.player1) or (self.selected == "Uncle Ben" and not self.player2)):
                 self.grid[i][j] = self.selected
                 if (self.selected == 4):
                     self.player1 = True
@@ -140,16 +140,16 @@ class LevelEditor(Screen):
         return False
 
     def replacePlayer(self, i, j):
-        if self.grid[i][j] == 4 and self.player1:
+        if self.grid[i][j] =="Aunt May" and self.player1:
             self.player1 = False
-        elif self.grid[i][j] == 5 and self.player2:
+        elif self.grid[i][j] == "Uncle Ben" and self.player2:
             self.player2 = False
-        self.grid[i][j] = 3
+        self.grid[i][j] = " "
 
     # If the mouse was pressed but the co-ordinates clicked later were not part of the grid
     # Then set selected to None
     def handlePlayerMouse(self):
-        if self.selected in (4, 5) and self.evMgr.mousePressed:
+        if self.selected in ("Aunt May", "Uncle Ben") and self.evMgr.mousePressed:
             if not self.handlePlayer():
                 self.setSelected(None)
 
@@ -166,7 +166,7 @@ class LevelEditor(Screen):
             return None
 
     def continousDraw(self):
-        if self.selected and ((self.selected != 4) and (self.selected != 5)):
+        if self.selected and ((self.selected != "Aunt May") and (self.selected != "Uncle Ben")):
             hovered_cell = self.getHoveredCell()
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell

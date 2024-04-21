@@ -23,6 +23,8 @@ class GameWindow(Screen):
         self.level = GameLevel(file_path,self.boxWidth,self.boxHeight)
         self.gamesurface = pygame.Surface((self.gameWidth, self.gameHeight), pygame.SRCALPHA)
         self.infosurface = pygame.Surface((self.gameWidth, (H-self.gameHeight+70)) )
+        self.pWidth, self.pHeight = int(self.gameWidth*0.75), self.gameHeight//2
+        self.popUpWindow = pygame.Surface(  (self.pWidth, self.pHeight), pygame.SRCALPHA )
         self.pl1Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70) )
         self.pl2Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70) )
 
@@ -39,12 +41,14 @@ class GameWindow(Screen):
         )
         self.menuButton=Button(
             W / 2, H / 2 + 40, 30, 30, text="Go to Menu",
-            callBack=lambda: self.gameMgr.setState(MAIN_WINDOW)
+            callBack=lambda: self.gameMgr.setState(MAIN_WINDOW),
+            textColor = BLACK
         )
         self.restartButton=Button(
             W / 2, H / 2 + 80, 30, 30, text="Restart Game",
             callBack=lambda: (self.level.restart(),
-                              resetCursor())
+                              resetCursor()),
+            textColor = BLACK
         )
 
 
@@ -75,9 +79,13 @@ class GameWindow(Screen):
         drawText(self.infosurface, PLAYER2_NAME, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
         drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
         if self.level.finished:
+            pygame.draw.rect(self.popUpWindow, (238, 238, 238, 240), self.popUpWindow.get_rect(), border_radius=8)
             text=self.level.players[0].name+ " has won the game!!!"
+            self.level.draw(self.gamesurface)
             display.blit(self.infosurface, (98, 0))
-            drawText(display, text, W / 2, H / 2)
+            display.blit(self.gamesurface, (98, 70))
+            display.blit(self.popUpWindow, (W/2 - self.pWidth/2, H/2 - self.pHeight/2) )
+            drawText(display, text, W / 2, H / 2 - self.pHeight/2 + 30, color=BLACK)
             self.menuButton.draw(display)
             self.restartButton.draw(display)
         elif self.level.gameEnd:

@@ -11,14 +11,20 @@ from copy import deepcopy
 TEMPORARY CLASS FOR EXPERIMENTATION PURPOSES.
 '''
 
+# For all the images
 imgs = {
     BOX: Box.image,
     WALL: Wall.image,
     EMPTY: EmptySpace.image,
     PLAYER1 : "sprites/players/Gamer1.png",
-    PLAYER2 : "sprites/players/Gamer2.png"
+    PLAYER2 : "sprites/players/Gamer2.png",
+    BASE_MONSTER : "sprites/monsters/m1.jpg",
+    GHOST_MONSTER : "sprites/monsters/m1.jpg",
+    FAST_MONSTER : "sprites/monsters/m1.jpg",
+    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m1.jpg"
 }
 
+# The surrounding borders
 borders = [0, NUM_BOXES - 1]
 
 
@@ -50,45 +56,70 @@ class LevelEditor(Screen):
             center=False
         )
         self.boxButton = Button(
-            80, 70, self.boxWidth, self.boxHeight, img=Box.image,
+            80, 20, self.boxWidth, self.boxHeight, img=Box.image,
             callBack=lambda: self.setSelected(BOX),
             center=False
         )
 
         self.wallButton = Button(
-            80, 150, self.boxWidth, self.boxHeight, img=Wall.image,
+            80, 80, self.boxWidth, self.boxHeight, img=Wall.image,
             callBack=lambda: self.setSelected(WALL),
             center=False
         )
 
         self.emptyButton = Button(
-            80, 230, self.boxWidth, self.boxHeight, img=EmptySpace.image,
+            80, 140, self.boxWidth, self.boxHeight, img=EmptySpace.image,
             callBack=lambda: self.setSelected(EMPTY),
             center=False
         )
 
         self.P1Button = Button(
-            80, 310, self.boxWidth, self.boxHeight, img="sprites/players/Gamer1.png",
+            80, 200, self.boxWidth, self.boxHeight, img="sprites/players/Gamer1.png",
             callBack=lambda:self.setSelected(PLAYER1),
             center=False
         )
 
         self.P2Button = Button(
-            80, 390, self.boxWidth, self.boxHeight, img="sprites/players/Gamer2.png",
+            80, 260, self.boxWidth, self.boxHeight, img="sprites/players/Gamer2.png",
             callBack=lambda:self.setSelected(PLAYER2),
             center=False
         )
 
+        self.baseMButton = Button(
+            80, 320, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            callBack=lambda: self.setSelected(BASE_MONSTER),
+            center=False
+        )
+
+        self.ghostMButton = Button(
+            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            callBack=lambda: self.setSelected(GHOST_MONSTER),
+            center=False
+        )
+
+        self.fastMButton = Button(
+            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            callBack=lambda: self.setSelected(FAST_MONSTER),
+            center=False
+        )
+
+        self.pseudoIntMButton = Button(
+            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
+            center=False
+        )
+
         self.resetButton = Button(
-            x=80, y=490, width=200, height=100,
+            x=80, y=550, width=200, height=100,
             callBack=lambda: self.reset(),
+            center=False,
             text="Reset Map",
             textSize=15,
             textColor=BLACK,
         )
 
         self.startButton = Button(
-            x=80, y=460, width=200, height=100,
+            x=80, y=580, width=200, height=100,
             callBack=lambda: self.handleStartButton(),
             center=False,
             text="Start Game",
@@ -204,6 +235,11 @@ class LevelEditor(Screen):
         self.P1Button.update()
         self.P2Button.update()
 
+        self.baseMButton.update()
+        self.ghostMButton.update()
+        self.fastMButton.update()
+        self.pseudoIntMButton.update()
+
 
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
@@ -212,13 +248,21 @@ class LevelEditor(Screen):
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
                 if i in borders or j in borders:
-                    self.map[i][j] = "#"
+                    self.map[i][j] = "@"
                 elif self.grid[i][j] == EMPTY:
                     self.map[i][j] = ' '
                 elif self.grid[i][j] == BOX:
                     self.map[i][j] = 'b'
                 elif self.grid[i][j] == WALL:
                     self.map[i][j] = '#'
+                elif self.grid[i][j] == BASE_MONSTER:
+                    self.map[i][j] = "m"
+                elif self.grid[i][j] == GHOST_MONSTER:
+                    self.map[i][j] = "g"
+                elif self.grid[i][j] == FAST_MONSTER:
+                    self.map[i][j] = "f"
+                elif self.grid[i][j] == PSEUDOINTELLIGENT_MONSTER:
+                    self.map[i][j] = "p"
 
     # def saveToFile(self):
     #	with open()
@@ -233,6 +277,10 @@ class LevelEditor(Screen):
         self.emptyButton.draw(display)
         self.P1Button.draw(display)
         self.P2Button.draw(display)
+        self.baseMButton.draw(display)
+        self.ghostMButton.draw(display)
+        self.fastMButton.draw(display)
+        self.pseudoIntMButton.draw(display)
 
         # Draws the rectangular lines
         for i in range(NUM_BOXES):

@@ -206,6 +206,10 @@ class LevelEditor(Screen):
                 (i, j) = hovered_cell
                 self.grid[i][j] = self.selected
 
+            self.clicked=False
+
+
+
 
     def handleMousePos(self):
         if self.evMgr.mousePressed:
@@ -231,6 +235,10 @@ class LevelEditor(Screen):
         self.emptyButton.update()
         self.startButton.update()
         self.resetButton.update()
+
+        mousePressed = pygame.mouse.get_pressed()
+        if mousePressed[0]:
+            self.evMgr.setMousePressed(True)
 
         self.handleMousePos()
         self.continousDraw()

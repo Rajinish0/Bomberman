@@ -10,3 +10,4 @@ from .monster import Monster
 from .monster import GhostMonster
 from .monster import FastMonster
 from .monster import PseudoIntelligentMonster
+

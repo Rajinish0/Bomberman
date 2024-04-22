@@ -17,7 +17,7 @@ class Player(GameCharacter):
         self.wins=0
         self.keys=keys
         self.bombCount=1
-        self.bombRange=1
+        self.bombRange=2
         self.alive=True
         self.name=n
         self.bombBox = []

@@ -4,6 +4,7 @@ from constants import *
 from .wall import BorderWall
 from .wall import Wall 
 from .box import Box
+from .powerup import PowerUp
 from point import Point
 
 class Bomb(GameObject):
@@ -21,21 +22,38 @@ class Bomb(GameObject):
         self.player = player
         self.timer = Bomb.TIMER_CONST
         self.explodeTimer = Bomb.EXPLODE_CONST
+        self.animationTimer=1
+        self.currentDepth=1
         self.image = self.imgHandler.load(self.image, (self.level.bw, self.level.bh))
         self.expImage = self.imgHandler.load(self.expImage, (self.level.bw, self.level.bh))
 
     def update(self):
         if not self.finished:
             if not self.isExploded:
+
                 self.timer -= 0.1
                 self.isExploded = self.timer <= 0
                 if self.isExploded:
-                    self.incUp, self.incDown, self.incLeft, self.incRight = self.player.bombRange, self.player.bombRange, self.player.bombRange, self.player.bombRange
+                    self.drawSpots=[(self.i,self.j)]
+                    self.boxPosition=[]
+                    #self.incUp, self.incDown, self.incLeft, self.incRight = self.currentRange, self.currentRange,self.currentRange,self.currentRange
             else:
-                self.kill()
-                self.explodeTimer -= 0.1
+                self.animationTimer-=0.0166
+
+                if self.animationTimer<=0:
+                    self.animationTimer=1
+                    self.currentDepth+=1
+
+
+
+                print(self.boxPosition)
+                self.kill(min(self.currentDepth,self.player.bombRange))
+                self.explodeTimer -= 0.0166
                 self.finished = self.explodeTimer <= 0
+
         else:
+            self.animationTimer=1
+            self.currentDepth=1
             self.Destroy()
 
     def draw_recurse(self, display, i, j, move_i, move_j, depth):
@@ -45,15 +63,20 @@ class Bomb(GameObject):
         display.blit(self.expImage, (j*self.level.bw, i*self.level.bh) )
         self.draw_recurse(display, i+move_i, j+move_j, move_i, move_j, depth-1)
 
+
+
     def draw(self, display):
         if not self.isExploded:
             super().draw(display)
             # display.blit(self.image, (self.position.x, self.position.y))
         else:
-            self.draw_recurse(display, self.i, self.j, 1, 0, self.incDown)
-            self.draw_recurse(display, self.i, self.j,-1, 0, self.incUp)
-            self.draw_recurse(display, self.i, self.j, 0, 1, self.incRight)
-            self.draw_recurse(display, self.i, self.j, 0, -1,self.incLeft)
+            for spot in self.drawSpots:
+                display.blit(self.expImage, (spot[1] * self.level.bw, spot[0] * self.level.bh))
+
+            # self.draw_recurse(display, self.i, self.j, 1, 0, self.incDown)
+            # self.draw_recurse(display, self.i, self.j,-1, 0, self.incUp)
+            # self.draw_recurse(display, self.i, self.j, 0, 1, self.incRight)
+            # self.draw_recurse(display, self.i, self.j, 0, -1,self.incLeft)
             # for i in range(max(0,self.i-self.player.bombRange), min(NUM_BOXES, self.i+self.player.bombRange+1)):
             # for i in range(self.i, min(NUM_BOXES, self.i + self.player.bombRange + 1)):
             #     if isinstance(self.level.gameobjs[i][self.j], Wall):
@@ -110,11 +133,89 @@ class Bomb(GameObject):
                 return counter+1
         return self.kill_recurse(i+move_i, j+move_j, move_i, move_j, depth-1, counter+1)
 
-    def kill(self):
-        self.incDown   = self.kill_recurse(self.i, self.j, 1, 0, self.incDown, -1)
-        self.incUp     = self.kill_recurse(self.i, self.j,-1, 0, self.incUp, -1)
-        self.incRight  = self.kill_recurse(self.i, self.j, 0, 1, self.incRight, -1)
-        self.incLeft   = self.kill_recurse(self.i, self.j, 0,-1, self.incLeft, -1)
+
+    def queueKill(self,depth):
+        queue=[]
+        queue.append(((self.i+1,self.j),(0,1),1))
+        queue.append(((self.i-1,self.j),(0,-1),1))
+        queue.append(((self.i,self.j+1),(1,0),1))
+        queue.append(((self.i,self.j-1),(-1,0),1))
+        drawSpots=[(self.i,self.j)]
+
+        while len(queue)>0:
+
+            temp=queue.pop(0)
+            i=temp[0][0]
+            j=temp[0][1]
+            x=temp[1][0]
+            y=temp[1][1]
+
+            stop=False
+            if isinstance(self.level.gameobjs[i][j],Wall):
+                stop=True
+            if isinstance(self.level.gameobjs[i][j],Bomb):
+                self.level.gameobjs[i][j].explode()
+                stop=True
+
+
+
+            if isinstance(self.level.gameobjs[i][j], Box):
+                self.level.gameobjs[i][j].Destroy()
+                self.boxPosition.append((i,j))
+                stop=True
+            for player in self.level.players:
+                if Point.int(player.position) == Point(j, i):
+                    player.Destroy()
+                    stop=True
+            for monster in self.level.monsters:
+                if Point.int(monster.position) == Point(j, i):
+                    monster.Destroy()
+                    stop=True
+
+            if not stop:
+                drawSpots.append((i, j))
+                if temp[2]<depth and not (i,j) in self.boxPosition:
+                    queue.append(((i+y,j+x),(x,y),temp[2]+1))
+
+
+
+
+        return drawSpots
+
+
+
+
+
+
+
+
+
+
+
+    def kill(self,depth):
+        self.drawSpots=self.queueKill(depth)
+        # self.incDown = self.kill_recurse(self.i, self.j, 1, 0, self.incDown, -1)
+        # self.incUp  = self.kill_recurse(self.i, self.j, -1, 0, self.incUp, -1)
+        # self.incRight = self.kill_recurse(self.i, self.j, 0, 1, self.incRight, -1)
+        # self.incLeft = self.kill_recurse(self.i, self.j, 0,-1, self.incLeft, -1)
+
+        # if self.animationTimer>=0:
+        #     self.animationTimer-=0.01666
+        # else:
+        #     # self.currentRange+=1
+        #     self.animationTimer=0.5
+        #     if self.incDown>=self.currentRange-1:
+        #         self.incDown=self.currentRange+1
+        #     if self.incUp>=self.currentRange-1:
+        #         self.incUp=self.currentRange+1
+        #     if self.incRight>=self.currentRange-1:
+        #         self.incRight=self.currentRange+1
+        #     if self.incLeft>=self.currentRange-1:
+        #         self.incLeft=self.currentRange+1
+        #
+        #     self.currentRange+=1
+
+
 
         if (Point.int(self.player.position) == self.position and \
             self.player in self.level.players):

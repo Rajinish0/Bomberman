@@ -39,7 +39,7 @@ def init(map_, bw, bh):
                 case game_elements.BORDER_WALL:
                     elem = BorderWall(p, bw, bh);
                 case game_elements.PLAYER1:
-                    players.append(Player(game_elements.PLAYER1_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'bomber-sprite.png'),keys["p1"],bw,bh))
+                    players.append(Player(game_elements.PLAYER1_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'bomber-sprite2.png'),keys["p1"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PLAYER2:
                     players.append(Player(game_elements.PLAYER2_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'bomber-sprite.png'),keys["p2"],bw,bh))

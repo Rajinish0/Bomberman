@@ -97,9 +97,11 @@ class ControlsWindow(Screen):
             }
         }
 
+        self.assigned_keys=set()
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
                 button.text = pygame.key.name(self.keys[player][key])
+                self.assigned_keys.add(pygame.key.name(self.keys[player][key]))
 
 
         with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:

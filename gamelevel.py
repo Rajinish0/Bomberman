@@ -87,10 +87,21 @@ class GameLevel:
         self.player2Wins=0;
         self.randomizePowerUps()
         self.finished=False
+        self.brTimer=30
+        self.brAnimationFinished=False
 
 
     def update(self):
         if(not self.gameEnd):
+            if self.brTimer<=0:
+
+                #Animation Logic : Returns self.brAnimationFinished=True
+
+                if self.brAnimationFinished:
+                    self.brTimer=45
+
+            self.brTimer-=0.016666
+
             for i in range(NUM_BOXES):
                 for j in range(NUM_BOXES):
                     self.gameobjs[i][j].update()
@@ -194,6 +205,7 @@ class GameLevel:
         self.endStart=False
         self.gameEnd=True
         self.finished = self.player1Wins == 2 or self.player2Wins == 2
+        self.brTimer=30
 
 
 

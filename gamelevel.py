@@ -95,10 +95,11 @@ class GameLevel:
         if(not self.gameEnd):
             if self.brTimer<=0:
 
-                #Animation Logic : Returns self.brAnimationFinished=True
+                #Insert Animation Logic : Returns self.brAnimationFinished=True
 
                 if self.brAnimationFinished:
                     self.brTimer=45
+                    self.brAnimationFinished=False
 
             self.brTimer-=0.016666
 
@@ -206,6 +207,7 @@ class GameLevel:
         self.gameEnd=True
         self.finished = self.player1Wins == 2 or self.player2Wins == 2
         self.brTimer=30
+        self.brAnimationFinished=False
 
 
 

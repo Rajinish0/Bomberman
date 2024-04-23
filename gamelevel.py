@@ -111,7 +111,7 @@ class GameLevel:
                 self.startEnd(player)
                 break
 
-        self.gameobjs[row][col] = Wall(Point(col, row), self.bw, self.bh)
+        self.gameobjs[row][col] = BorderWall(Point(col, row), self.bw, self.bh)
 
     def update(self):
         if(not self.gameEnd):

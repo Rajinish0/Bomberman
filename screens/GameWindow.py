@@ -61,6 +61,7 @@ class GameWindow(Screen):
     def update(self):
         self.backButton.update()
         self.level.update()
+
         if self.level.finished:
             self.menuButton.update()
             self.restartButton.update()
@@ -68,6 +69,8 @@ class GameWindow(Screen):
             if self.timer>0:
                 self.timer-=1/FPS
             else:
+                self.level.nextRound()
+                self.timer = 5
                 self.level.nextRound()
 
     def getTimer(self):
@@ -83,6 +86,13 @@ class GameWindow(Screen):
             else:
                 return (text,WHITE)
 
+    def getBattleTimer(self):
+        min=str(math.floor(math.ceil(self.level.battleTimer)/60)).zfill(2)
+        sec=str(math.ceil(self.level.battleTimer)%60).zfill(2)
+        text=min+":"+sec
+        return (text,RED)
+
+
     def draw(self, display):
         display.fill((110, 161, 100))
         self.gamesurface.fill((110, 161, 100))
@@ -91,11 +101,15 @@ class GameWindow(Screen):
         self.infosurface.blit(self.pl2Image, ((self.gameWidth)-50, 0))
         self.backButton.draw(display)
 
-        timer=self.getTimer()
+        if not self.level.brTimer <= 0:
+            timer=self.getTimer()
+            drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
+        else:
+            timer = self.getBattleTimer()
+            drawText(self.infosurface, timer[0], self.gameWidth / 2, 30, size=50, color=timer[1], center=True)
 
         drawText(self.infosurface,PLAYER1_NAME,55,10,size=18,color=WHITE,center=False)
         drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
-        drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
         drawText(self.infosurface, PLAYER2_NAME, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
         drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
         if self.level.finished:
@@ -109,6 +123,7 @@ class GameWindow(Screen):
             drawText(display, text, W / 2, H / 2 - self.pHeight/2 + 30, color=BLACK)
             self.menuButton.draw(display)
             self.restartButton.draw(display)
+
         elif self.level.gameEnd:
             self.level.draw(self.gamesurface)
 

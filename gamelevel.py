@@ -89,7 +89,7 @@ class GameLevel:
         self.player2Wins=0;
         self.randomizePowerUps()
         self.finished=False
-        self.brTimer=2
+        self.brTimer = 120
         self.brAnimationFinished=False
 
         self.start = 1
@@ -98,6 +98,8 @@ class GameLevel:
         self.col = 1
         self.count = 0
         self.switch = 1
+
+        self.battleTimer = 60
 
     def battleRoyal(self, row, col):
         margin = 0.1
@@ -108,8 +110,16 @@ class GameLevel:
                 player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
                     (player_y - margin <= row <= player_y + 1 + margin or
                      player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
-                self.startEnd(player)
-                break
+                player.Destroy()
+
+        for monster in self.monsters:
+            monster_x = math.floor(monster.position.x)
+            monster_y = math.floor(monster.position.y)
+            if (monster_x - margin <= col <= monster_x + 1 + margin or
+                monster_x + 1 - margin <= col + 1 <= monster_x + 1 + margin) and \
+                    (monster_y - margin <= row <= monster_y + 1 + margin or
+                     monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
+                monster.Destroy()
 
         self.gameobjs[row][col] = Wall(Point(col, row), self.bw, self.bh)
 
@@ -150,12 +160,12 @@ class GameLevel:
                             self.switch = 1
                     self.count = 0
                 self.count += 1
-
+                self.battleTimer -= 0.016666
 
                 #Insert Animation Logic : Returns self.brAnimationFinished=True
 
                 if self.brAnimationFinished:
-                    self.brTimer=45
+                    self.brTimer = 120
                     self.brAnimationFinished=False
 
             self.brTimer-=0.016666
@@ -268,7 +278,7 @@ class GameLevel:
         self.endStart=False
         self.gameEnd=True
         self.finished = self.player1Wins == 2 or self.player2Wins == 2
-        self.brTimer = 10
+        self.brTimer = 120
         self.brAnimationFinished=False
 
     def startEnd(self,pl):

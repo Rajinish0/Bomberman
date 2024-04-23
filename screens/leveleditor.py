@@ -48,8 +48,7 @@ class LevelEditor(Screen):
         self.backButton = Button(
             10, 10, 30, 30, text="Back",
             callBack=lambda: self.gameMgr.setState(
-                self.gameMgr.getPrevState(),
-            ),
+                self.gameMgr.getPrevState()),
             center=False
         )
         self.boxButton = Button(
@@ -107,7 +106,7 @@ class LevelEditor(Screen):
         )
 
         self.resetButton = Button(
-            x=80, y=550, width=200, height=100,
+            x=80, y=850, width=200, height=100,
             callBack=lambda: self.reset(),
             center=False,
             text="Reset Map",
@@ -117,12 +116,16 @@ class LevelEditor(Screen):
 
         self.startButton = Button(
             x=80, y=580, width=200, height=100,
-            callBack=lambda: (self.handleStartButton(),
-                              ),
+            callBack=lambda: (self.handleStartButton()),
             center=False,
             text="Start Game",
             textSize=15,
             textColor=BLACK,
+        )
+
+        self.oKButton = Button(
+            420, 300, 30, 30, text="Ok",
+            callBack=lambda: self.removePopUp()
         )
 
         self.selected = None
@@ -133,21 +136,28 @@ class LevelEditor(Screen):
         self.player2Coordinates = " "
         self.monsterCount = 0
         self.levels = 3
+        self.popUpWindow = False
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+    def removePopUp(self):
+        self.popUpWindow = False
 
     def handleStartButton(self):
         self.newMap()
         for row in self.map:
             print(row)
-        self.levels += 1
 
-        with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
-            for row in self.map:
-                f.write(''.join(row) + '\n')
+        if self.player1 and self.player2:
+            self.levels += 1
+            with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
+                for row in self.map:
+                    f.write(''.join(row) + '\n')
 
-        file = f'sprites/levels/level{self.levels}.txt'
-        self.main.setState(GAME_WINDOW, GameWindow(file)),
-        self.gameMgr.setState(GAME_WINDOW)
+            file = f'sprites/levels/level{self.levels}.txt'
+            self.main.setState(GAME_WINDOW, GameWindow(file)),
+            self.gameMgr.setState(GAME_WINDOW)
+        else:
+            self.popUpWindow = True
 
     def newMap(self):
         for i in range(NUM_BOXES):
@@ -203,11 +213,6 @@ class LevelEditor(Screen):
     def setSelected(self, elem):
         self.selected = elem
 
-    def start_game(self, file_path):
-        self.gameMgr.set_game_window_file_path(file_path)
-        game_window = GameWindow(file_path)
-        self.gameMgr.setState(GAME_WINDOW, game_window)
-
     # If the mouse was pressed but the co-ordinates clicked later were not part of the grid
     # Then set selected to None
     def handlePlayerMouse(self):
@@ -216,6 +221,7 @@ class LevelEditor(Screen):
                 self.setSelected(None)
 
     def reset(self):
+        print("hello")
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
 
@@ -250,7 +256,7 @@ class LevelEditor(Screen):
     # backButton goes back to the previous state
     # For box and wall it will set them as the selected element incase the mouse was clicked
     def update(self):
-
+        self.oKButton.update()
         self.handlePlayerMouse()
         self.backButton.update()
         self.boxButton.update()
@@ -270,13 +276,8 @@ class LevelEditor(Screen):
         self.fastMButton.update()
         self.pseudoIntMButton.update()
 
-
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
-
-
-    # def saveToFile(self):
-    #	with open()
 
     def draw(self, display):
         display.fill((110, 161, 100))
@@ -313,3 +314,23 @@ class LevelEditor(Screen):
                 img.set_alpha(150)
                 display.blit(img, (mx - self.boxWidth / 2, my - self.boxHeight / 2))
                 img.set_alpha(255)
+
+        if self.popUpWindow:
+            x = 270
+            y = 220
+            width = 300
+            height = 100
+            font_size = 20
+            text_color = (255, 255, 255)
+            bg_color = (255, 0, 0)
+
+            rect = pygame.Rect(x, y, width, height)
+            pygame.draw.rect(display, bg_color, rect)
+            font = pygame.font.SysFont(None, font_size)
+            text_surface = font.render("2 Players Should Be Placed", True, text_color)
+            text_rect = text_surface.get_rect(center=rect.center)
+            display.blit(text_surface, text_rect)
+            self.oKButton.draw(display)
+
+
+

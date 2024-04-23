@@ -99,7 +99,7 @@ class GameLevel:
         self.count = 0
         self.switch = 1
 
-        self.battleTimer = 60
+        self.battleTimer = 10
 
     def battleRoyal(self, row, col):
         margin = 0.1
@@ -130,7 +130,6 @@ class GameLevel:
                     if self.switch == 1:
                         self.battleRoyal(self.row, self.col)
                         self.col += 1
-
                         if self.col == self.end+1:
                             self.col = self.end-1
                             self.switch = 2
@@ -158,6 +157,7 @@ class GameLevel:
                             self.row = self.start
                             self.row = self.start
                             self.switch = 1
+                            self.brAnimationFinished = True
                     self.count = 0
                 self.count += 1
                 self.battleTimer -= 0.016666
@@ -168,8 +168,8 @@ class GameLevel:
                     self.brTimer = 120
                     self.brAnimationFinished=False
 
-            self.brTimer-=0.016666
-
+            # self.brTimer-=0.016666
+            self.brTimer -= 0.2
 
 
             for i in range(NUM_BOXES):

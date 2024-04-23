@@ -1,5 +1,6 @@
 import math
 
+import gamelevel
 from screens.screen import Screen
 from constants import *
 from button import Button
@@ -32,6 +33,8 @@ class GameWindow(Screen):
         self.timer=5
         self.timeList=[3,2,1]
 
+        self.battleTimer = 14 * 14
+
         self.backButton = Button(
             30, 30, 30, 30, text="Back",
             callBack=lambda: self.gameMgr.setState(MAP_WINDOW)
@@ -55,9 +58,6 @@ class GameWindow(Screen):
         )
 
 
-
-
-
     def update(self):
         self.backButton.update()
         self.level.update()
@@ -70,8 +70,6 @@ class GameWindow(Screen):
             else:
                 self.level.nextRound()
 
-
-
     def getTimer(self):
         if self.level.brTimer<=0:
             return ("00:00",RED)
@@ -80,9 +78,11 @@ class GameWindow(Screen):
             sec=str(math.ceil(self.level.brTimer)%60).zfill(2)
             text=min+":"+sec
             if self.level.brTimer<4:
+                # print(self.level.brTimer)
                 return (text,RED)
             else:
                 return (text,WHITE)
+
     def draw(self, display):
         display.fill((110, 161, 100))
         self.gamesurface.fill((110, 161, 100))
@@ -92,6 +92,7 @@ class GameWindow(Screen):
         self.backButton.draw(display)
 
         timer=self.getTimer()
+
         drawText(self.infosurface,PLAYER1_NAME,55,10,size=18,color=WHITE,center=False)
         drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
         drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
@@ -121,13 +122,14 @@ class GameWindow(Screen):
             drawText(display,math.ceil(self.timer), W / 2, H / 2 +100,color=WHITE,size=50)
 
 
-
-
             # self.nextButton.draw(display)
         else:
             self.level.draw(self.gamesurface)
             display.blit(self.infosurface, (98, 0))
             display.blit(self.gamesurface, (98, 70))
+
+
+
 
 
 

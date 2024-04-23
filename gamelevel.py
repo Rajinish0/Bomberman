@@ -1,5 +1,7 @@
+import math
 import random
 
+import time
 from constants import game_elements
 from constants.game_constants import *
 from gameObjects import *
@@ -12,7 +14,6 @@ def loadKeys():
     with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'rb') as f:
         keys = pickle.load(f)
     return keys
-
 
 def init(map_, bw, bh):
 
@@ -71,9 +72,10 @@ class GameLevel:
         self.bw = boxwidth
         self.bh = boxheight
         GameObject.setLevel(self)
-
+        self.phase = 0
 
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
+
         if(len(self.monsters)==0):
             self.monsters=self.initMonster(2)
 
@@ -87,13 +89,68 @@ class GameLevel:
         self.player2Wins=0;
         self.randomizePowerUps()
         self.finished=False
-        self.brTimer=30
+        self.brTimer=2
         self.brAnimationFinished=False
 
+        self.start = 1
+        self.end = 14
+        self.row = 1
+        self.col = 1
+        self.count = 0
+        self.switch = 1
+
+    def battleRoyal(self, row, col):
+        margin = 0.1
+        for player in self.players:
+            player_x = math.floor(player.position.x)
+            player_y = math.floor(player.position.y)
+            if (player_x - margin <= col <= player_x + 1 + margin or
+                player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
+                    (player_y - margin <= row <= player_y + 1 + margin or
+                     player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
+                self.startEnd(player)
+                break
+
+        self.gameobjs[row][col] = Wall(Point(col, row), self.bw, self.bh)
 
     def update(self):
         if(not self.gameEnd):
-            if self.brTimer<=0:
+            if self.brTimer <= 0:
+                if self.count == 15:
+                    if self.switch == 1:
+                        self.battleRoyal(self.row, self.col)
+                        self.col += 1
+
+                        if self.col == self.end+1:
+                            self.col = self.end-1
+                            self.switch = 2
+
+                    elif self.switch == 2:
+                        self.battleRoyal(self.row, self.col)
+                        self.row += 1
+                        if self.row == self.end + 1:
+                            self.row = self.end - 1
+                            self.switch = 3
+
+                    elif self.switch == 3:
+                        self.battleRoyal(self.row, self.col)
+                        self.col -= 1
+                        if self.col == self.start-1:
+                            self.col = self.start
+                            self.switch = 4
+
+                    elif self.switch == 4:
+                        self.battleRoyal(self.row, self.col)
+                        self.row -= 1
+                        if self.row == self.start - 1:
+                            self.start += 1
+                            self.end -= 1
+                            self.row = self.start
+                            self.row = self.start
+                            self.switch = 1
+                    self.count = 0
+                self.count += 1
+
 
                 #Insert Animation Logic : Returns self.brAnimationFinished=True
 
@@ -102,6 +159,8 @@ class GameLevel:
                     self.brAnimationFinished=False
 
             self.brTimer-=0.016666
+
+
 
             for i in range(NUM_BOXES):
                 for j in range(NUM_BOXES):
@@ -117,19 +176,16 @@ class GameLevel:
 
             if(self.endStart):
                 if(self.winTimer<=0):
+
                     if(self.players[0].name=="Aunt May"):
                         self.player1Wins+=1
+
                     else:
                         self.player2Wins+=1
                     self.isOver()
                 else:
                     if(len(self.players)>0):
                         self.winTimer-=0.1
-
-
-
-
-
 
     def draw(self, display):
 
@@ -203,13 +259,17 @@ class GameLevel:
         return powups
 
     def isOver(self):
+        self.start = 1
+        self.end = 14
+        self.row = 1
+        self.col = 1
+        self.count = 0
+        self.switch = 1
         self.endStart=False
         self.gameEnd=True
         self.finished = self.player1Wins == 2 or self.player2Wins == 2
-        self.brTimer=30
+        self.brTimer = 10
         self.brAnimationFinished=False
-
-
 
     def startEnd(self,pl):
         self.players.remove(pl)
@@ -217,7 +277,8 @@ class GameLevel:
         if(len(self.players)==0):
             self.gameEnd=True
 
-    # def unpredictableMonster(self,monster):
+
+        # def unpredictableMonster(self,monster):
     #     rand_num=random.randint(0,100)
     #     if(rand_num>90):
     #         monster.makeDecision()

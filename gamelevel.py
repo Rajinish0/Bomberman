@@ -121,7 +121,7 @@ class GameLevel:
                      monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
                 monster.Destroy()
 
-        self.gameobjs[row][col] = Wall(Point(col, row), self.bw, self.bh)
+        self.gameobjs[row][col] = BorderWall(Point(col, row), self.bw, self.bh)
 
     def update(self):
         if(not self.gameEnd):

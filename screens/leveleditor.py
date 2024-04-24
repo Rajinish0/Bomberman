@@ -134,7 +134,7 @@ class LevelEditor(Screen):
         self.player1Coordinates = " "
         self.player2Coordinates = " "
         self.monsterCount = 0
-
+        self.maxMonster = 10
 
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
 
@@ -167,6 +167,18 @@ class LevelEditor(Screen):
                     self.player2Coordinates = (i, j)
         return True
 
+    """def handleMonster(self):
+        if self.selected in ("m", "f", "p", "g"):
+            (mx, my) = pygame.mouse.get_pos()
+            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+                if self.monsterCount <= self.maxMonster and self.grid[i][j] != self.selected:
+                    self.grid[i][j] = self.selected
+                    self.monsterCount += 1
+                    return True  # Monster was placed successfully
+        return False  # Monster placement failed"""
+
+
     def handleStartButton(self):
         self.newMap()
         for row in self.map:
@@ -187,7 +199,22 @@ class LevelEditor(Screen):
             if not self.handlePlayer():
                 self.setSelected(None)
 
+
+    def handleMonsterMouse(self):
+        if self.selected in ("m", "f", "g", "p"):
+            (mx, my) = pygame.mouse.get_pos()
+            if self.selected and inBound(mx, my, self.offSetX, self.offSetY,
+                                         W - self.offSetX, H - self.offSetY):
+                if self.monsterCount < self.maxMonster and self.evMgr.mousePressed:
+                    (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+                    self.grid[i][j] = self.selected
+                    self.monsterCount += 1
+                    return True
+            else:
+                return False
+
     def reset(self):
+        self.monsterCount = 0
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
 
@@ -200,7 +227,7 @@ class LevelEditor(Screen):
             return None
 
     def continousDraw(self):
-        if self.selected and ((self.selected != "a") and (self.selected != "c")):
+        if self.selected and (self.selected not in ("m", "f", "g", "p", "a", "c")):
             hovered_cell = self.getHoveredCell()
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell
@@ -208,7 +235,10 @@ class LevelEditor(Screen):
 
 
     def handleMousePos(self):
+
         if self.evMgr.mousePressed:
+            """if self.selected in ("m", "f", "g", "p"):
+                self.handleMonsterMouse()"""
             if not self.clicked:
                 (mx, my) = pygame.mouse.get_pos()
                 if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
@@ -234,6 +264,7 @@ class LevelEditor(Screen):
 
         self.handleMousePos()
         self.continousDraw()
+        self.handleMonsterMouse()
 
         self.P1Button.update()
         self.P2Button.update()

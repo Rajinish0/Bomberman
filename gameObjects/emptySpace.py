@@ -6,3 +6,6 @@ class EmptySpace(GameObject):
     def __init__(self, position,width, height):
         super().__init__(position, width, height)
         self.image = self.imgHandler.load(EmptySpace.image, (width, height))
+
+
+

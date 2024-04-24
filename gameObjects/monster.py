@@ -52,7 +52,8 @@ class Monster(GameCharacter):
 
     def makeDecision(self):
         directions=self.decisionList()
-        self.direction=random.choice(directions)
+        if directions:
+            self.direction=random.choice(directions)
 
     def decisionList(self):
         ls=[]
@@ -93,9 +94,7 @@ class GhostMonster(Monster):
 
     def isValid(self, coord):
         mvi, mvj = coord
-        if mvi<1 or mvj<1 or mvi>len(self.level.gameobjs)-2 or mvj>len(self.level.gameobjs[0])-2:
-            return False
-        return not isinstance(self.level.gameobjs[mvi][mvj], Bomb)
+        return not isinstance(self.level.gameobjs[mvi][mvj], (Bomb,BorderWall))
 
     def decisionList(self):
         ls=[]

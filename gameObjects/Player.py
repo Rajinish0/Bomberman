@@ -6,11 +6,14 @@ from point import Point
 from .emptySpace import EmptySpace
 from .powerup import PowerUp
 from utils import *
+from handlers import SpriteSheet
 
 
 class Player(GameCharacter):
     def __init__(self,n,position,speed,image,keys,w,h):
         super().__init__(position, speed)
+        self.spriteSheet = SpriteSheet(image, 32, 32, numActions = 4, numImagesPerAction = 7,
+                                       scaleSize = (w, h), defaultAction = 2 )
         self.image=self.imgHandler.load(image,(w,h))
         self.rw = .7
         self.rh = .7
@@ -28,18 +31,26 @@ class Player(GameCharacter):
 
         if keys[self.keys["UP"]]:
             self.move(Point(0,-1)*(self.speed))
+            self.spriteSheet.setAction(0)
 
         if keys[self.keys["DOWN"]]:
             self.move(Point(0,1)*(self.speed))
+            self.spriteSheet.setAction(2)
 
         if keys[self.keys["LEFT"]]:
             self.move(Point(-1,0)*(self.speed))
+            self.spriteSheet.setAction(3)
 
         if keys[self.keys["RIGHT"]]:
             self.move(Point(1,0)*(self.speed))
+            self.spriteSheet.setAction(1)
 
         if keys[self.keys["BOMB"]]:
             self.placeBomb()
+
+    def draw(self, display):
+        self.image = self.spriteSheet.getImage()
+        super().draw(display)
 
     def checkForDeath(self):
         for monster in self.level.monsters:

@@ -33,7 +33,7 @@ class GameWindow(Screen):
         self.timer=5
         self.timeList=[3,2,1]
 
-        self.battleTimer = 14 * 14
+       # self.battleTimer = 14 * 14
 
         self.backButton = Button(
             30, 30, 30, 30, text="Back",
@@ -87,6 +87,8 @@ class GameWindow(Screen):
                 return (text,WHITE)
 
     def getBattleTimer(self):
+        if self.level.battleTimer<=0:
+            return ("00:00",RED)
         min=str(math.floor(math.ceil(self.level.battleTimer)/60)).zfill(2)
         sec=str(math.ceil(self.level.battleTimer)%60).zfill(2)
         text=min+":"+sec
@@ -100,13 +102,14 @@ class GameWindow(Screen):
         self.infosurface.blit(self.pl1Image, (0, 0))
         self.infosurface.blit(self.pl2Image, ((self.gameWidth)-50, 0))
         self.backButton.draw(display)
-
-        if not self.level.brTimer <= 0:
-            timer=self.getTimer()
-            drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
-        else:
-            timer = self.getBattleTimer()
-            drawText(self.infosurface, timer[0], self.gameWidth / 2, 30, size=50, color=timer[1], center=True)
+        timer = self.getTimer()
+        drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
+        # if not self.level.brTimer <= 0:
+        #     timer=self.getTimer()
+        #     drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
+        # else:
+        #     timer = self.getBattleTimer()
+        #     drawText(self.infosurface, timer[0], self.gameWidth / 2, 30, size=50, color=timer[1], center=True)
 
         drawText(self.infosurface,PLAYER1_NAME,55,10,size=18,color=WHITE,center=False)
         drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)

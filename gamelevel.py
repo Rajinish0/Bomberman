@@ -99,7 +99,7 @@ class GameLevel:
         self.count = 0
         self.switch = 1
 
-        self.battleTimer = 10
+        #self.battleTimer = 10
 
     def battleRoyal(self, row, col):
         margin = 0.1
@@ -160,12 +160,13 @@ class GameLevel:
                             self.brAnimationFinished = True
                     self.count = 0
                 self.count += 1
-                self.battleTimer -= 0.016666
+                #self.battleTimer -= 0.016666
 
                 #Insert Animation Logic : Returns self.brAnimationFinished=True
 
                 if self.brAnimationFinished:
                     self.brTimer = 120
+                    #self.battleTimer=10
                     self.brAnimationFinished=False
 
             # self.brTimer-=0.016666
@@ -196,6 +197,8 @@ class GameLevel:
                 else:
                     if(len(self.players)>0):
                         self.winTimer-=0.1
+                    else:
+                        self.isOver()
 
     def draw(self, display):
 

@@ -188,27 +188,25 @@ class LevelEditor(Screen):
             if not self.handlePlayer():
                 self.setSelected(None)
 
-
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()
-            if self.selected and inBound(mx, my, self.offSetX, self.offSetY,
-                                         W - self.offSetX, H - self.offSetY):
-                if self.calculateMonsterCount() < self.maxMonster and self.evMgr.mousePressed:
-                    (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
-                    self.grid[i][j] = self.selected
-                    self.monsterCount += 1
-                    return True
-            else:
-                return False
+            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+                # Check if the grid cell is not already occupied by the same monster and count limit not exceeded
+                if self.grid[i][j] != self.selected and self.calculateMonsterCount() < self.maxMonster:
+                    if self.evMgr.mousePressed:  # Ensure that the mouse button is pressed
+                        self.grid[i][j] = self.selected
+                        self.monsterCount += 1
+                        return True
+            return False
 
     def calculateMonsterCount(self):
-        num = 0
-        for i in range(NUM_BOXES):
-           for j in range(NUM_BOXES):
-               if self.grid[i][j] == Monster:
-                   num += 1
-        return num
+        count = 0
+        for row in self.grid:
+            count += row.count(BASE_MONSTER) + row.count(GHOST_MONSTER) + row.count(FAST_MONSTER) + row.count(
+                PSEUDOINTELLIGENT_MONSTER)
+        return count
 
     def reset(self):
         self.monsterCount = 0

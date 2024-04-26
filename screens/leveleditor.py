@@ -16,12 +16,12 @@ imgs = {
     BOX: Box.image,
     WALL: Wall.image,
     EMPTY: EmptySpace.image,
-    PLAYER1 : "sprites/players/Gamer1.png",
-    PLAYER2 : "sprites/players/Gamer2.png",
-    BASE_MONSTER : "sprites/monsters/m1.jpg",
-    GHOST_MONSTER : "sprites/monsters/m1.jpg",
-    FAST_MONSTER : "sprites/monsters/m1.jpg",
-    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m1.jpg"
+    PLAYER1 : "sprites/players/g1.png",
+    PLAYER2 : "sprites/players/g2.png",
+    BASE_MONSTER : "sprites/monsters/m1b.png",
+    GHOST_MONSTER : "sprites/monsters/m1b.png",
+    FAST_MONSTER : "sprites/monsters/m1b.png",
+    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m1b.png"
 }
 
 # The surrounding borders
@@ -73,37 +73,37 @@ class LevelEditor(Screen):
         )
 
         self.P1Button = Button(
-            80, 200, self.boxWidth, self.boxHeight, img="sprites/players/Gamer1.png",
+            80, 200, self.boxWidth, self.boxHeight, img="sprites/players/g1.png",
             callBack=lambda:self.setSelected(PLAYER1),
             center=False
         )
 
         self.P2Button = Button(
-            80, 260, self.boxWidth, self.boxHeight, img="sprites/players/Gamer2.png",
+            80, 260, self.boxWidth, self.boxHeight, img="sprites/players/g2.png",
             callBack=lambda:self.setSelected(PLAYER2),
             center=False
         )
 
         self.baseMButton = Button(
-            80, 320, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            80, 320, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
             callBack=lambda: self.setSelected(BASE_MONSTER),
             center=False
         )
 
         self.ghostMButton = Button(
-            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
             callBack=lambda: self.setSelected(GHOST_MONSTER),
             center=False
         )
 
         self.fastMButton = Button(
-            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
             callBack=lambda: self.setSelected(FAST_MONSTER),
             center=False
         )
 
         self.pseudoIntMButton = Button(
-            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m1.jpg",
+            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
             callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
             center=False
         )
@@ -348,6 +348,8 @@ class LevelEditor(Screen):
             for j in range(NUM_BOXES):
                 x = self.offSetX + j * self.boxWidth
                 y = self.offSetY + i * self.boxHeight
+
+                display.blit(self.load(imgs[EMPTY]), (x,y))
 
                 if i in borders or j in borders:
                     display.blit(self.load(imgs[WALL]), (x, y))

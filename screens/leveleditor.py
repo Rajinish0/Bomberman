@@ -126,6 +126,11 @@ class LevelEditor(Screen):
             textColor=BLACK,
         )
 
+        self.oKButton = Button(
+            420, 300, 30, 30, text="Ok",
+            callBack=lambda: self.removePopUp()
+        )
+
         self.selected = None
         self.clicked = False
 
@@ -135,8 +140,13 @@ class LevelEditor(Screen):
         self.player2Coordinates = " "
         self.monsterCount = 0
         self.maxMonster = 10
+        self.levels = 3
+        self.popUpWindow = False
 
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+    def removePopUp(self):
+        self.popUpWindow = False
 
     def handlePlayer(self):
         if self.selected in ("a", "c"):
@@ -150,7 +160,7 @@ class LevelEditor(Screen):
                     self.player1 = True
                 elif ((self.selected == "a" and self.player1)):
                     (k, l) = self.player1Coordinates
-                    print(self.player1Coordinates)
+                    # print(self.player1Coordinates)
                     self.grid[k][l] = " "
                     self.grid[i][j] = self.selected
                     self.player1Coordinates = (i, j)
@@ -172,6 +182,18 @@ class LevelEditor(Screen):
         self.newMap()
         for row in self.map:
             print(row)
+
+        if self.player1 and self.player2:
+            self.levels += 1
+            with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
+                for row in self.map:
+                    f.write(''.join(row) + '\n')
+
+            file = f'sprites/levels/level{self.levels}.txt'
+            self.main.setState(GAME_WINDOW, GameWindow(file)),
+            self.gameMgr.setState(GAME_WINDOW)
+        else:
+            self.popUpWindow = True
 
     def setSelected(self, elem):
         self.selected = elem
@@ -209,7 +231,6 @@ class LevelEditor(Screen):
         return count
 
     def reset(self):
-        self.monsterCount = 0
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
 
@@ -251,7 +272,7 @@ class LevelEditor(Screen):
     # backButton goes back to the previous state
     # For box and wall it will set them as the selected element incase the mouse was clicked
     def update(self):
-
+        self.oKButton.update()
         self.handlePlayerMouse()
         self.backButton.update()
         self.boxButton.update()
@@ -299,6 +320,10 @@ class LevelEditor(Screen):
                     self.map[i][j] = "f"
                 elif self.grid[i][j] == PSEUDOINTELLIGENT_MONSTER:
                     self.map[i][j] = "p"
+                elif self.grid[i][j] == PLAYER1:
+                    self.map[i][j] = "a"
+                elif self.grid[i][j] == PLAYER2:
+                    self.map[i][j] = "c"
 
     # def saveToFile(self):
     #	with open()
@@ -321,8 +346,8 @@ class LevelEditor(Screen):
         # Draws the rectangular lines
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
-                x = self.offSetX + j * self.boxWidth;
-                y = self.offSetY + i * self.boxHeight;
+                x = self.offSetX + j * self.boxWidth
+                y = self.offSetY + i * self.boxHeight
 
                 if i in borders or j in borders:
                     display.blit(self.load(imgs[WALL]), (x, y))
@@ -338,3 +363,20 @@ class LevelEditor(Screen):
                 img.set_alpha(150)
                 display.blit(img, (mx - self.boxWidth / 2, my - self.boxHeight / 2))
                 img.set_alpha(255)
+
+        if self.popUpWindow:
+            x = 270
+            y = 220
+            width = 300
+            height = 100
+            font_size = 20
+            text_color = (255, 255, 255)
+            bg_color = (255, 0, 0)
+
+            rect = pygame.Rect(x, y, width, height)
+            pygame.draw.rect(display, bg_color, rect)
+            font = pygame.font.SysFont(None, font_size)
+            text_surface = font.render("2 Players Should Be Placed", True, text_color)
+            text_rect = text_surface.get_rect(center=rect.center)
+            display.blit(text_surface, text_rect)
+            self.oKButton.draw(display)

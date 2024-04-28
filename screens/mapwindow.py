@@ -7,6 +7,34 @@ from .screen import Screen
 import os
 
 class MapWindow(Screen):
+
+	def __init__(self):
+		self.btnBack = Button(
+			30, 30, 30, 30, text="Back",
+			callBack=lambda: (self.go_back())
+		)
+
+		self.btnStart=Button(
+			W/2, H-60, 30, 30, text="Start",color=BLACK,textColor=BLACK,
+			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+		)
+
+		self.forwardStart=Button(
+			W-100, H-60, 30, 30, text="-->",color=BLACK,textColor=BLACK,
+			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+		)
+
+
+		self.backwardStart=Button(
+			W-150, H-60, 30, 30, text="<--",color=BLACK,textColor=BLACK,
+			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+		)
+
+		self.create_buttons()
+		self.currMap=self.button_data[0]
+		self.currInd=None
+		self.totalWindow = 0
+
 	def start_game(self, file_path):
 		if self.currInd:
 			self.currInd=None
@@ -25,14 +53,13 @@ class MapWindow(Screen):
 		button_index = 0
 
 		for filename in os.listdir(directory_name):
-			print(filename)
 			if filename.endswith('.txt'):  # Filter out non-txt files
 				map_path = os.path.join(directory_name, filename)  # Get the full path of the map file
 
-				# Calculate the x position of the button
-				x_position = (button_index % buttons_per_row) * 210 + 200
+				# if button_index > 5:
+				# 	button_index = 0
 
-				# Calculate the y position of the button
+				x_position = (button_index % buttons_per_row) * 210 + 200
 				y_position = (button_index // buttons_per_row) * 200 + 220
 
 				self.button_data.append({
@@ -46,9 +73,10 @@ class MapWindow(Screen):
 
 
 		self.buttons = []
+
 		for data in self.button_data:
 			button = Button(data["x"], data["y"], 150, 150,
-							img=os.path.join(data["img"]))
+							img=os.path.join(data["img"]), text=data["map_file"], textSize=10, textColor=BLACK)
 			self.buttons.append(button)
 
 
@@ -59,50 +87,13 @@ class MapWindow(Screen):
 	# 		callBack=lambda: self.start_game("sprites/defaultMap.txt"),
 	# 		img=os.path.join(IMG_PATH, 'Solid_white.png')
 	# 	)
-	def __init__(self):
-		self.btnBack = Button(
-			30, 30, 30, 30, text="Back",
-			callBack=lambda: (self.go_back())
-		)
-		# self.button_data = [
-		# 	{"x": 200, "y": 220, "map_file": 'sprites/levels/defaultMap.txt', "img": 'sprites/maps/map1.png'},
-		# 	{"x": 410, "y": 220, "map_file": 'sprites/levels/SecondMap.txt', "img": 'sprites/maps/map2.png'},
-		# 	{"x": 610, "y": 220, "map_file": 'sprites/levels/ThirdMap.txt', "img": 'sprites/maps/map3.png'}
-		# ]
-
-		self.create_buttons()
-
-		self.currMap=self.button_data[0]
-		self.currInd=None
-
-		self.btnStart=Button(
-			W/2, H-60, 30, 30, text="Start",color=BLACK,textColor=BLACK,
-			callBack=lambda : (self.start_game(self.currMap["map_file"]))
-		)
-
-
-		self.forwardStart=Button(
-			W-100, H-60, 30, 30, text="-->",color=BLACK,textColor=BLACK,
-			callBack=lambda : (self.start_game(self.currMap["map_file"]))
-		)
-
-
-		self.backwardStart=Button(
-			W-150, H-60, 30, 30, text="<--",color=BLACK,textColor=BLACK,
-			callBack=lambda : (self.start_game(self.currMap["map_file"]))
-		)
-
-		#
-		# self.buttons = []
-		# for data in self.button_data:
-		# 	button = Button(data["x"], data["y"], 150, 150,img=os.path.join(data["img"]))
-		# 	self.buttons.append(button)
 
 
 
 
 	def update(self):
 		self.btnBack.update()
+		self.create_buttons()
 		self.btnStart.update()
 
 		for ind,button in enumerate(self.buttons):

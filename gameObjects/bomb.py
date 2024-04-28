@@ -7,7 +7,7 @@ from .box import Box
 from point import Point
 
 class Bomb(GameObject):
-    image = "sprites/gameobjects/Bomb.png"
+    image = "sprites/gameobjects/bomb.png"
     expImage = "sprites/gameobjects/explode.png"
     TIMER_CONST = 10
     EXPLODE_CONST = 3

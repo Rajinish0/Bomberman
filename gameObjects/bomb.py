@@ -22,6 +22,7 @@ class Bomb(GameObject):
         self.timer = Bomb.TIMER_CONST
         self.animationTimer = 1
         self.currentDepth = 1
+        self.boxPosition = []
         self.explodeTimer = Bomb.EXPLODE_CONST
         self.image = self.imgHandler.load(self.image, (self.level.bw, self.level.bh))
         self.expImage = self.imgHandler.load(self.expImage, (self.level.bw, self.level.bh))

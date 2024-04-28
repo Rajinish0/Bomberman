@@ -2,8 +2,9 @@ from gameObjects.gameObject import GameObject
 import pygame
 from .powerup import *
 import random
-from .emptySpace import EmptySpace
+
 from point import Point
+
 
 class Box(GameObject):
     image = "sprites/gameobjects/boxImg.JPEG"

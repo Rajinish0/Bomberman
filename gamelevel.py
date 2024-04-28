@@ -104,22 +104,52 @@ class GameLevel:
     def battleRoyal(self, row, col):
         margin = 0.1
         for player in self.players:
-            player_x = math.floor(player.position.x)
-            player_y = math.floor(player.position.y)
-            if (player_x - margin <= col <= player_x + 1 + margin or
-                player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
-                    (player_y - margin <= row <= player_y + 1 + margin or
-                     player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
+            # player_x = int(player.position.x)
+            # player_y = int(player.position.y)
+            if (Point.int(player.position) == Point(col, row)):
+            # if (player_x - margin <= col <= player_x + 1 + margin or
+                # player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
+                    # (player_y - margin <= row <= player_y + 1 + margin or
+                     # player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
                 player.Destroy()
+            else:
+                if Point.int(Point(player.position.x - player.rw/2,
+                             player.position.y)) == Point(col, row):
+                    player.position = Point(col + 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x + player.rw/2,
+                             player.position.y)) == Point(col, row):
+                    player.position = Point(col - 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x,
+                             player.position.y + player.rh/2)) == Point(col, row):
+                    player.position = Point(col, row - 1).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x,
+                             player.position.y - player.rh/2)) == Point(col, row):
+                    player.position = Point(col, row + 1).add(Point(0.5, 0.5))
+
 
         for monster in self.monsters:
-            monster_x = math.floor(monster.position.x)
-            monster_y = math.floor(monster.position.y)
-            if (monster_x - margin <= col <= monster_x + 1 + margin or
-                monster_x + 1 - margin <= col + 1 <= monster_x + 1 + margin) and \
-                    (monster_y - margin <= row <= monster_y + 1 + margin or
-                     monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
+            if (Point.int(monster.position) == Point(col, row)):
                 monster.Destroy()
+            else:
+                if Point.int(Point(monster.position.x - monster.rw/2,
+                             monster.position.y)) == Point(col, row):
+                    monster.position = Point(col + 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x + monster.rw/2,
+                             monster.position.y)) == Point(col, row):
+                    monster.position = Point(col - 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x,
+                             monster.position.y + monster.rh/2)) == Point(col, row):
+                    monster.position = Point(col, row - 1).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x,
+                             monster.position.y - monster.rh/2)) == Point(col, row):
+                    monster.position = Point(col, row + 1).add(Point(0.5, 0.5))
+            # monster_x = math.floor(monster.position.x)
+            # monster_y = math.floor(monster.position.y)
+            # if (monster_x - margin <= col <= monster_x + 1 + margin or
+            #     monster_x + 1 - margin <= col + 1 <= monster_x + 1 + margin) and \
+            #         (monster_y - margin <= row <= monster_y + 1 + margin or
+            #          monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
+                # monster.Destroy()
 
         self.gameobjs[row][col] = BorderWall(Point(col, row), self.bw, self.bh)
 

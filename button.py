@@ -64,6 +64,7 @@ class Button:
         self.center = center
         self.pressed = False
         self.hovered = False
+        self.editing=False
         self.textSize = textSize
         if center: self.centerCords()
 
@@ -72,6 +73,7 @@ class Button:
         self.y -= self.h / 2
 
     def update(self):
+
         self.pressed = False
         if self.mouseInside():
             if (not self.hovered):
@@ -81,9 +83,15 @@ class Button:
             if self.evMgr.mousePressed:
                 if self.cb is not None: self.cb()
                 self.pressed = True
+
+
         elif self.hovered:
             resetCursor()
             self.hovered = False
+
+
+
+
 
     def setCallBack(self, cb):
         self.cb = cb

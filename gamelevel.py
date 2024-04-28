@@ -50,15 +50,15 @@ def init(map_, bw, bh):
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.GHOST_MONSTER:
                     monsters.append(
-                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm2.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.FAST_MONSTER:
                     monsters.append(
-                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm3.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
-                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -73,6 +73,8 @@ class GameLevel:
         self.bh = boxheight
         GameObject.setLevel(self)
         self.phase = 0
+        self.emptyImage = pygame.image.load(EmptySpace.image)
+        self.emptyImage = pygame.transform.scale(self.emptyImage, (boxwidth, boxheight))
 
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
 
@@ -206,6 +208,8 @@ class GameLevel:
 
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
+                # pos = self.gameobjs[i][j].position
+                display.blit(self.emptyImage, (j * self.bw, i * self.bh))
                 if not isinstance(self.gameobjs[i][j], Bomb):
                 # pygame.draw.rect(display, (255, 0, 0), (j * self.bw, i * self.bh, self.bw, self.bh), 1)
                     self.gameobjs[i][j].draw(display)
@@ -254,7 +258,7 @@ class GameLevel:
         for f in final_spots:
             p=Point(f[1],f[0])
             monsters.append(
-                GhostMonster(p, 0.025, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+                GhostMonster(p, 0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
 
         return monsters
 

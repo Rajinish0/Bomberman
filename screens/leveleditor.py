@@ -19,9 +19,9 @@ imgs = {
     PLAYER1 : "sprites/players/g1.png",
     PLAYER2 : "sprites/players/g2.png",
     BASE_MONSTER : "sprites/monsters/m1b.png",
-    GHOST_MONSTER : "sprites/monsters/m1b.png",
-    FAST_MONSTER : "sprites/monsters/m1b.png",
-    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m1b.png"
+    GHOST_MONSTER : "sprites/monsters/m2.png",
+    FAST_MONSTER : "sprites/monsters/m3.png",
+    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m4.png"
 }
 
 # The surrounding borders
@@ -91,19 +91,19 @@ class LevelEditor(Screen):
         )
 
         self.ghostMButton = Button(
-            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m2.png",
             callBack=lambda: self.setSelected(GHOST_MONSTER),
             center=False
         )
 
         self.fastMButton = Button(
-            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m3.png",
             callBack=lambda: self.setSelected(FAST_MONSTER),
             center=False
         )
 
         self.pseudoIntMButton = Button(
-            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m4.png",
             callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
             center=False
         )

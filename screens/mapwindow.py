@@ -71,10 +71,13 @@ class MapWindow(Screen):
 	def increasePage(self):
 		if self.totalWindow >= self.currWindow + 1:
 			self.currWindow += 1
+			self.currInd =None
+
 
 	def decreasePage(self):
 		if 0 <= self.currWindow - 1:
 			self.currWindow -= 1
+			self.currInd = None
 
 	def deleteMap(self):
 		file_name = self.currInd.text
@@ -100,6 +103,7 @@ class MapWindow(Screen):
 
 	def create_buttons(self):
 		directory_name = 'sprites/levels/'
+		directory_name_img = 'sprites/map_pictures/'
 		buttons_per_row = 3
 
 		self.button_data = []
@@ -108,31 +112,33 @@ class MapWindow(Screen):
 		total_window = 0
 
 		for filename in os.listdir(directory_name):
-			if filename.endswith('.txt'):  # Filter out non-txt files
-				map_path = os.path.join(directory_name, filename)  # Get the full path of the map file
+			map_path = os.path.join(directory_name, filename)
+			map_name = os.path.splitext(filename)[0]
 
-				if button_index > 5:
-					button_index = 0
-					total_window += 1
-					self.totalWindow = total_window
+			img_path = os.path.join(directory_name_img, f"{map_name}.jpg")
 
-				x_position = (button_index % buttons_per_row) * 210 + 200
-				y_position = (button_index // buttons_per_row) * 200 + 220
+			if button_index > 5:
+				button_index = 0
+				total_window += 1
+				self.totalWindow = total_window
 
-				self.button_data.append({
-					"page": total_window,
-					"x": x_position,
-					"y": y_position,
-					"map_file": map_path,  # Save the full path of the map file
-					"position": button_index,
-					"img": f'sprites/Solid_white.png'
-				})
+			x_position = (button_index % buttons_per_row) * 210 + 200
+			y_position = (button_index // buttons_per_row) * 200 + 220
 
-				button_index += 1  # Increment button index
+			self.button_data.append({
+				"page": total_window,
+				"x": x_position,
+				"y": y_position,
+				"map_file": map_path,  # Save the full path of the map file
+				"position": button_index,
+				"img": img_path
+			})
 
-				self.mapPerPage.update({
-					total_window: button_index
-				})
+			button_index += 1  # Increment button index
+
+			self.mapPerPage.update({
+				total_window: button_index
+			})
 
 		self.buttons = []
 		# if not self.currWindow:
@@ -140,7 +146,7 @@ class MapWindow(Screen):
 		for data in self.button_data:
 			if self.currWindow == data["page"]:
 				button = Button(data["x"], data["y"], 150, 150,
-								img=os.path.join(data["img"]), text=data["map_file"], textSize=10, textColor=BLACK, )
+								img=os.path.join(data["img"]), text=data["map_file"], textSize=1, color=(0, 0, 0, 0))
 				self.buttons.append(button)
 
 

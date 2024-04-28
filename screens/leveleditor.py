@@ -6,6 +6,9 @@ from gameObjects import *
 from utils import *
 import pygame
 from copy import deepcopy
+from PIL import Image
+import os
+
 
 '''
 TEMPORARY CLASS FOR EXPERIMENTATION PURPOSES.
@@ -141,9 +144,11 @@ class LevelEditor(Screen):
         self.player2Coordinates = " "
         self.monsterCount = 0
         self.maxMonster = 10
-        self.levels = 3
-        self.popUpWindow = False
+        self.directory = 'sprites/levels/'
+        self.levels = len(
+            [filename for filename in os.listdir(self.directory) if os.path.isfile(os.path.join(self.directory, filename))])
 
+        self.popUpWindow = False
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
 
     def removePopUp(self):
@@ -185,8 +190,38 @@ class LevelEditor(Screen):
             print(row)
 
         if self.player1 and self.player2:
+            background = Image.open("sprites/Solid_white.png")
+            background = background.resize((195, 195))
+            image = Image.open(imgs[WALL])
+            resized_image = image.resize((13, 13))
+            width, height = resized_image.size
+            y_offset = -height
+            for row in self.map:
+                y_offset += height
+                x_offset = 0
+                for elem in row:
+                    if elem == "@" or elem == "#":
+                        image = Image.open(imgs[WALL])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    if elem == " " or elem == "a" or elem == "c":
+                        image = Image.open(imgs[EMPTY])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    if elem == "b":
+                        image = Image.open(imgs[BOX])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    x_offset += width
+
+            background.save("output_image.jpg")
+
             self.levels += 1
             with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
+
                 for row in self.map:
                     f.write(''.join(row) + '\n')
 
@@ -298,6 +333,8 @@ class LevelEditor(Screen):
         self.fastMButton.update()
         self.pseudoIntMButton.update()
 
+        self.levels = len(
+            [filename for filename in os.listdir(self.directory) if os.path.isfile(os.path.join(self.directory, filename))])
 
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
@@ -325,9 +362,6 @@ class LevelEditor(Screen):
                     self.map[i][j] = "a"
                 elif self.grid[i][j] == PLAYER2:
                     self.map[i][j] = "c"
-
-    # def saveToFile(self):
-    #	with open()
 
     def draw(self, display):
         display.fill((110, 161, 100))
@@ -358,7 +392,6 @@ class LevelEditor(Screen):
                     display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
                     pygame.draw.rect(display, (225, 225, 225), (x, y, self.boxWidth, self.boxHeight), 1)
 
-        # Provides the visual of the selected element when the mouse is moving around
         if self.selected is not None:
             (mx, my) = pygame.mouse.get_pos()
             if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):

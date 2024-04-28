@@ -16,6 +16,7 @@ from gamelevel import GameLevel
 class GameWindow(Screen):
     def __init__(self, file_path=None):
 
+
         self.file_path = file_path
         self.offSetX = 200
         self.offSetY = 0

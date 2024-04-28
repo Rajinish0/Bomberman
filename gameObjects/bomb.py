@@ -36,14 +36,14 @@ class Bomb(GameObject):
                     self.boxPosition = []
                     self.range = self.player.bombRange
             else:
-                self.animationTimer -= (10/FPS)
+                self.animationTimer -= (15/FPS)
 
                 if self.animationTimer <= 0:
                     self.animationTimer = 1
                     self.currentDepth += 1
 
                 self.kill( min(self.currentDepth, self.range) )
-                self.explodeTimer -= 1/FPS
+                self.explodeTimer -= 5/FPS
                 self.finished = self.explodeTimer <= 0
         else:
             self.Destroy()

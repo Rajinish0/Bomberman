@@ -5,6 +5,7 @@ class GameObject:
     imgHandler=ImageHandler()
     image = None
     level = None
+
     def __init__(self, position, width, height):
         self.position = position # Point
         self.w = width

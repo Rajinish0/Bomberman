@@ -1,5 +1,6 @@
 from gameObjects.gameObject import GameObject
 import pygame
+from handlers import ImageHandler
 
 class EmptySpace(GameObject):
     image = "sprites/gameobjects/grass.jpg"

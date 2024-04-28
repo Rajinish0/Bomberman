@@ -14,7 +14,7 @@ class TestPlayer(TestCase):
         load.return_value = None
         loadImageMock.return_value = None
         transformScale.return_value = None
-        self.level = GameLevel('tests/custom_map.txt', 40, 40)
+        self.level = GameLevel('tests/maps/custom_map.txt', 40, 40)
         self.player1 = self.level.players[0]
         self.player2 = self.level.players[1]
     

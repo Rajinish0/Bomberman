@@ -1,3 +1,6 @@
+import math
+import pickle
+
 import pygame
 
 from button import Button
@@ -12,6 +15,7 @@ from utils import *
 class MapWindow(Screen):
 
 	def __init__(self):
+		self.caps=False
 		self.currWindow = 0
 		self.create_buttons()
 		self.currPressedName = None
@@ -23,21 +27,26 @@ class MapWindow(Screen):
 		self.currMap=self.button_data[0]
 		self.currInd=None
 
+		with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'rb') as f:
+			self.data = pickle.load(f)
+
+
+
 		self.create_buttons()
 		self.pl1Name = Button(
-			270 + 10, 150 + 80, 30, 30, text=PLAYER1_NAME,
+			270 + 10, 150 + 80, 30, 30, text=self.data["p1"],
 			textColor=BLACK, center=False
 		)
 		self.pl2Name = Button(
-			270 + W / 3 - 80, 150 + 80, 30, 30, text=PLAYER2_NAME,
+			270 + W / 3 - 80, 150 + 80, 30, 30, text=self.data["p2"],
 			textColor=BLACK, center=False)
 
 		self.time = Button(
-			(270 + W / 6), 150 + 150, 30, 30, text="05:23",
+			(270 + W / 6), 150 + 150, 30, 30, text=self.getTimer(self.data["timer"]),
 			textColor=BLACK)
 
 		self.rounds = Button(
-			(270 + W / 6), 150 + 200, 30, 30, text="3",
+			(270 + W / 6), 150 + 200, 30, 30, text=str(self.data["rounds"]),
 			textColor=BLACK)
 
 		self.dataSurface = pygame.Surface((W / 3, (H / 2)))
@@ -89,6 +98,13 @@ class MapWindow(Screen):
 		self.showData=True
 
 	def start_game(self, file_path):
+		self.data["p1"] = self.pl1Name.text
+		self.data["p2"] = self.pl2Name.text
+		time=self.time.text.split(":")
+		self.data["timer"]=int(time[0])*60+int(time[1])
+		self.data["round"]=int(self.rounds.text)
+		with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'wb') as f:
+			data = pickle.dump(self.data, f)
 		if self.currInd:
 			self.currInd=None
 			self.main.setState(GAME_WINDOW, GameWindow(file_path))
@@ -97,6 +113,15 @@ class MapWindow(Screen):
 	def go_back(self):
 		self.currInd = None
 		self.gameMgr.setState(MAIN_WINDOW)
+
+	def getTimer(self,timer):
+		if timer <= 0:
+			return ("00:00")
+		else:
+			min = str(math.floor(math.ceil(timer) / 60)).zfill(2)
+			sec = str(math.ceil(timer) % 60).zfill(2)
+			text = min + ":" + sec
+			return text
 
 	def create_buttons(self):
 		directory_name = 'sprites/levels/'
@@ -146,16 +171,24 @@ class MapWindow(Screen):
 
 	def handleEvent(self, event):
 		if self.currPressedName:
-			text=self.currPressedName.text
+			text = self.currPressedName.text
 			if event.type == pygame.KEYDOWN:
-				if pygame.key.name(event.key)=="backspace":
-					text=text[:-1]
-				elif pygame.key.name(event.key)=="enter":
-					self.currPressedName=None
-				elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$",pygame.key.name(event.key)):
-					text+=pygame.key.name(event.key)
+				if pygame.key.name(event.key) == "left shift":
+					self.caps = True
+				if pygame.key.name(event.key) == "backspace":
+					text = text[:-1]
+				elif pygame.key.name(event.key) == "enter":
+					self.currPressedName = None
+				elif pygame.key.name(event.key) == "space":
+					text += " "
+				elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)):
+					if self.caps:
+						text += pygame.key.name(event.key).upper()
+					else:
+						text += pygame.key.name(event.key)
+
 			if self.currPressedName:
-				self.currPressedName.text=text
+				self.currPressedName.text = text
 		elif self.currPressedTime:
 			text = self.currPressedTime.text.split(":")
 			if event.type == pygame.KEYDOWN:
@@ -185,6 +218,9 @@ class MapWindow(Screen):
 					text+=pygame.key.name(event.key)
 			if self.currPressedRounds:
 				self.currPressedRounds.text=text
+		if event.type == pygame.KEYUP:
+			if pygame.key.name(event.key) == "left shift":
+				self.caps = False
 
 	def update(self):
 		self.btnBack.update()
@@ -203,6 +239,8 @@ class MapWindow(Screen):
 		self.pl1Name.update()
 		self.pl2Name.update()
 		if self.pl1Name.pressed:
+			self.currPressedRounds=False
+			self.currPressedTime=False
 			self.currPressedName=self.pl1Name
 		elif self.pl2Name.pressed:
 			self.currPressedName = self.pl2Name
@@ -210,10 +248,14 @@ class MapWindow(Screen):
 		self.time.update()
 
 		if self.time.pressed:
+			self.currPressedRounds = False
+			self.currPressedName = False
 			self.currPressedTime=self.time
 
 		self.rounds.update()
 		if self.rounds.pressed:
+			self.currPressedName = False
+			self.currPressedTime = False
 			self.currPressedRounds=self.rounds
 
 

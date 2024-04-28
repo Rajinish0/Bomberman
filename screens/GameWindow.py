@@ -1,4 +1,5 @@
 import math
+import pickle
 
 import gamelevel
 from screens.screen import Screen
@@ -13,6 +14,8 @@ from gameObjects.emptySpace import EmptySpace
 from gameObjects.Player import Player
 from point import Point
 from gamelevel import GameLevel
+
+
 class GameWindow(Screen):
     def __init__(self, file_path=None):
 
@@ -33,6 +36,10 @@ class GameWindow(Screen):
         self.pl2Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70) )
         self.timer=5
         self.timeList=[3,2,1]
+
+
+
+
 
        # self.battleTimer = 14 * 14
 
@@ -112,9 +119,9 @@ class GameWindow(Screen):
         #     timer = self.getBattleTimer()
         #     drawText(self.infosurface, timer[0], self.gameWidth / 2, 30, size=50, color=timer[1], center=True)
 
-        drawText(self.infosurface,PLAYER1_NAME,55,10,size=18,color=WHITE,center=False)
+        drawText(self.infosurface,self.level.pl1Name,55,10,size=18,color=WHITE,center=False)
         drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
-        drawText(self.infosurface, PLAYER2_NAME, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
+        drawText(self.infosurface, self.level.pl2Name, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
         drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
         if self.level.finished:
             self.timer=5

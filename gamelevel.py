@@ -15,6 +15,11 @@ def loadKeys():
         keys = pickle.load(f)
     return keys
 
+def loadData():
+    with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'rb') as f:
+        data=pickle.load(f)
+    return data
+
 def init(map_, bw, bh):
 
     reader = GridReader(map_)
@@ -73,8 +78,18 @@ class GameLevel:
         self.bh = boxheight
         GameObject.setLevel(self)
         self.phase = 0
+        self.data=loadData()
+
+
 
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
+
+        self.pl1Name=self.data["p1"]
+        self.pl2Name=self.data["p2"]
+        self.brTimer = self.data["timer"]
+        self.numRounds=self.data["round"]
+        self.players[0].name=self.pl1Name
+        self.players[1].name=self.pl2Name
 
         if(len(self.monsters)==0):
             self.monsters=self.initMonster(2)
@@ -89,7 +104,7 @@ class GameLevel:
         self.player2Wins=0;
         self.randomizePowerUps()
         self.finished=False
-        self.brTimer = 120
+
         self.brAnimationFinished=False
 
         self.start = 1
@@ -165,7 +180,7 @@ class GameLevel:
                 #Insert Animation Logic : Returns self.brAnimationFinished=True
 
                 if self.brAnimationFinished:
-                    self.brTimer = 120
+                    self.brTimer = self.data["timer"]
                     #self.battleTimer=10
                     self.brAnimationFinished=False
 
@@ -224,6 +239,8 @@ class GameLevel:
 
     def nextRound(self):
         self.gameobjs, self.players, self.monsters = init(self.mp, self.bw, self.bh)
+        self.players[0].name = self.pl1Name
+        self.players[1].name = self.pl2Name
         if (len(self.monsters) == 0):
             self.monsters = self.initMonster(2)
 
@@ -280,8 +297,8 @@ class GameLevel:
         self.switch = 1
         self.endStart=False
         self.gameEnd=True
-        self.finished = self.player1Wins == 2 or self.player2Wins == 2
-        self.brTimer = 120
+        self.finished = self.player1Wins == self.numRounds or self.player2Wins == self.numRounds
+        self.brTimer = self.data["timer"]
         self.brAnimationFinished=False
 
     def startEnd(self,pl):

@@ -21,10 +21,23 @@ key_dic = {
 }
 
 
+data_dic={
+    "p1": "Aunt May",
+    "p2": "Uncle Ben",
+    "timer": 120,
+    "rounds": 2}
+
 def reset():
     with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
         pickle.dump(key_dic, f)
     return key_dic
 
+def reset2():
+    with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'wb') as f:
+        pickle.dump(data_dic, f)
+    return data_dic
+
+
 if __name__ == '__main__':
     reset()
+    reset2()

@@ -8,7 +8,7 @@ from gameObjects import *
 from utils import *
 import pygame
 from copy import deepcopy
-from PIL import Image
+
 import os
 
 
@@ -142,7 +142,7 @@ class LevelEditor(Screen):
         self.currPressedName=False
         self.selected = None
         self.clicked = False
-
+        self.caps=False
         self.player1 = False
         self.player2 = False
         self.player1Coordinates = " "
@@ -274,14 +274,25 @@ class LevelEditor(Screen):
         if self.currPressedName:
             text = self.currPressedName.text
             if event.type == pygame.KEYDOWN:
+                if pygame.key.name(event.key) == "left shift":
+                    self.caps=True
                 if pygame.key.name(event.key) == "backspace":
                     text = text[:-1]
                 elif pygame.key.name(event.key) == "enter":
                     self.currPressedName = None
+                elif pygame.key.name(event.key)=="space":
+                    text +=" "
                 elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)):
-                    text += pygame.key.name(event.key)
+                    if self.caps:
+                        text += pygame.key.name(event.key).upper()
+                    else:
+                        text += pygame.key.name(event.key)
+
             if self.currPressedName:
                 self.currPressedName.text = text
+        if event.type==pygame.KEYUP:
+            if pygame.key.name(event.key) == "left shift":
+                self.caps = False
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()

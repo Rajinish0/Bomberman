@@ -54,6 +54,7 @@ class LevelEditor(Screen):
             ),
             center=False
         )
+
         self.boxButton = Button(
             80, 20, self.boxWidth, self.boxHeight, img=Box.image,
             callBack=lambda: self.setSelected(BOX),

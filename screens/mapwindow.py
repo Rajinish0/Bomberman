@@ -25,6 +25,7 @@ class MapWindow(Screen):
 		button_index = 0
 
 		for filename in os.listdir(directory_name):
+			print(filename)
 			if filename.endswith('.txt'):  # Filter out non-txt files
 				map_path = os.path.join(directory_name, filename)  # Get the full path of the map file
 
@@ -50,8 +51,6 @@ class MapWindow(Screen):
 							img=os.path.join(data["img"]))
 			self.buttons.append(button)
 
-		print(self.buttons)
-
 
 		# def __init__(self):
 	# 	# ... existing code ...
@@ -75,10 +74,24 @@ class MapWindow(Screen):
 
 		self.currMap=self.button_data[0]
 		self.currInd=None
+
 		self.btnStart=Button(
-			W/2, H-100, 30, 30, text="Start",color=BLACK,textColor=BLACK,
+			W/2, H-60, 30, 30, text="Start",color=BLACK,textColor=BLACK,
 			callBack=lambda : (self.start_game(self.currMap["map_file"]))
 		)
+
+
+		self.forwardStart=Button(
+			W-100, H-60, 30, 30, text="-->",color=BLACK,textColor=BLACK,
+			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+		)
+
+
+		self.backwardStart=Button(
+			W-150, H-60, 30, 30, text="<--",color=BLACK,textColor=BLACK,
+			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+		)
+
 		#
 		# self.buttons = []
 		# for data in self.button_data:
@@ -91,12 +104,12 @@ class MapWindow(Screen):
 	def update(self):
 		self.btnBack.update()
 		self.btnStart.update()
+
 		for ind,button in enumerate(self.buttons):
 			button.update()
 			if button.pressed:
 				self.currMap=self.button_data[ind]
 				self.currInd=button
-
 
 	def draw(self, display):
 		display.fill((110, 161, 100))
@@ -114,6 +127,8 @@ class MapWindow(Screen):
 		display.blit(rect1_surface, (50, 62))
 
 		self.btnStart.draw(display)
+		self.forwardStart.draw(display)
+		self.backwardStart.draw(display)
 
 		self.btnBack.draw(display)
 		for button in self.buttons:

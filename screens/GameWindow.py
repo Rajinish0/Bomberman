@@ -25,7 +25,7 @@ class GameWindow(Screen):
         self.boxHeight = (520 - self.offSetY) // NUM_BOXES
         self.level = GameLevel(file_path,self.boxWidth,self.boxHeight)
         self.gamesurface = pygame.Surface((self.gameWidth, self.gameHeight), pygame.SRCALPHA)
-        self.infosurface = pygame.Surface((self.gameWidth, (H-self.gameHeight+70)) )
+        self.infosurface = pygame.Surface((self.gameWidth, (H-self.gameHeight+70)))
         self.pWidth, self.pHeight = int(self.gameWidth*0.75), self.gameHeight//2
         self.popUpWindow = pygame.Surface(  (self.pWidth, self.pHeight), pygame.SRCALPHA )
         self.pl1Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70) )

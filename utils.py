@@ -35,3 +35,4 @@ def rectsCollide(r1 : tuple , r2 : tuple) -> bool:
 	(x2, y2, w2, h2) = r2
 
 	return (x2-w1<x1<x2+w2 and y2-h1<y1<y2+h2)
+

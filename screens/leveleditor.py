@@ -1,3 +1,5 @@
+import os
+import re
 from .screen import Screen
 from screens.GameWindow import GameWindow
 from constants import *
@@ -49,9 +51,8 @@ class LevelEditor(Screen):
                      for j in range(NUM_BOXES)]
         self.backButton = Button(
             10, 10, 30, 30, text="Back",
-            callBack=lambda: self.gameMgr.setState(
-                self.gameMgr.getPrevState(),
-            ),
+            callBack=lambda: self.go_back()
+            ,
             center=False
         )
         self.boxButton = Button(
@@ -109,7 +110,7 @@ class LevelEditor(Screen):
         )
 
         self.resetButton = Button(
-            x=80, y=550, width=200, height=100,
+            x=80, y=550, width=200, height=20,
             callBack=lambda: self.reset(),
             center=False,
             text="Reset Map",
@@ -119,7 +120,7 @@ class LevelEditor(Screen):
 
         self.startButton = Button(
             x=80, y=580, width=200, height=100,
-            callBack=lambda: self.handleStartButton(),
+            callBack=lambda: self.handleInitialStart(),
             center=False,
             text="Start Game",
             textSize=15,
@@ -131,6 +132,10 @@ class LevelEditor(Screen):
             callBack=lambda: self.removePopUp()
         )
 
+        self.nameButton=Button(270+150, 400, 30, 30, text="Enter Name")
+        self.startGameButton=Button(270+150, 500, 30, 30, text="Start",
+                                    callBack=lambda : self.handleStartButton())
+        self.currPressedName=False
         self.selected = None
         self.clicked = False
 
@@ -140,10 +145,22 @@ class LevelEditor(Screen):
         self.player2Coordinates = " "
         self.monsterCount = 0
         self.maxMonster = 10
-        self.levels = 3
+        self.levels = len(os.listdir('sprites/levels'))
         self.popUpWindow = False
+        self.nameMapWindow=False
 
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+
+    def go_back(self):
+        self.selected=None
+        self.nameMapWindow=False
+        self.popUpWindow=False
+        self.player1=False
+        self.player2=False
+        self.reset()
+        self.gameMgr.setState(self.gameMgr.getPrevState())
+
 
     def removePopUp(self):
         self.popUpWindow = False
@@ -178,22 +195,30 @@ class LevelEditor(Screen):
         return True
 
 
+    def handleInitialStart(self):
+        self.selected=None
+        if self.player1 and self.player2:
+            self.nameMapWindow=True
+        else:
+            self.popUpWindow=True
+
     def handleStartButton(self):
+
+        self.nameMapWindow=False
         self.newMap()
         for row in self.map:
             print(row)
 
-        if self.player1 and self.player2:
-            self.levels += 1
-            with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
-                for row in self.map:
-                    f.write(''.join(row) + '\n')
+        self.levels += 1
+        with open(f'sprites/levels/{self.nameButton.text}.txt', 'w') as f:
+            for row in self.map:
+                f.write(''.join(row) + '\n')
 
-            file = f'sprites/levels/level{self.levels}.txt'
-            self.main.setState(GAME_WINDOW, GameWindow(file)),
-            self.gameMgr.setState(GAME_WINDOW)
-        else:
-            self.popUpWindow = True
+        file = f'sprites/levels/{self.nameButton.text}.txt'
+
+        self.main.setState(GAME_WINDOW, GameWindow(file)),
+        self.gameMgr.setState(GAME_WINDOW)
+
 
     def setSelected(self, elem):
         self.selected = elem
@@ -210,6 +235,18 @@ class LevelEditor(Screen):
             if not self.handlePlayer():
                 self.setSelected(None)
 
+    def handleEvent(self, event):
+        if self.currPressedName:
+            text = self.currPressedName.text
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.name(event.key) == "backspace":
+                    text = text[:-1]
+                elif pygame.key.name(event.key) == "enter":
+                    self.currPressedName = None
+                elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)):
+                    text += pygame.key.name(event.key)
+            if self.currPressedName:
+                self.currPressedName.text = text
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()
@@ -247,6 +284,10 @@ class LevelEditor(Screen):
             hovered_cell = self.getHoveredCell()
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell
+                if self.grid[i][j]=="a":
+                    self.player1=False
+                if self.grid[i][j]=="c":
+                    self.player2=False
                 self.grid[i][j] = self.selected
 
             self.clicked=False
@@ -296,12 +337,19 @@ class LevelEditor(Screen):
         self.ghostMButton.update()
         self.fastMButton.update()
         self.pseudoIntMButton.update()
+        if self.nameMapWindow:
+            self.nameButton.update()
+
+            if self.nameButton.pressed:
+                self.currPressedName=self.nameButton
+            self.startGameButton.update()
 
 
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
 
     def newMap(self):
+        print("Here")
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
                 if i in borders or j in borders:
@@ -365,6 +413,24 @@ class LevelEditor(Screen):
                 img.set_alpha(150)
                 display.blit(img, (mx - self.boxWidth / 2, my - self.boxHeight / 2))
                 img.set_alpha(255)
+
+        if self.nameMapWindow:
+            x = 270
+            y = 220
+            width = 300
+            height = 300
+            font_size = 20
+            text_color = (255, 255, 255)
+            bg_color = (255, 0, 0)
+
+            rect = pygame.Rect(x, y, width, height)
+            pygame.draw.rect(display, bg_color, rect)
+            font = pygame.font.SysFont(None, font_size)
+            text_surface = font.render("Name Window", True, text_color)
+            text_rect = text_surface.get_rect(center=rect.center)
+            display.blit(text_surface, text_rect)
+            self.nameButton.draw(display)
+            self.startGameButton.draw(display)
 
         if self.popUpWindow:
             x = 270

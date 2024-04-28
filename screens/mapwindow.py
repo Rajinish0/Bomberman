@@ -17,6 +17,42 @@ class MapWindow(Screen):
 		self.currInd = None
 		self.gameMgr.setState(MAIN_WINDOW)
 
+	def create_buttons(self):
+		directory_name = 'sprites/levels/'
+		buttons_per_row = 3
+
+		self.button_data = []
+		button_index = 0
+
+		for filename in os.listdir(directory_name):
+			if filename.endswith('.txt'):  # Filter out non-txt files
+				map_path = os.path.join(directory_name, filename)  # Get the full path of the map file
+
+				# Calculate the x position of the button
+				x_position = (button_index % buttons_per_row) * 210 + 200
+
+				# Calculate the y position of the button
+				y_position = (button_index // buttons_per_row) * 200 + 220
+
+				self.button_data.append({
+					"x": x_position,
+					"y": y_position,
+					"map_file": map_path,  # Save the full path of the map file
+					"img": f'sprites/Solid_white.png'
+				})
+
+				button_index += 1  # Increment button index
+
+
+		self.buttons = []
+		for data in self.button_data:
+			button = Button(data["x"], data["y"], 150, 150,
+							img=os.path.join(data["img"]))
+			self.buttons.append(button)
+
+		print(self.buttons)
+
+
 		# def __init__(self):
 	# 	# ... existing code ...
 	# 	self.Game1 = Button(
@@ -29,11 +65,13 @@ class MapWindow(Screen):
 			30, 30, 30, 30, text="Back",
 			callBack=lambda: (self.go_back())
 		)
-		self.button_data = [
-			{"x": 200, "y": 220, "map_file": 'sprites/levels/defaultMap.txt', "img": 'sprites/maps/map1.png'},
-			{"x": 410, "y": 220, "map_file": 'sprites/levels/SecondMap.txt', "img": 'sprites/maps/map2.png'},
-			{"x": 610, "y": 220, "map_file": 'sprites/levels/ThirdMap.txt', "img": 'sprites/maps/map3.png'}
-		]
+		# self.button_data = [
+		# 	{"x": 200, "y": 220, "map_file": 'sprites/levels/defaultMap.txt', "img": 'sprites/maps/map1.png'},
+		# 	{"x": 410, "y": 220, "map_file": 'sprites/levels/SecondMap.txt', "img": 'sprites/maps/map2.png'},
+		# 	{"x": 610, "y": 220, "map_file": 'sprites/levels/ThirdMap.txt', "img": 'sprites/maps/map3.png'}
+		# ]
+
+		self.create_buttons()
 
 		self.currMap=self.button_data[0]
 		self.currInd=None
@@ -41,11 +79,11 @@ class MapWindow(Screen):
 			W/2, H-100, 30, 30, text="Start",color=BLACK,textColor=BLACK,
 			callBack=lambda : (self.start_game(self.currMap["map_file"]))
 		)
-
-		self.buttons = []
-		for data in self.button_data:
-			button = Button(data["x"], data["y"], 150, 150,img=os.path.join(data["img"]))
-			self.buttons.append(button)
+		#
+		# self.buttons = []
+		# for data in self.button_data:
+		# 	button = Button(data["x"], data["y"], 150, 150,img=os.path.join(data["img"]))
+		# 	self.buttons.append(button)
 
 
 

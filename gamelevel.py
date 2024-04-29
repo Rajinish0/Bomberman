@@ -24,7 +24,7 @@ def init(map_, bw, bh):
     gameobjs = []
     players = []
     monsters = []
-    default_direction=Point(0,1)
+    default_direction=Point(0, 1)
 
     keys = loadKeys()
     for i in range(NUM_BOXES):

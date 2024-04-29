@@ -5,7 +5,6 @@ from gameObjects import Bomb
 from point import Point
 from mock import patch
 from handlers import ImageHandler
-import pygame
 class TestPlayer(TestCase):
     @patch('handlers.ImageHandler.load')
     @patch('pygame.image.load')
@@ -41,7 +40,6 @@ class TestPlayer(TestCase):
         )
     
     def test_player_to_player_collision(self):
-        origPos = self.player2.position
         self.player1.position = Point(1.5, 1.5)
         self.player2.position = Point(2.5, 1.5)
         self.player1.move(Point(1, 0))
@@ -51,7 +49,6 @@ class TestPlayer(TestCase):
         self.assertEqual(
             self.player2.position, Point(2.5, 1.5)
         )
-        self.player2.position = origPos
     
     def test_continuous_movement(self):
         self.player1.move(Point(1, 0)*0.3)

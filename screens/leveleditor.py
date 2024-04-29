@@ -243,9 +243,10 @@ class LevelEditor(Screen):
                         background.paste(resized_image, (x_offset, y_offset))
                     x_offset += width
 
-            background.save("output_image.jpg")
 
         with open(f'sprites/levels/{self.nameButton.text}.txt', 'w') as f:
+            name = f'{self.nameButton.text}.jpg'
+            background.save(f'sprites/map_pictures/{name}')
             for row in self.map:
                 f.write(''.join(row) + '\n')
 

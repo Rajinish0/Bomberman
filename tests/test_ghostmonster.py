@@ -35,7 +35,12 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(self.player1.alive, False)
 
     def test_monster_destroy(self):
-        self.monster.move(Point())
+        self.monster.move(Point(-6, 0))
+        self.player1.placeBomb()
+        self.bombPos = Point.int(self.player1.position)
+        self.level.gameobjs[self.bombPos.y][self.bombPos.x].explode()
+        self.level.gameobjs[self.bombPos.y][self.bombPos.x].update()
+        self.assertEqual(self.monster.alive, False)
 
 if __name__ == '__main__':
     unittest.main()

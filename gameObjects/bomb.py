@@ -8,7 +8,7 @@ from point import Point
 
 class Bomb(GameObject):
     image = "sprites/gameobjects/Bomb.png"
-    expImage = "sprites/gameobjects/Bomb.png"
+    expImage = "sprites/gameobjects/explode.png"
     TIMER_CONST = 10
     EXPLODE_CONST = 3
     def __init__(self, position,range, player):

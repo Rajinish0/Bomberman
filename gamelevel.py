@@ -55,15 +55,17 @@ def init(map_, bw, bh):
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.GHOST_MONSTER:
                     monsters.append(
-                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm2.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.FAST_MONSTER:
                     monsters.append(
-                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm3.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
-                        PseudoIntelligentMonster(p, 0.038, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+
+                        PseudoIntelligentMonster(p, 0.038, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
+
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -79,8 +81,8 @@ class GameLevel:
         GameObject.setLevel(self)
         self.phase = 0
         self.data=loadData()
-
-
+        self.emptyImage = pygame.image.load(EmptySpace.image)
+        self.emptyImage = pygame.transform.scale(self.emptyImage, (boxwidth, boxheight))
 
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
 
@@ -119,22 +121,52 @@ class GameLevel:
     def battleRoyal(self, row, col):
         margin = 0.1
         for player in self.players:
-            player_x = math.floor(player.position.x)
-            player_y = math.floor(player.position.y)
-            if (player_x - margin <= col <= player_x + 1 + margin or
-                player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
-                    (player_y - margin <= row <= player_y + 1 + margin or
-                     player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
+            # player_x = int(player.position.x)
+            # player_y = int(player.position.y)
+            if (Point.int(player.position) == Point(col, row)):
+            # if (player_x - margin <= col <= player_x + 1 + margin or
+                # player_x + 1 - margin <= col + 1 <= player_x + 1 + margin) and \
+                    # (player_y - margin <= row <= player_y + 1 + margin or
+                     # player_y + 1 - margin <= row + 1 <= player_y + 1 + margin):
                 player.Destroy()
+            else:
+                if Point.int(Point(player.position.x - player.rw/2,
+                             player.position.y)) == Point(col, row):
+                    player.position = Point(col + 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x + player.rw/2,
+                             player.position.y)) == Point(col, row):
+                    player.position = Point(col - 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x,
+                             player.position.y + player.rh/2)) == Point(col, row):
+                    player.position = Point(col, row - 1).add(Point(0.5, 0.5))
+                elif Point.int(Point(player.position.x,
+                             player.position.y - player.rh/2)) == Point(col, row):
+                    player.position = Point(col, row + 1).add(Point(0.5, 0.5))
+
 
         for monster in self.monsters:
-            monster_x = math.floor(monster.position.x)
-            monster_y = math.floor(monster.position.y)
-            if (monster_x - margin <= col <= monster_x + 1 + margin or
-                monster_x + 1 - margin <= col + 1 <= monster_x + 1 + margin) and \
-                    (monster_y - margin <= row <= monster_y + 1 + margin or
-                     monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
+            if (Point.int(monster.position) == Point(col, row)):
                 monster.Destroy()
+            else:
+                if Point.int(Point(monster.position.x - monster.rw/2,
+                             monster.position.y)) == Point(col, row):
+                    monster.position = Point(col + 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x + monster.rw/2,
+                             monster.position.y)) == Point(col, row):
+                    monster.position = Point(col - 1, row).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x,
+                             monster.position.y + monster.rh/2)) == Point(col, row):
+                    monster.position = Point(col, row - 1).add(Point(0.5, 0.5))
+                elif Point.int(Point(monster.position.x,
+                             monster.position.y - monster.rh/2)) == Point(col, row):
+                    monster.position = Point(col, row + 1).add(Point(0.5, 0.5))
+            # monster_x = math.floor(monster.position.x)
+            # monster_y = math.floor(monster.position.y)
+            # if (monster_x - margin <= col <= monster_x + 1 + margin or
+            #     monster_x + 1 - margin <= col + 1 <= monster_x + 1 + margin) and \
+            #         (monster_y - margin <= row <= monster_y + 1 + margin or
+            #          monster_y + 1 - margin <= row + 1 <= monster_y + 1 + margin):
+                # monster.Destroy()
 
         self.gameobjs[row][col] = BorderWall(Point(col, row), self.bw, self.bh)
 
@@ -221,6 +253,8 @@ class GameLevel:
 
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
+                # pos = self.gameobjs[i][j].position
+                display.blit(self.emptyImage, (j * self.bw, i * self.bh))
                 if not isinstance(self.gameobjs[i][j], Bomb):
                 # pygame.draw.rect(display, (255, 0, 0), (j * self.bw, i * self.bh, self.bw, self.bh), 1)
                     self.gameobjs[i][j].draw(display)
@@ -268,9 +302,10 @@ class GameLevel:
 
         f=random.choices(spots,k=4)
         monsters.append(Monster(Point(f[0][1],f[0][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m3.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m4.png'),Point(0,1),self.bw,self.bh))
+
 
 
 

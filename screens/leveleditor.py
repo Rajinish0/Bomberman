@@ -28,9 +28,9 @@ imgs = {
     PLAYER1 : "sprites/players/g1.png",
     PLAYER2 : "sprites/players/g2.png",
     BASE_MONSTER : "sprites/monsters/m1b.png",
-    GHOST_MONSTER : "sprites/monsters/m1b.png",
-    FAST_MONSTER : "sprites/monsters/m1b.png",
-    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m1b.png"
+    GHOST_MONSTER : "sprites/monsters/m2.png",
+    FAST_MONSTER : "sprites/monsters/m3.png",
+    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m4.png"
 }
 
 # The surrounding borders
@@ -64,55 +64,55 @@ class LevelEditor(Screen):
         )
 
         self.boxButton = Button(
-            80, 20, self.boxWidth, self.boxHeight, img=Box.image,
+            80, 20, self.boxWidth, self.boxHeight, img=imgs[BOX],
             callBack=lambda: self.setSelected(BOX),
             center=False
         )
 
         self.wallButton = Button(
-            80, 80, self.boxWidth, self.boxHeight, img=Wall.image,
+            80, 80, self.boxWidth, self.boxHeight, img=imgs[WALL],
             callBack=lambda: self.setSelected(WALL),
             center=False
         )
 
         self.emptyButton = Button(
-            80, 140, self.boxWidth, self.boxHeight, img=EmptySpace.image,
+            80, 140, self.boxWidth, self.boxHeight, img=imgs[EMPTY],
             callBack=lambda: self.setSelected(EMPTY),
             center=False
         )
 
         self.P1Button = Button(
-            80, 200, self.boxWidth, self.boxHeight, img="sprites/players/g1.png",
+            80, 200, self.boxWidth, self.boxHeight, img=imgs[PLAYER1],
             callBack=lambda:self.setSelected(PLAYER1),
             center=False
         )
 
         self.P2Button = Button(
-            80, 260, self.boxWidth, self.boxHeight, img="sprites/players/g2.png",
+            80, 260, self.boxWidth, self.boxHeight, img=imgs[PLAYER2],
             callBack=lambda:self.setSelected(PLAYER2),
             center=False
         )
 
         self.baseMButton = Button(
-            80, 320, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 320, self.boxWidth, self.boxHeight, img=imgs[BASE_MONSTER],
             callBack=lambda: self.setSelected(BASE_MONSTER),
             center=False
         )
 
         self.ghostMButton = Button(
-            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 380, self.boxWidth, self.boxHeight, img=imgs[GHOST_MONSTER],
             callBack=lambda: self.setSelected(GHOST_MONSTER),
             center=False
         )
 
         self.fastMButton = Button(
-            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 440, self.boxWidth, self.boxHeight, img=imgs[FAST_MONSTER],
             callBack=lambda: self.setSelected(FAST_MONSTER),
             center=False
         )
 
         self.pseudoIntMButton = Button(
-            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 500, self.boxWidth, self.boxHeight, img=imgs[PSEUDOINTELLIGENT_MONSTER],
             callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
             center=False
         )

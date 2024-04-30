@@ -45,13 +45,13 @@ def init(map_, bw, bh):
                 case game_elements.BORDER_WALL:
                     elem = BorderWall(p, bw, bh);
                 case game_elements.PLAYER1:
-                    players.append(Player(game_elements.PLAYER1_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'bomber-sprite2.png'),keys["p1"],bw,bh))
+                    players.append(Player(game_elements.PLAYER1_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'bomber-sprite2.png'),keys["p1"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PLAYER2:
-                    players.append(Player(game_elements.PLAYER2_NAME,p,0.05,os.path.join(IMG_PATH, 'players', 'bomber-sprite.png'),keys["p2"],bw,bh))
+                    players.append(Player(game_elements.PLAYER2_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'bomber-sprite.png'),keys["p2"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.BASE_MONSTER:
-                    monsters.append(Monster(p,0.038,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
+                    monsters.append(Monster(p,0.05,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.GHOST_MONSTER:
                     monsters.append(
@@ -59,12 +59,12 @@ def init(map_, bw, bh):
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.FAST_MONSTER:
                     monsters.append(
-                        FastMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm3.png'), default_direction, bw, bh))
+                        FastMonster(p, 0.066, os.path.join(IMG_PATH, 'monsters', 'm3.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
 
-                        PseudoIntelligentMonster(p, 0.038, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
+                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
 
                     elem = EmptySpace(p, bw, bh)
                 case _:

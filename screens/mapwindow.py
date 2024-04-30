@@ -34,28 +34,28 @@ class MapWindow(Screen):
 
 		self.create_buttons()
 		self.pl1Name = Button(
-			270 + 50, 150 + 80, 30, 30, text=self.data["p1"],color=WHITE,
-			textColor=BLACK
+			270 + 70, 150 + 90, 100, 25, text=self.data["p1"],color=WHITE,center=True,textSize=15,
+			textColor=BLACK,drawRect=True
 		)
 		self.pl2Name = Button(
-			270 + W / 3 - 30, 150 + 80, 30, 30, text=self.data["p2"],
-			textColor=BLACK)
+			270 + W / 3 - 70, 150 + 90, 100, 25, text=self.data["p2"],color=WHITE,center=True,textSize=15,
+			textColor=BLACK,drawRect=True)
 
 		self.time = Button(
-			(270 + W / 6), 150 + 150, 30, 30, text=self.getTimer(self.data["timer"]),
-			textColor=BLACK)
+			(270 + W / 6), 150 + 170, 50, 25, text=self.getTimer(self.data["timer"]),color=WHITE,textSize=15,
+			textColor=BLACK,drawRect=True)
 
 		self.rounds = Button(
-			(270 + W / 6), 150 + 200, 30, 30, text=str(self.data["rounds"]),
-			textColor=BLACK)
+			(270 + W / 6), 150 + 245, 30, 25, text=str(self.data["rounds"]),color=WHITE,
+			textColor=BLACK,drawRect=True)
 
 		self.start = Button(
-			270 + W / 3 - 80,150+250,30,30,text="Start",textColor=BLACK,
+			270 + W / 3 - 70,150+H/2+30,50,25,text="Start",textColor=BLACK, center=True,
 			callBack=lambda: (self.start_game(self.currMap["map_file"]))
 		)
 
 		self.back=Button(
-			270,150+250,30,30,text="Back", textColor=BLACK,
+			270+70,150+H/2+30,50,25,text="Back", textColor=BLACK, center=True,
 			callBack=lambda : self.remove_popup()
 		)
 
@@ -108,7 +108,7 @@ class MapWindow(Screen):
 		self.totalWindow = len(self.mapPerPage) - 1
 	def popup_start(self):
 		if self.currInd:
-			self.dataSurface = pygame.Surface((W / 3, (H / 2)))
+			self.dataSurface = pygame.Surface((W / 3, (H / 2)+50))
 			self.showData=True
 			with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'rb') as f:
 				self.data = pickle.load(f)
@@ -132,11 +132,16 @@ class MapWindow(Screen):
 		self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
-		self.data["p1"] = self.pl1Name.text
-		self.data["p2"] = self.pl2Name.text
+		self.data["p1"] = self.pl1Name.text or "Aunt May"
+		self.data["p2"] = self.pl2Name.text or "Uncle Ben"
 		time=self.time.text.split(":")
-		self.data["timer"]=int(time[0])*60+int(time[1])
-		self.data["round"]=int(self.rounds.text)
+		if time[1]:
+			self.data["timer"]=int(time[0])*60+int(time[1])
+		else:
+			self.data["timer"] = 45
+
+		self.data["round"]=int(self.rounds.text or 2)
+
 		with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'wb') as f:
 			data = pickle.dump(self.data, f)
 		if self.currInd:
@@ -217,9 +222,9 @@ class MapWindow(Screen):
 					text = text[:-1]
 				elif pygame.key.name(event.key) == "enter":
 					self.currPressedName = None
-				elif pygame.key.name(event.key) == "space":
+				elif pygame.key.name(event.key) == "space" and len(text)<12:
 					text += " "
-				elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)):
+				elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)) and len(text)<12:
 					if self.caps:
 						text += pygame.key.name(event.key).upper()
 					else:
@@ -252,8 +257,11 @@ class MapWindow(Screen):
 				elif pygame.key.name(event.key)=="enter":
 					self.currPressedRounds=None
 				elif re.search("^[0-9]{0,1}$",pygame.key.name(event.key)):
+					if len(text)<1:
+						text+=pygame.key.name(event.key)
+					else:
+						text = pygame.key.name(event.key)
 
-					text+=pygame.key.name(event.key)
 			if self.currPressedRounds:
 				self.currPressedRounds.text=text
 		if event.type == pygame.KEYUP:
@@ -326,6 +334,7 @@ class MapWindow(Screen):
 		self.btnBack.draw(display)
 		for button in self.buttons:
 			button.draw(display)
+			drawText(display,button.text[15:-4],button.x+button.w/2,button.y+button.h+25,size=20,color=BLACK)
 
 		if self.currInd:
 			self.currInd.draw(display,Border=True,BorderWidth=4)
@@ -336,12 +345,14 @@ class MapWindow(Screen):
 		if self.showData:
 			pygame.draw.rect(self.dataSurface, (238, 238, 238, 240), self.dataSurface.get_rect())
 			display.blit(self.dataSurface, (270, 150))
-			display.blit(self.pl1Image, (270+10, 150))
-			display.blit(self.pl2Image, (270-10 + W / 3 - 50, 150))
-			self.pl1Name.draw(display)
-			self.pl2Name.draw(display)
-			self.time.draw(display)
-			self.rounds.draw(display)
+			display.blit(self.pl1Image, (270+70-25, 150))
+			display.blit(self.pl2Image, (270 + W / 3 - 70-25, 150))
+			drawText(display,"Battle Royale Time", 270+W/6,150+135,size=18,color=BLACK)
+			drawText(display, "Win Rounds", 270 + W / 6, 150 + 210, size=18, color=BLACK)
+			self.pl1Name.draw(display,Border=True)
+			self.pl2Name.draw(display,Border=True)
+			self.time.draw(display,Border=True)
+			self.rounds.draw(display,Border=True)
 			self.back.draw(display)
 			self.start.draw(display)
 

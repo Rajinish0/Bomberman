@@ -63,7 +63,7 @@ def init(map_, bw, bh):
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
-                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
+                        PseudoIntelligentMonster(p, 0.038, os.path.join(IMG_PATH, 'monsters', 'm1b.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -92,7 +92,7 @@ class GameLevel:
         self.players[1].name=self.pl2Name
 
         if(len(self.monsters)==0):
-            self.monsters=self.initMonster(2)
+            self.monsters=self.initMonster()
 
         self.winTimer=10
         self.endStart=False
@@ -184,8 +184,8 @@ class GameLevel:
                     #self.battleTimer=10
                     self.brAnimationFinished=False
 
-            # self.brTimer-=0.016666
-            self.brTimer -= 0.2
+            self.brTimer-=0.016666
+            #self.brTimer -= 0.2
 
 
             for i in range(NUM_BOXES):
@@ -242,7 +242,7 @@ class GameLevel:
         self.players[0].name = self.pl1Name
         self.players[1].name = self.pl2Name
         if (len(self.monsters) == 0):
-            self.monsters = self.initMonster(2)
+            self.monsters = self.initMonster()
 
         self.winTimer = 10
         self.endStart = False
@@ -254,7 +254,7 @@ class GameLevel:
 
     def restart(self):
         self.__init__(self.mp,self.bw,self.bh)
-    def initMonster(self,x):
+    def initMonster(self):
         spots=[]
         monsters=[]
         for i in range(NUM_BOXES):
@@ -266,12 +266,13 @@ class GameLevel:
             spots.remove((int(pl.position.y), int(pl.position.x)))
 
 
-        final_spots=random.choices(spots,k=x)
+        f=random.choices(spots,k=4)
+        monsters.append(Monster(Point(f[0][1],f[0][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
 
-        for f in final_spots:
-            p=Point(f[1],f[0])
-            monsters.append(
-                GhostMonster(p, 0.025, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+
 
         return monsters
 

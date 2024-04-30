@@ -24,7 +24,7 @@ key_dic = {
 data_dic={
     "p1": "Aunt May",
     "p2": "Uncle Ben",
-    "timer": 120,
+    "timer": 45,
     "rounds": 2}
 
 def reset():

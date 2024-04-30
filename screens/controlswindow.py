@@ -67,6 +67,7 @@ class ControlsWindow(Screen):
 
     def saveKeys(self):
         self.save_pressed = True
+        self.curr_pressed_button=None
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
                 key_code = pygame.key.key_code(button.text)
@@ -74,6 +75,8 @@ class ControlsWindow(Screen):
 
         with open(os.path.join(RSRC_PATH, 'keycfg.pkl'), 'wb') as f:
             keys = pickle.dump(self.keys, f)
+
+
 
     def setUp(self):
         if not self.save_pressed:
@@ -98,6 +101,7 @@ class ControlsWindow(Screen):
         }
 
         self.assigned_keys=set()
+        self.curr_pressed_button=None
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
                 button.text = pygame.key.name(self.keys[player][key])
@@ -151,6 +155,9 @@ class ControlsWindow(Screen):
         for player_commands in self.players_command.values():
             for button in player_commands.values():
                     button.draw(display)
+
+        if self.curr_pressed_button:
+            self.curr_pressed_button.draw(display,Border=True)
 
         self.saveBtn.draw(display)
         self.menuBtn.draw(display)

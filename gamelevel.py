@@ -15,6 +15,11 @@ def loadKeys():
         keys = pickle.load(f)
     return keys
 
+def loadData():
+    with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'rb') as f:
+        data=pickle.load(f)
+    return data
+
 def init(map_, bw, bh):
 
     reader = GridReader(map_)
@@ -58,7 +63,9 @@ def init(map_, bw, bh):
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
-                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
+
+                        PseudoIntelligentMonster(p, 0.038, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
+
                     elem = EmptySpace(p, bw, bh)
                 case _:
                     elem = EmptySpace(p, bw, bh);
@@ -73,13 +80,21 @@ class GameLevel:
         self.bh = boxheight
         GameObject.setLevel(self)
         self.phase = 0
+        self.data=loadData()
         self.emptyImage = pygame.image.load(EmptySpace.image)
         self.emptyImage = pygame.transform.scale(self.emptyImage, (boxwidth, boxheight))
 
         self.gameobjs,self.players, self.monsters = init(mp,boxwidth,boxheight)
 
+        self.pl1Name=self.data["p1"]
+        self.pl2Name=self.data["p2"]
+        self.brTimer = self.data["timer"]
+        self.numRounds=self.data["round"]
+        self.players[0].name=self.pl1Name
+        self.players[1].name=self.pl2Name
+
         if(len(self.monsters)==0):
-            self.monsters=self.initMonster(2)
+            self.monsters=self.initMonster()
 
         self.winTimer=10
         self.endStart=False
@@ -91,7 +106,7 @@ class GameLevel:
         self.player2Wins=0;
         self.randomizePowerUps()
         self.finished=False
-        self.brTimer = 120
+
         self.brAnimationFinished=False
 
         self.start = 1
@@ -197,12 +212,12 @@ class GameLevel:
                 #Insert Animation Logic : Returns self.brAnimationFinished=True
 
                 if self.brAnimationFinished:
-                    self.brTimer = 120
+                    self.brTimer = self.data["timer"]
                     #self.battleTimer=10
                     self.brAnimationFinished=False
 
-            # self.brTimer-=0.016666
-            self.brTimer -= 0.2
+            self.brTimer-=0.016666
+            #self.brTimer -= 0.2
 
 
             for i in range(NUM_BOXES):
@@ -258,8 +273,10 @@ class GameLevel:
 
     def nextRound(self):
         self.gameobjs, self.players, self.monsters = init(self.mp, self.bw, self.bh)
+        self.players[0].name = self.pl1Name
+        self.players[1].name = self.pl2Name
         if (len(self.monsters) == 0):
-            self.monsters = self.initMonster(2)
+            self.monsters = self.initMonster()
 
         self.winTimer = 10
         self.endStart = False
@@ -271,7 +288,7 @@ class GameLevel:
 
     def restart(self):
         self.__init__(self.mp,self.bw,self.bh)
-    def initMonster(self,x):
+    def initMonster(self):
         spots=[]
         monsters=[]
         for i in range(NUM_BOXES):
@@ -283,12 +300,14 @@ class GameLevel:
             spots.remove((int(pl.position.y), int(pl.position.x)))
 
 
-        final_spots=random.choices(spots,k=x)
+        f=random.choices(spots,k=4)
+        monsters.append(Monster(Point(f[0][1],f[0][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m3.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m4.png'),Point(0,1),self.bw,self.bh))
 
-        for f in final_spots:
-            p=Point(f[1],f[0])
-            monsters.append(
-                GhostMonster(p, 0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
+
+
 
         return monsters
 
@@ -314,8 +333,8 @@ class GameLevel:
         self.switch = 1
         self.endStart=False
         self.gameEnd=True
-        self.finished = self.player1Wins == 2 or self.player2Wins == 2
-        self.brTimer = 120
+        self.finished = self.player1Wins == self.numRounds or self.player2Wins == self.numRounds
+        self.brTimer = self.data["timer"]
         self.brAnimationFinished=False
 
     def startEnd(self,pl):

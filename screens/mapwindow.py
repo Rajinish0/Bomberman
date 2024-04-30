@@ -34,12 +34,12 @@ class MapWindow(Screen):
 
 		self.create_buttons()
 		self.pl1Name = Button(
-			270 + 10, 150 + 80, 30, 30, text=self.data["p1"],
-			textColor=BLACK, center=False
+			270 + 50, 150 + 80, 30, 30, text=self.data["p1"],color=WHITE,
+			textColor=BLACK
 		)
 		self.pl2Name = Button(
-			270 + W / 3 - 80, 150 + 80, 30, 30, text=self.data["p2"],
-			textColor=BLACK, center=False)
+			270 + W / 3 - 30, 150 + 80, 30, 30, text=self.data["p2"],
+			textColor=BLACK)
 
 		self.time = Button(
 			(270 + W / 6), 150 + 150, 30, 30, text=self.getTimer(self.data["timer"]),
@@ -49,8 +49,18 @@ class MapWindow(Screen):
 			(270 + W / 6), 150 + 200, 30, 30, text=str(self.data["rounds"]),
 			textColor=BLACK)
 
-		self.dataSurface = pygame.Surface((W / 3, (H / 2)))
-		self.showData = True
+		self.start = Button(
+			270 + W / 3 - 80,150+250,30,30,text="Start",textColor=BLACK,
+			callBack=lambda: (self.start_game(self.currMap["map_file"]))
+		)
+
+		self.back=Button(
+			270,150+250,30,30,text="Back", textColor=BLACK,
+			callBack=lambda : self.remove_popup()
+		)
+
+
+		self.showData = False
 
 		self.btnBack = Button(
 			30, 30, 30, 30, text="Back",
@@ -59,7 +69,7 @@ class MapWindow(Screen):
 
 		self.btnStart=Button(
 			W/2, H-60, 30, 30, text="Start",color=BLACK,textColor=BLACK,
-			callBack=lambda : (self.start_game(self.currMap["map_file"]))
+			callBack=lambda : (self.popup_start())
 		)
 
 		self.forwardStart=Button(
@@ -97,10 +107,31 @@ class MapWindow(Screen):
 		self.currInd = None
 		self.totalWindow = len(self.mapPerPage) - 1
 	def popup_start(self):
-		self.dataSurface = pygame.Surface((self.gameWidth, (H - self.gameHeight + 70)))
-		self.showData=True
+		if self.currInd:
+			self.dataSurface = pygame.Surface((W / 3, (H / 2)))
+			self.showData=True
+			with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'rb') as f:
+				self.data = pickle.load(f)
+
+	def remove_popup(self):
+		self.showData = False
+		self.currPressedName=None
+		self.currPressedTime=None
+		self.currPressedRounds=None
+		self.data["p1"] = self.pl1Name.text
+		self.data["p2"] = self.pl2Name.text
+		time = self.time.text.split(":")
+		self.data["timer"] = int(time[0]) * 60 + int(time[1])
+		self.data["round"] = int(self.rounds.text)
+		with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'wb') as f:
+			data = pickle.dump(self.data, f)
+
 
 	def start_game(self, file_path):
+		self.showData=False
+		self.currPressedName = None
+		self.currPressedTime = None
+		self.currPressedRounds = None
 		self.data["p1"] = self.pl1Name.text
 		self.data["p2"] = self.pl2Name.text
 		time=self.time.text.split(":")
@@ -109,12 +140,13 @@ class MapWindow(Screen):
 		with open(os.path.join(RSRC_PATH, 'datacfg.pkl'), 'wb') as f:
 			data = pickle.dump(self.data, f)
 		if self.currInd:
-			self.currInd=None
 			self.main.setState(GAME_WINDOW, GameWindow(file_path))
 			self.gameMgr.setState(GAME_WINDOW)
 
 	def go_back(self):
-		self.currInd = None
+		self.currPressedName = None
+		self.currPressedTime = None
+		self.currPressedRounds = None
 		self.gameMgr.setState(MAIN_WINDOW)
 
 	def getTimer(self,timer):
@@ -229,40 +261,46 @@ class MapWindow(Screen):
 				self.caps = False
 
 	def update(self):
-		self.btnBack.update()
-		self.create_buttons()
-		self.btnStart.update()
-		self.deleteBtn.update()
+		if self.showData:
+			self.start.update()
+			self.back.update()
 
-		self.backwardStart.update()
-		self.forwardStart.update()
-		self.create_buttons()
-		for ind,button in enumerate(self.buttons):
-			button.update()
-			if button.pressed:
-				self.currMap=self.button_data[ind]
-				self.currInd=button
-		self.pl1Name.update()
-		self.pl2Name.update()
-		if self.pl1Name.pressed:
-			self.currPressedRounds=False
-			self.currPressedTime=False
-			self.currPressedName=self.pl1Name
-		elif self.pl2Name.pressed:
-			self.currPressedName = self.pl2Name
+			self.pl1Name.update()
+			self.pl2Name.update()
+			if self.pl1Name.pressed:
+				self.currPressedRounds=False
+				self.currPressedTime=False
+				self.currPressedName=self.pl1Name
+			elif self.pl2Name.pressed:
+				self.currPressedName = self.pl2Name
 
-		self.time.update()
+			self.time.update()
 
-		if self.time.pressed:
-			self.currPressedRounds = False
-			self.currPressedName = False
-			self.currPressedTime=self.time
+			if self.time.pressed:
+				self.currPressedRounds = False
+				self.currPressedName = False
+				self.currPressedTime=self.time
 
-		self.rounds.update()
-		if self.rounds.pressed:
-			self.currPressedName = False
-			self.currPressedTime = False
-			self.currPressedRounds=self.rounds
+			self.rounds.update()
+			if self.rounds.pressed:
+				self.currPressedName = False
+				self.currPressedTime = False
+				self.currPressedRounds=self.rounds
+		else:
+			self.btnBack.update()
+			self.create_buttons()
+			self.btnStart.update()
+			self.deleteBtn.update()
+
+			self.backwardStart.update()
+			self.forwardStart.update()
+			self.create_buttons()
+
+			for ind, button in enumerate(self.buttons):
+				button.update()
+				if button.pressed:
+					self.currMap = self.button_data[ind]
+					self.currInd = button
 
 
 	def draw(self, display):
@@ -304,6 +342,9 @@ class MapWindow(Screen):
 			self.pl2Name.draw(display)
 			self.time.draw(display)
 			self.rounds.draw(display)
+			self.back.draw(display)
+			self.start.draw(display)
+
 
 
 

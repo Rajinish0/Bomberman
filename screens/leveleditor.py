@@ -1,5 +1,9 @@
 import os
 import re
+
+from PIL import Image
+
+
 from .screen import Screen
 from screens.GameWindow import GameWindow
 from constants import *
@@ -136,8 +140,8 @@ class LevelEditor(Screen):
             callBack=lambda: self.removePopUp()
         )
 
-        self.nameButton=Button(270+150, 400, 30, 30, text="Enter Name")
-        self.startGameButton=Button(270+150, 500, 30, 30, text="Start",
+        self.nameButton=Button(270+150, 400, 30, 30, text="Enter Name",textColor=BLACK)
+        self.startGameButton=Button(270+150, 500, 30, 30, text="Start",textColor=BLACK,
                                     callBack=lambda : self.handleStartButton())
         self.currPressedName=False
         self.selected = None
@@ -465,8 +469,8 @@ class LevelEditor(Screen):
             width = 300
             height = 300
             font_size = 20
-            text_color = (255, 255, 255)
-            bg_color = (255, 0, 0)
+            text_color = BLACK
+            bg_color = WHITE
 
             rect = pygame.Rect(x, y, width, height)
             pygame.draw.rect(display, bg_color, rect)

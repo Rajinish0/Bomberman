@@ -1,3 +1,9 @@
+import os
+import re
+
+from PIL import Image
+
+
 from .screen import Screen
 from screens.GameWindow import GameWindow
 from constants import *
@@ -6,6 +12,9 @@ from gameObjects import *
 from utils import *
 import pygame
 from copy import deepcopy
+
+import os
+
 
 '''
 TEMPORARY CLASS FOR EXPERIMENTATION PURPOSES.
@@ -49,67 +58,67 @@ class LevelEditor(Screen):
                      for j in range(NUM_BOXES)]
         self.backButton = Button(
             10, 10, 30, 30, text="Back",
-            callBack=lambda: self.gameMgr.setState(
-                self.gameMgr.getPrevState(),
-            ),
+            callBack=lambda: self.go_back()
+            ,
             center=False
         )
+
         self.boxButton = Button(
-            80, 20, self.boxWidth, self.boxHeight, img=Box.image,
+            80, 20, self.boxWidth, self.boxHeight, img=imgs[BOX],
             callBack=lambda: self.setSelected(BOX),
             center=False
         )
 
         self.wallButton = Button(
-            80, 80, self.boxWidth, self.boxHeight, img=Wall.image,
+            80, 80, self.boxWidth, self.boxHeight, img=imgs[WALL],
             callBack=lambda: self.setSelected(WALL),
             center=False
         )
 
         self.emptyButton = Button(
-            80, 140, self.boxWidth, self.boxHeight, img=EmptySpace.image,
+            80, 140, self.boxWidth, self.boxHeight, img=imgs[EMPTY],
             callBack=lambda: self.setSelected(EMPTY),
             center=False
         )
 
         self.P1Button = Button(
-            80, 200, self.boxWidth, self.boxHeight, img="sprites/players/g1.png",
+            80, 200, self.boxWidth, self.boxHeight, img=imgs[PLAYER1],
             callBack=lambda:self.setSelected(PLAYER1),
             center=False
         )
 
         self.P2Button = Button(
-            80, 260, self.boxWidth, self.boxHeight, img="sprites/players/g2.png",
+            80, 260, self.boxWidth, self.boxHeight, img=imgs[PLAYER2],
             callBack=lambda:self.setSelected(PLAYER2),
             center=False
         )
 
         self.baseMButton = Button(
-            80, 320, self.boxWidth, self.boxHeight, img="sprites/monsters/m1b.png",
+            80, 320, self.boxWidth, self.boxHeight, img=imgs[BASE_MONSTER],
             callBack=lambda: self.setSelected(BASE_MONSTER),
             center=False
         )
 
         self.ghostMButton = Button(
-            80, 380, self.boxWidth, self.boxHeight, img="sprites/monsters/m2.png",
+            80, 380, self.boxWidth, self.boxHeight, img=imgs[GHOST_MONSTER],
             callBack=lambda: self.setSelected(GHOST_MONSTER),
             center=False
         )
 
         self.fastMButton = Button(
-            80, 440, self.boxWidth, self.boxHeight, img="sprites/monsters/m3.png",
+            80, 440, self.boxWidth, self.boxHeight, img=imgs[FAST_MONSTER],
             callBack=lambda: self.setSelected(FAST_MONSTER),
             center=False
         )
 
         self.pseudoIntMButton = Button(
-            80, 500, self.boxWidth, self.boxHeight, img="sprites/monsters/m4.png",
+            80, 500, self.boxWidth, self.boxHeight, img=imgs[PSEUDOINTELLIGENT_MONSTER],
             callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
             center=False
         )
 
         self.resetButton = Button(
-            x=80, y=550, width=200, height=100,
+            x=80, y=550, width=200, height=20,
             callBack=lambda: self.reset(),
             center=False,
             text="Reset Map",
@@ -119,7 +128,7 @@ class LevelEditor(Screen):
 
         self.startButton = Button(
             x=80, y=580, width=200, height=100,
-            callBack=lambda: self.handleStartButton(),
+            callBack=lambda: self.handleInitialStart(),
             center=False,
             text="Start Game",
             textSize=15,
@@ -131,19 +140,40 @@ class LevelEditor(Screen):
             callBack=lambda: self.removePopUp()
         )
 
+        self.nameButton=Button(270+150, 220+65, 120, 25, text="Enter Name",textColor=BLACK,color=WHITE,drawRect=True,center=True,textSize=15)
+        self.startGameButton=Button(270+300-70, 220+150-25, 50, 25, text="Start",textColor=BLACK,
+                                    callBack=lambda : self.handleStartButton())
+        self.backGameButton=Button(270+70, 220+150-25, 50, 25, text="Back",textColor=BLACK,
+                                    callBack=lambda : self.handleBackButton())
+        self.currPressedName=False
         self.selected = None
         self.clicked = False
-
+        self.caps=False
         self.player1 = False
         self.player2 = False
         self.player1Coordinates = " "
         self.player2Coordinates = " "
         self.monsterCount = 0
         self.maxMonster = 10
-        self.levels = 3
-        self.popUpWindow = False
+        self.directory = 'sprites/levels/'
+        self.levels = len(
+            [filename for filename in os.listdir(self.directory) if os.path.isfile(os.path.join(self.directory, filename))])
 
+
+        self.popUpWindow = False
+        self.nameMapWindow=False
         self.map = [[' ' for j in range(NUM_BOXES)] for i in range(NUM_BOXES)]
+
+
+    def go_back(self):
+        self.selected=None
+        self.nameMapWindow=False
+        self.popUpWindow=False
+        self.player1=False
+        self.player2=False
+        self.reset()
+        self.gameMgr.setState(self.gameMgr.getPrevState())
+
 
     def removePopUp(self):
         self.popUpWindow = False
@@ -178,22 +208,66 @@ class LevelEditor(Screen):
         return True
 
 
+    def handleInitialStart(self):
+        self.selected=None
+        if self.player1 and self.player2:
+            self.nameMapSurface = pygame.Surface((300, 150))
+            self.nameMapWindow=True
+        else:
+            self.popUpWindow=True
+
+    def handleBackButton(self):
+        self.nameMapWindow=False
     def handleStartButton(self):
+
+        self.nameMapWindow=False
         self.newMap()
         for row in self.map:
             print(row)
 
         if self.player1 and self.player2:
-            self.levels += 1
-            with open(f'sprites/levels/level{self.levels}.txt', 'w') as f:
-                for row in self.map:
-                    f.write(''.join(row) + '\n')
+            background = Image.open("sprites/Solid_white.png")
+            background = background.resize((195, 195))
+            image = Image.open(imgs[WALL])
+            resized_image = image.resize((13, 13))
+            width, height = resized_image.size
+            y_offset = -height
+            for row in self.map:
+                y_offset += height
+                x_offset = 0
+                for elem in row:
+                    if elem == "@" or elem == "#":
+                        image = Image.open(imgs[WALL])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    if elem == " " or elem == "a" or elem == "c":
+                        image = Image.open(imgs[EMPTY])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    if elem == "b":
+                        image = Image.open(imgs[BOX])
+                        resized_image = image.resize((13, 13))
+                        width, height = resized_image.size
+                        background.paste(resized_image, (x_offset, y_offset))
+                    x_offset += width
 
-            file = f'sprites/levels/level{self.levels}.txt'
-            self.main.setState(GAME_WINDOW, GameWindow(file)),
-            self.gameMgr.setState(GAME_WINDOW)
-        else:
-            self.popUpWindow = True
+        cnt=1
+        while(os.path.exists(os.path.join(self.directory,self.nameButton.text+".txt"))):
+            self.nameButton.text+=str(cnt)
+            cnt+=1
+        with open(f'sprites/levels/{self.nameButton.text}.txt', 'w') as f:
+            name = f'{self.nameButton.text}.jpg'
+            background.save(f'sprites/map_pictures/{name}')
+            for row in self.map:
+                f.write(''.join(row) + '\n')
+
+        file = f'sprites/levels/{self.nameButton.text}.txt'
+        self.reset()
+        self.main.setState(GAME_WINDOW, GameWindow(file)),
+        self.gameMgr.setState(GAME_WINDOW)
+
 
     def setSelected(self, elem):
         self.selected = elem
@@ -210,6 +284,29 @@ class LevelEditor(Screen):
             if not self.handlePlayer():
                 self.setSelected(None)
 
+    def handleEvent(self, event):
+        if self.currPressedName:
+            text = self.currPressedName.text
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.name(event.key) == "left shift":
+                    self.caps=True
+                if pygame.key.name(event.key) == "backspace":
+                    text = text[:-1]
+                elif pygame.key.name(event.key) == "enter":
+                    self.currPressedName = None
+                elif pygame.key.name(event.key)=="space":
+                    text +=" "
+                elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)):
+                    if self.caps:
+                        text += pygame.key.name(event.key).upper()
+                    else:
+                        text += pygame.key.name(event.key)
+
+            if self.currPressedName:
+                self.currPressedName.text = text
+        if event.type==pygame.KEYUP:
+            if pygame.key.name(event.key) == "left shift":
+                self.caps = False
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()
@@ -247,6 +344,10 @@ class LevelEditor(Screen):
             hovered_cell = self.getHoveredCell()
             if hovered_cell is not None and self.clicked:
                 (i, j) = hovered_cell
+                if self.grid[i][j]=="a":
+                    self.player1=False
+                if self.grid[i][j]=="c":
+                    self.player2=False
                 self.grid[i][j] = self.selected
 
             self.clicked=False
@@ -272,36 +373,49 @@ class LevelEditor(Screen):
     # backButton goes back to the previous state
     # For box and wall it will set them as the selected element incase the mouse was clicked
     def update(self):
-        self.oKButton.update()
-        self.handlePlayerMouse()
-        self.backButton.update()
-        self.boxButton.update()
-        self.wallButton.update()
-        self.emptyButton.update()
-        self.startButton.update()
-        self.resetButton.update()
+        if self.nameMapWindow:
+            self.startGameButton.update()
+            self.backGameButton.update()
+            self.nameButton.update()
 
-        mousePressed = pygame.mouse.get_pressed()
-        if mousePressed[0]:
-            self.evMgr.setMousePressed(True)
+            if self.nameButton.pressed:
+                self.currPressedName=self.nameButton
+        else:
+            self.oKButton.update()
+            self.handlePlayerMouse()
+            self.backButton.update()
+            self.boxButton.update()
+            self.wallButton.update()
+            self.emptyButton.update()
+            self.startButton.update()
+            self.resetButton.update()
 
-        self.handleMousePos()
-        self.continousDraw()
-        self.handleMonsterMouse()
+            mousePressed = pygame.mouse.get_pressed()
+            if mousePressed[0]:
+                self.evMgr.setMousePressed(True)
 
-        self.P1Button.update()
-        self.P2Button.update()
+            self.handleMousePos()
+            self.continousDraw()
+            self.handleMonsterMouse()
 
-        self.baseMButton.update()
-        self.ghostMButton.update()
-        self.fastMButton.update()
-        self.pseudoIntMButton.update()
+            self.P1Button.update()
+            self.P2Button.update()
 
+            self.baseMButton.update()
+            self.ghostMButton.update()
+            self.fastMButton.update()
+            self.pseudoIntMButton.update()
+
+
+
+        #self.levels = len(
+        #   [filename for filename in os.listdir(self.directory) if os.path.isfile(os.path.join(self.directory, filename))])
 
     def load(self, img):
         return self.imgHandler.load(img, (self.boxWidth, self.boxHeight))
 
     def newMap(self):
+        print("Here")
         for i in range(NUM_BOXES):
             for j in range(NUM_BOXES):
                 if i in borders or j in borders:
@@ -324,9 +438,6 @@ class LevelEditor(Screen):
                     self.map[i][j] = "a"
                 elif self.grid[i][j] == PLAYER2:
                     self.map[i][j] = "c"
-
-    # def saveToFile(self):
-    #	with open()
 
     def draw(self, display):
         display.fill((110, 161, 100))
@@ -357,7 +468,6 @@ class LevelEditor(Screen):
                     display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
                     pygame.draw.rect(display, (225, 225, 225), (x, y, self.boxWidth, self.boxHeight), 1)
 
-        # Provides the visual of the selected element when the mouse is moving around
         if self.selected is not None:
             (mx, my) = pygame.mouse.get_pos()
             if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
@@ -365,6 +475,30 @@ class LevelEditor(Screen):
                 img.set_alpha(150)
                 display.blit(img, (mx - self.boxWidth / 2, my - self.boxHeight / 2))
                 img.set_alpha(255)
+
+        if self.nameMapWindow:
+            # x = 270
+            # y = 220
+            # width = 300
+            # height = 300
+            # font_size = 20
+            # text_color = BLACK
+            # bg_color = WHITE
+            pygame.draw.rect(self.nameMapSurface, (238, 238, 238, 240), self.nameMapSurface.get_rect())
+            display.blit(self.nameMapSurface, (270, 220))
+
+            drawText(display,"Name the map",270+150,220+15,size=25,color=BLACK)
+            self.nameButton.draw(display,Border=True,BorderWidth=1)
+            self.startGameButton.draw(display)
+            self.backGameButton.draw(display)
+
+            # rect = pygame.Rect(x, y, width, height)
+            # pygame.draw.rect(display, bg_color, rect)
+            # font = pygame.font.SysFont(None, font_size)
+            # text_surface = font.render("Name Window", True, text_color)
+            # text_rect = text_surface.get_rect(center=rect.center)
+            # display.blit(text_surface, text_rect)
+
 
         if self.popUpWindow:
             x = 270

@@ -7,7 +7,7 @@ from .box import Box
 from point import Point
 
 class Bomb(GameObject):
-    image = "sprites/gameobjects/Bomb.png"
+    image = "sprites/gameobjects/bomb.png"
     expImage = "sprites/gameobjects/explode.png"
     TIMER_CONST = 10
     EXPLODE_CONST = 3
@@ -22,6 +22,7 @@ class Bomb(GameObject):
         self.timer = Bomb.TIMER_CONST
         self.animationTimer = 1
         self.currentDepth = 1
+        self.boxPosition = []
         self.explodeTimer = Bomb.EXPLODE_CONST
         self.image = self.imgHandler.load(self.image, (self.level.bw, self.level.bh))
         self.expImage = self.imgHandler.load(self.expImage, (self.level.bw, self.level.bh))

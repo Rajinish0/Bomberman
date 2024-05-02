@@ -64,7 +64,9 @@ class SpriteSheet:
 				 numActions : int, numImagesPerAction : int,
 				 scaleSize : tuple = None, animationCoolDown = 100,
 				 defaultAction = 0, defaultActionFrame = 0):
-		self.image = pygame.image.load(sheetImage).convert_alpha()
+		self.image = pygame.image.load(sheetImage)
+		if self.image:
+			self.image = self.image.convert_alpha()
 		self.width  = width
 		self.height = height
 		self.numActions = numActions

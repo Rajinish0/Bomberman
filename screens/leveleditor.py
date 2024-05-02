@@ -241,7 +241,7 @@ class LevelEditor(Screen):
                         resized_image = image.resize((13, 13))
                         width, height = resized_image.size
                         background.paste(resized_image, (x_offset, y_offset))
-                    if elem == " " or elem == "a" or elem == "c":
+                    if elem == " " or elem == "a" or elem == "c" or elem =="m" or elem == "f" or elem=="p" or elem=="g":
                         image = Image.open(imgs[EMPTY])
                         resized_image = image.resize((13, 13))
                         width, height = resized_image.size

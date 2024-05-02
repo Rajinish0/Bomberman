@@ -301,10 +301,10 @@ class GameLevel:
 
 
         f=random.choices(spots,k=4)
-        monsters.append(Monster(Point(f[0][1],f[0][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(Monster(Point(f[0][1],f[0][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
         monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m3.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.038, os.path.join(IMG_PATH,'monsters' ,'m4.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.066, os.path.join(IMG_PATH,'monsters' ,'m3.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m4.png'),Point(0,1),self.bw,self.bh))
 
 
 

@@ -122,7 +122,7 @@ class Player(GameCharacter):
         ## IoU > .5
 
         if (isinstance(self.level.gameobjs[int(dp.y)][int(dp.x)], PowerUp)):
-            self.position = p.add(self.position)
+            # self.position = p.add(self.position)
             self.level.gameobjs[int(dp.y)][int(dp.x)].empower(self)
 
             # for pl in self.level.players:

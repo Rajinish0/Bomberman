@@ -25,6 +25,9 @@ class Point:
         return Point(self.x * d, self.y *d)
     __mul__ = __lmul__
 
+    def __add__(self, p):
+        return Point(self.x + p.x, self.y + p.y)
+
     def __sub__(self, p):
         return Point(self.x-p.x, self.y-p.y)
 

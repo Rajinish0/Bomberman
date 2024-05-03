@@ -100,12 +100,25 @@ class MapWindow(Screen):
 
 	def deleteMap(self):
 		file_name = self.currInd.text
-		if os.path.exists(file_name):
-			os.remove(file_name)
+		parts = file_name.split('/')
+		picture_name = parts[2].split('.')
+		flag = False
 
-		self.create_buttons()
-		self.currInd = None
-		self.totalWindow = len(self.mapPerPage) - 1
+		if os.path.exists(file_name):
+			# Check if picture_name is one of the restricted names
+			if picture_name[0] not in ["defaultMap", "secondMap", "thirdMap"]:
+				flag = True
+				os.remove(file_name)
+
+		picture_file_name = "sprites/map_pictures/" + picture_name[0] + ".jpg"
+		if flag:
+			if os.path.exists(picture_file_name):
+				os.remove(picture_file_name)
+
+			self.create_buttons()
+			self.currInd = None
+			self.totalWindow = len(self.mapPerPage) - 1
+
 	def popup_start(self):
 		if self.currInd:
 			self.dataSurface = pygame.Surface((W / 3, (H / 2)+50))

@@ -25,6 +25,9 @@ class Point:
         return Point(self.x * d, self.y *d)
     __mul__ = __lmul__
 
+    def __add__(self, p):
+        return Point(self.x + p.x, self.y + p.y)
+
     def __sub__(self, p):
         return Point(self.x-p.x, self.y-p.y)
 
@@ -43,6 +46,10 @@ class Point:
 
     def __hash__(self):
         return hash((self.x, self.y))
+    
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
+    
     @classmethod
     def int(cls, point):
         return cls( int(point.x), int(point.y) )

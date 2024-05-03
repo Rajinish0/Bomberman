@@ -16,7 +16,7 @@ class PowerUp(GameObject):
         self.level.gameobjs[self.position.y][self.position.x] = EmptySpace(self.position, self.level.bw, self.level.bh)
 
 class RangePowerUp(PowerUp):
-    image = "sprites/gameObjects/rangePowerup.png"
+    image = "sprites/gameobjects/rangePowerup.png"
 
     def empower(self, player):
         # print("Called ")
@@ -25,7 +25,7 @@ class RangePowerUp(PowerUp):
 
 
 class BombNumPowerUp(PowerUp):
-    image = "sprites/gameObjects/bombPowerup.png"
+    image = "sprites/gameobjects/bombPowerup.png"
 
     def empower(self, player):
         # print("Called ")

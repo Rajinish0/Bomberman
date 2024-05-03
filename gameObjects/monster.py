@@ -13,8 +13,8 @@ class Monster(GameCharacter):
     def __init__(self,position,speed,image,direction,w,h):
         super().__init__(position,speed)
         self.image=self.imgHandler.load(image, (w,h))
-        self.rw = .9999
-        self.rh = .9999
+        self.rw = .9
+        self.rh = .9
         self.direction=direction
         self.alive=True
         self.t = 1

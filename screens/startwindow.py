@@ -40,8 +40,6 @@ class StartWindow(Screen):
 		self.text7 = ",and the victor may leave.\""
 		self.text8 = "Bound by the wizard's spell, Mira and Thane"
 		self.text9 = "had no choice."
-
-
 		self.text_color = BLACK
 
 
@@ -53,7 +51,7 @@ class StartWindow(Screen):
 		self.btn.draw(display)
 
 		display.blit(self.wizard_image, self.wizard_position)
-		display.blit(self.des_image, (280, 140))
+		display.blit(self.des_image, (280, 120))
 
 		x_increment = 50
 		frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
@@ -64,8 +62,9 @@ class StartWindow(Screen):
 			display.blit(frame_rotated_image, (40 + i * x_increment, 550))
 
 		y_increment = 50
+		frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
 		for i in range(12):
-			display.blit(self.frame_image, (-10, -5 + i * y_increment))
+			display.blit(frame_rotated_image, (-10, -5 + i * y_increment))
 
 		for i in range(12):
 			display.blit(self.frame_image, (950, -5 + i * y_increment))

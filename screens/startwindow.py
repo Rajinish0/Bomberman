@@ -70,25 +70,25 @@ class StartWindow(Screen):
 			display.blit(self.frame_image, (950, -5 + i * y_increment))
 
 		text_surface = self.font.render(self.text, True, self.text_color)
-		display.blit(text_surface, (380,190))
+		display.blit(text_surface, (380,180))
 		text_surface = self.font.render(self.text2, True, self.text_color)
-		display.blit(text_surface, (380, 210))
+		display.blit(text_surface, (380, 200))
 		text_surface = self.font.render(self.text3, True, self.text_color)
-		display.blit(text_surface, (380, 250))
+		display.blit(text_surface, (380, 240))
 
 		text_surface = self.font.render(self.text4, True, self.text_color)
-		display.blit(text_surface, (380, 270))
+		display.blit(text_surface, (380, 260))
 		text_surface = self.font.render(self.text5, True, self.text_color)
-		display.blit(text_surface, (380, 290))
+		display.blit(text_surface, (380, 280))
 		text_surface = self.font.render(self.text6, True, self.text_color)
-		display.blit(text_surface, (380, 310))
+		display.blit(text_surface, (380, 300))
 
 		text_surface = self.font.render(self.text7, True, self.text_color)
-		display.blit(text_surface, (380, 330))
+		display.blit(text_surface, (380, 320))
 
 		text_surface = self.font.render(self.text8, True, self.text_color)
-		display.blit(text_surface, (380, 370))
+		display.blit(text_surface, (380, 360))
 
 		text_surface = self.font.render(self.text9, True, self.text_color)
-		display.blit(text_surface, (380, 390))
+		display.blit(text_surface, (380, 380))
 

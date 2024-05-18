@@ -16,18 +16,18 @@ class MainWindow(Screen):
 		font_size = 10
 		self.font = pygame.font.Font(font_path, font_size)
 
-		self.MapMenu = Button(W/2, H/2 - 120, 300, 100, text="Maps", textColor=WHITE,
-								callBack = lambda: self.gameMgr.setState(MAP_WINDOW),  img='UI/button.png', textSize=25)
-		self.CntrlMenu = Button(W/2, H/2 , 300, 100, text="Controls", textColor=WHITE,
-								callBack = lambda: self.gameMgr.setState(CONTROLS_WINDOW),  img='UI/button.png', textSize=25)
-		self.LvlEditor = Button(W/2, H/2 + 120, 300, 100, text="Editor", textColor=WHITE,
-						  	 	callBack= lambda: self.gameMgr.setState(LEVEL_EDITOR), img='UI/button.png', textSize=25)
+		self.MapMenu = Button(W/2, H/2 - 120, 300, 100, text="Maps", textColor=BLACK,
+								callBack = lambda: self.gameMgr.setState(MAP_WINDOW),  img='UI/button.png', textSize=15)
+		self.CntrlMenu = Button(W/2, H/2 , 300, 100, text="Controls", textColor=BLACK,
+								callBack = lambda: self.gameMgr.setState(CONTROLS_WINDOW),  img='UI/button.png', textSize=15)
+		self.LvlEditor = Button(W/2, H/2 + 120, 300, 100, text="Editor", textColor=BLACK,
+						  	 	callBack= lambda: self.gameMgr.setState(LEVEL_EDITOR), img='UI/button.png', textSize=15)
 
-		self.ExitButton = Button(930,70, 30, 30, textColor=WHITE,
+		self.ExitButton = Button(930,70, 30, 30, textColor=BLACK,
 						   		 callBack=lambda: pygame.quit(),  img='UI/exit.png', textSize=25)
 
 		self.frame_image = pygame.image.load('UI/frame.png')
-		self.frame_image = pygame.transform.scale(self.frame_image, (60, 60))
+		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
 		self.wizard_image = pygame.image.load('UI/wizard2.png')
 		self.wizard_image = pygame.transform.scale(self.wizard_image, (180, 180))
@@ -42,21 +42,22 @@ class MainWindow(Screen):
 	def draw(self, display):
 		display.fill((114, 125, 104))
 		display.blit(self.wizard_image, self.wizard_position)
+
 		x_increment = 50
-		frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
+		frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
 		for i in range(20):
-			display.blit(frame_rotated_image, (40 + i * x_increment, -10))
+			display.blit(frame_rotated_image, (35 + i * x_increment, -15))
 
 		for i in range(20):
-			display.blit(frame_rotated_image, (40 + i * x_increment, 550))
+			display.blit(frame_rotated_image, (35 + i * x_increment, 550))
 
 		y_increment = 50
 		frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
 		for i in range(12):
-			display.blit(frame_rotated_image, (-10, -5 + i * y_increment))
+			display.blit(frame_rotated_image, (-15, -15 + i * y_increment))
 
 		for i in range(12):
-			display.blit(self.frame_image, (950, -5 + i * y_increment))
+			display.blit(self.frame_image, (950, -15 + i * y_increment))
 
 		self.MapMenu.draw(display)
 		self.CntrlMenu.draw(display)

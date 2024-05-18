@@ -1,4 +1,5 @@
 import pygame
+import os
 
 '''
 draws text on x, y coordinates (these are the center coordinates)
@@ -8,11 +9,11 @@ center : if true then x, y define the center coords of the text otherwise,
 		 they define the top left corner's coords
 '''
 def drawText(screen : pygame.Surface, text: str, x : float, y : float, 
-			 size : int =30, color: tuple =(255, 0, 0), 
-			 font_type: str = "Comic Sans MS",
+			 size : int =30, color: tuple =(255, 0, 0),
+			 font_path: str =os.path.join('UI/Press_Start_2P', 'PressStart2P-Regular.ttf'),
 			 center: bool =True,right:bool=False):
 	text = str(text)
-	font = pygame.font.SysFont(font_type, size)
+	font = pygame.font.Font(font_path, size)
 	surface = font.render(text, True, color)
 	text_width, text_height = font.size(text)
 	if center:

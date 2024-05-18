@@ -22,7 +22,7 @@ class StartWindow(Screen):
 		self.wizard_position = (70,70)
 
 		self.frame_image = pygame.image.load('UI/frame.png')
-		self.frame_image = pygame.transform.scale(self.frame_image, (60, 60))
+		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
 		self.des_image = pygame.image.load('UI/description.png')
 		self.des_image = pygame.transform.scale(self.des_image, (620, 320))
@@ -36,8 +36,8 @@ class StartWindow(Screen):
 
 		self.text4 = "unknowingly crossed into his territory. Zephyr"
 		self.text5 = "appeared in a flash of light, his eyes cold."
-		self.text6 = "\"You have trespassed on sacred ground. Fight "
-		self.text7 = ",and the victor may leave.\""
+		self.text6 = "\"You have trespassed on sacred ground. Fight,"
+		self.text7 = "and the victor may leave.\""
 		self.text8 = "Bound by the wizard's spell, Mira and Thane"
 		self.text9 = "had no choice."
 		self.text_color = BLACK
@@ -54,20 +54,20 @@ class StartWindow(Screen):
 		display.blit(self.des_image, (280, 120))
 
 		x_increment = 50
-		frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
+		frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
 		for i in range(20):
-			display.blit(frame_rotated_image, (40 + i * x_increment, -10))
+			display.blit(frame_rotated_image, (35 + i * x_increment, -15))
 
 		for i in range(20):
-			display.blit(frame_rotated_image, (40 + i * x_increment, 550))
+			display.blit(frame_rotated_image, (35 + i * x_increment, 550))
 
 		y_increment = 50
 		frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
 		for i in range(12):
-			display.blit(frame_rotated_image, (-10, -5 + i * y_increment))
+			display.blit(frame_rotated_image, (-15, -15 + i * y_increment))
 
 		for i in range(12):
-			display.blit(self.frame_image, (950, -5 + i * y_increment))
+			display.blit(self.frame_image, (950, -15 + i * y_increment))
 
 		text_surface = self.font.render(self.text, True, self.text_color)
 		display.blit(text_surface, (380,180))

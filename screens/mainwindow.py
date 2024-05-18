@@ -23,14 +23,14 @@ class MainWindow(Screen):
 		self.LvlEditor = Button(W/2, H/2 + 120, 300, 100, text="Editor", textColor=BLACK,
 						  	 	callBack= lambda: self.gameMgr.setState(LEVEL_EDITOR), img='UI/button.png', textSize=15)
 
-		self.ExitButton = Button(930,70, 30, 30, textColor=BLACK,
+		self.ExitButton = Button(920,70, 30, 30, textColor=BLACK,
 						   		 callBack=lambda: pygame.quit(),  img='UI/exit.png', textSize=25)
 
 		self.frame_image = pygame.image.load('UI/frame.png')
 		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
 		self.wizard_image = pygame.image.load('UI/wizard2.png')
-		self.wizard_image = pygame.transform.scale(self.wizard_image, (180, 180))
+		self.wizard_image = pygame.transform.scale(self.wizard_image, (140, 140))
 		self.wizard_position = (70,70)
 
 	def update(self):
@@ -48,6 +48,7 @@ class MainWindow(Screen):
 		for i in range(20):
 			display.blit(frame_rotated_image, (35 + i * x_increment, -15))
 
+		frame_rotated_image = pygame.transform.rotate(self.frame_image,-90)
 		for i in range(20):
 			display.blit(frame_rotated_image, (35 + i * x_increment, 550))
 

@@ -11,32 +11,25 @@ import pickle
 class ControlsWindow(Screen):
 
     def __init__(self):
+        self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
+                                 callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
+
         self.saveBtn = Button(
-            70, 60, 30, 35, text="Save",
-            callBack=lambda: (self.saveKeys())
+            250, 85, 30, 35,
+            callBack=lambda: (self.saveKeys()), img="UI/save.png"
         )
 
         self.defaultBtn = Button(
-            140, 60, 30, 35, text="Default",
-            callBack=lambda: (self.defaultKeys())
+            200, 85, 30, 35,
+            callBack=lambda: (self.defaultKeys()), img="UI/delete.png"
         )
 
         self.menuBtn = Button(
-            660, 60, 30, 35, text="Menu",
-            callBack=lambda: (self.setUp(), self.gameMgr.setState(MAIN_WINDOW))
+            150, 85, 30, 35,
+            callBack=lambda: (self.setUp(), self.gameMgr.setState(MAIN_WINDOW)), img="UI/wizard2.png"
         )
 
-        self.helpBtn = Button(
-            730, 60, 30, 35, text="Help",
-            callBack=lambda: (self.helpSurface())
-        )
-
-        # self.okBtn = Button(
-        #     730, 60, 30, 35, text="Help",
-        #     callBack=lambda: (self.helpSurface())
-        # )
-
-        button_img = os.path.join(IMG_PATH, 'Solid_white.png')
+        button_img = os.path.join('UI/key.png')
         self.curr_pressed_key = None
         self.curr_pressed_button = None
         self.keys = loadKeys()
@@ -45,20 +38,25 @@ class ControlsWindow(Screen):
 
         self.players_command = {
             "p1": {
-                "UP": Button(550, 140, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "DOWN": Button(550, 210, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "LEFT": Button(480, 210, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "RIGHT": Button(620, 210, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "BOMB": Button(550, 280, 200, 45, img=button_img, textColor=BLACK, textSize=25)
+                "UP": Button(650, 160, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "DOWN": Button(650, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "RIGHT": Button(705, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "LEFT": Button(595, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "BOMB": Button(650, 270, 200, 45, img=button_img, textColor=BLACK, textSize=25)
             },
             "p2": {
-                "UP": Button(550, 390, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "DOWN": Button(550, 460, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "LEFT": Button(480, 460, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "RIGHT": Button(620, 460, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "BOMB": Button(550, 530, 200, 45, img=button_img, textColor=BLACK, textSize=20)
+                "UP": Button(650, 365, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "DOWN": Button(650, 420, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "RIGHT": Button(705, 420, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "LEFT": Button(595, 420, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "BOMB": Button(650, 475, 200, 45, img=button_img, textColor=BLACK, textSize=25)
             }
         }
+        self.frame_image = pygame.image.load('UI/frame.png')
+        self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
+
+        self.control_image = pygame.image.load('UI/controls.png')
+        self.control_image = pygame.transform.scale(self.control_image, (760, 220))
 
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
@@ -127,8 +125,8 @@ class ControlsWindow(Screen):
     def update(self): # every frame before draw
         self.menuBtn.update()
         self.saveBtn.update()
-        self.helpBtn.update()
         self.defaultBtn.update()
+        self.ExitButton.update()
 
         for player_commands in self.players_command.values():
             for button in player_commands.values():
@@ -136,21 +134,27 @@ class ControlsWindow(Screen):
                 if button.pressed:
                     self.curr_pressed_button = button
 
+
+
     def draw(self, display): # Draw is called every frame
-        display.fill((110, 161, 100))
+        display.fill((114, 125, 104))
         # background_image = pygame.image.load('sprites/background.png')
         # scaled_image = pygame.transform.scale(background_image, (W, H))
         # alpha_value_bg = 140
         # scaled_image.set_alpha(alpha_value_bg)
         # display.blit(scaled_image, (0, 0))
 
-        rect1_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
-        pygame.draw.rect(rect1_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
-        display.blit(rect1_surface, (50, 82))
+        # rect1_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
+        # pygame.draw.rect(rect1_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
+        # display.blit(rect1_surface, (50, 82))
 
-        rect2_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
-        pygame.draw.rect(rect2_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
-        display.blit(rect2_surface, (50, 336))
+        # rect2_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
+        # pygame.draw.rect(rect2_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
+        # display.blit(rect2_surface, (50, 336))
+
+        display.blit(self.control_image, (105, 310))
+        display.blit(self.control_image, (105, 100))
+
 
         for player_commands in self.players_command.values():
             for button in player_commands.values():
@@ -161,10 +165,43 @@ class ControlsWindow(Screen):
 
         self.saveBtn.draw(display)
         self.menuBtn.draw(display)
-        self.helpBtn.draw(display)
         self.defaultBtn.draw(display)
 
-        # help_surface = pygame.Surface((700, 500), pygame.SRCALPHA)
-        # pygame.draw.rect(help_surface, (238, 238, 238, 250), help_surface.get_rect(), border_radius=5)
-        # display.blit(help_surface, (50, 82))
+        x_increment = 50
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
+        for i in range(20):
+            display.blit(frame_rotated_image, (35 + i * x_increment, -15))
+
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
+        for i in range(20):
+            display.blit(frame_rotated_image, (35 + i * x_increment, 550))
+
+        y_increment = 50
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
+        for i in range(12):
+            display.blit(frame_rotated_image, (-15, -15 + i * y_increment))
+
+        for i in range(12):
+            display.blit(self.frame_image, (950, -15 + i * y_increment))
+
+        x_increment = 50
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
+        for i in range(20):
+            display.blit(frame_rotated_image, (35 + i * x_increment, -15))
+
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
+        for i in range(20):
+            display.blit(frame_rotated_image, (35 + i * x_increment, 550))
+
+        y_increment = 50
+        frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
+        for i in range(12):
+            display.blit(frame_rotated_image, (-15, -15 + i * y_increment))
+
+        for i in range(12):
+            display.blit(self.frame_image, (950, -15 + i * y_increment))
+
+        self.ExitButton.draw(display)
+
+
 

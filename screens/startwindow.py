@@ -13,7 +13,7 @@ all buttons must be updated before they are drawn
 '''
 class StartWindow(Screen):
 	def __init__(self):
-		self.btn = Button(500, 500, 170, 40,
+		self.btn = Button(500, 500, 200, 60,
 						  callBack = lambda: self.gameMgr.setState( MAIN_WINDOW ),
 						 text="Start", img='UI/button.png', textSize=12, textColor=BLACK)
 
@@ -52,7 +52,6 @@ class StartWindow(Screen):
 	def draw(self, display):
 		display.fill((114, 125, 104))
 		self.btn.draw(display)
-
 
 		display.blit(self.des_image, (180, 150))
 		display.blit(self.wizard_image, self.wizard_position)

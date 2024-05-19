@@ -46,7 +46,7 @@ class MainWindow(Screen):
 		x_increment = 50
 		frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
 		for i in range(20):
-			display.blit(frame_rotated_image, (35 + i * x_increment, -15))
+			display.blit(frame_rotated_image, (30 + i * x_increment, -15))
 
 		frame_rotated_image = pygame.transform.rotate(self.frame_image,-90)
 		for i in range(20):

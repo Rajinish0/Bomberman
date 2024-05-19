@@ -42,20 +42,20 @@ class ControlsWindow(Screen):
                 "DOWN": Button(650, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
                 "RIGHT": Button(705, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
                 "LEFT": Button(595, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "BOMB": Button(650, 270, 200, 45, img=button_img, textColor=BLACK, textSize=25)
+                "BOMB": Button(650, 270, 200, 40, img=button_img, textColor=BLACK, textSize=18)
             },
             "p2": {
-                "UP": Button(650, 365, 50, 50, img=button_img, textColor=BLACK, textSize=10),
-                "DOWN": Button(650, 420, 50, 50, img=button_img, textColor=BLACK, textSize=10),
-                "RIGHT": Button(705, 420, 50, 50, img=button_img, textColor=BLACK, textSize=9),
-                "LEFT": Button(595, 420, 50, 50, img=button_img, textColor=BLACK, textSize=9),
-                "BOMB": Button(650, 475, 200, 45, img=button_img, textColor=BLACK, textSize=25)
+                "UP": Button(650, 385, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "DOWN": Button(650, 440, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "RIGHT": Button(705, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "LEFT": Button(595, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "BOMB": Button(650, 495, 200, 40, img=button_img, textColor=BLACK, textSize=18)
             }
         }
         self.frame_image = pygame.image.load('UI/frame.png')
         self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
-        self.control_image = pygame.image.load('UI/controls.png')
+        self.control_image = pygame.image.load('UI/controls_panel.png')
         self.control_image = pygame.transform.scale(self.control_image, (760, 220))
 
         for player, playerDiction in self.players_command.items():
@@ -138,23 +138,8 @@ class ControlsWindow(Screen):
 
     def draw(self, display): # Draw is called every frame
         display.fill((114, 125, 104))
-        # background_image = pygame.image.load('sprites/background.png')
-        # scaled_image = pygame.transform.scale(background_image, (W, H))
-        # alpha_value_bg = 140
-        # scaled_image.set_alpha(alpha_value_bg)
-        # display.blit(scaled_image, (0, 0))
-
-        # rect1_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
-        # pygame.draw.rect(rect1_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
-        # display.blit(rect1_surface, (50, 82))
-
-        # rect2_surface = pygame.Surface((700, 245), pygame.SRCALPHA)
-        # pygame.draw.rect(rect2_surface, (238, 238, 238, 225.8), rect1_surface.get_rect(), border_radius=5)
-        # display.blit(rect2_surface, (50, 336))
-
-        display.blit(self.control_image, (105, 310))
+        display.blit(self.control_image, (105, 325))
         display.blit(self.control_image, (105, 100))
-
 
         for player_commands in self.players_command.values():
             for button in player_commands.values():
@@ -170,24 +155,7 @@ class ControlsWindow(Screen):
         x_increment = 50
         frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
         for i in range(20):
-            display.blit(frame_rotated_image, (35 + i * x_increment, -15))
-
-        frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
-        for i in range(20):
-            display.blit(frame_rotated_image, (35 + i * x_increment, 550))
-
-        y_increment = 50
-        frame_rotated_image = pygame.transform.rotate(self.frame_image, -180)
-        for i in range(12):
-            display.blit(frame_rotated_image, (-15, -15 + i * y_increment))
-
-        for i in range(12):
-            display.blit(self.frame_image, (950, -15 + i * y_increment))
-
-        x_increment = 50
-        frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
-        for i in range(20):
-            display.blit(frame_rotated_image, (35 + i * x_increment, -15))
+            display.blit(frame_rotated_image, (30 + i * x_increment, -15))
 
         frame_rotated_image = pygame.transform.rotate(self.frame_image, -90)
         for i in range(20):

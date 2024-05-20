@@ -85,7 +85,7 @@ class MapWindow(Screen):
 		)
 
 		self.deleteBtn=Button(
-			250, 90, 30, 35,color=BLACK,textColor=BLACK,
+			250, 90, 24, 30,color=BLACK,textColor=BLACK,
 			callBack=lambda : self.deleteMap(), img="UI/delete.png"
 		)
 
@@ -137,8 +137,8 @@ class MapWindow(Screen):
 		self.currPressedName=None
 		self.currPressedTime=None
 		self.currPressedRounds=None
-		self.data["p1"] = self.pl1Name.text
-		self.data["p2"] = self.pl2Name.text
+		self.data["p1"] = "MIRA"
+		self.data["p2"] = "THANE"
 		time = self.time.text.split(":")
 		self.data["timer"] = int(time[0]) * 60 + int(time[1])
 		self.data["round"] = int(self.rounds.text)
@@ -151,8 +151,8 @@ class MapWindow(Screen):
 		self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
-		self.data["p1"] = self.pl1Name.text or "Aunt May"
-		self.data["p2"] = self.pl2Name.text or "Uncle Ben"
+		self.data["p1"] = "MIRA"
+		self.data["p2"] = "THANE"
 		time=self.time.text.split(":")
 		if time[1]:
 			self.data["timer"]=int(time[0])*60+int(time[1])

@@ -17,9 +17,9 @@ class StartWindow(Screen):
 						  callBack = lambda: self.gameMgr.setState( MAIN_WINDOW ),
 						 text="Start", img='UI/button.png', textSize=12, textColor=BLACK)
 
-		self.wizard_image = pygame.image.load('UI/wizard3.png')
-		self.wizard_image = pygame.transform.scale(self.wizard_image, (100, 100))
-		self.wizard_position = (450,63)
+		self.wizard_image = pygame.image.load('UI/Entry.png')
+		self.wizard_image = pygame.transform.scale(self.wizard_image, (730, 440))
+		self.wizard_position = (50,30)
 
 		self.frame_image = pygame.image.load('UI/frame.png')
 		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
@@ -53,7 +53,7 @@ class StartWindow(Screen):
 		display.fill((114, 125, 104))
 		self.btn.draw(display)
 
-		display.blit(self.des_image, (180, 150))
+		# display.blit(self.des_image, (180, 150))
 		display.blit(self.wizard_image, self.wizard_position)
 
 		x_increment = 50
@@ -73,26 +73,27 @@ class StartWindow(Screen):
 		for i in range(12):
 			display.blit(self.frame_image, (950, -15 + i * y_increment))
 
-		text_surface = self.font.render(self.text, True, self.text_color)
-		display.blit(text_surface, (275,200))
-		text_surface = self.font.render(self.text2, True, self.text_color)
-		display.blit(text_surface, (275, 220))
-		text_surface = self.font.render(self.text3, True, self.text_color)
-		display.blit(text_surface, (275, 260))
-
-		text_surface = self.font.render(self.text4, True, self.text_color)
-		display.blit(text_surface, (275, 280))
-		text_surface = self.font.render(self.text5, True, self.text_color)
-		display.blit(text_surface, (275, 300))
-		text_surface = self.font.render(self.text6, True, self.text_color)
-		display.blit(text_surface, (275, 320))
-
-		text_surface = self.font.render(self.text7, True, self.text_color)
-		display.blit(text_surface, (275, 340))
-		text_surface = self.font.render(self.text8, True, self.text_color)
-		display.blit(text_surface, (275, 380))
-
-		text_surface = self.font.render(self.text9, True, self.text_color)
-		display.blit(text_surface, (275, 400))
+		# text_surface = self.font.render(self.text, True, self.text_color)
+		# display.blit(text_surface, (275,200))
+		# text_surface = self.font.render(self.text2, True, self.text_color)
+		# display.blit(text_surface, (275, 220))
+		# text_surface = self.font.render(self.text3, True, self.text_color)
+		# display.blit(text_surface, (275, 260))
+		#
+		# text_surface = self.font.render(self.text4, True, self.text_color)
+		# display.blit(text_surface, (275, 280))
+		# text_surface = self.font.render(self.text5, True, self.text_color)
+		# display.blit(text_surface, (275, 300))
+		# text_surface = self.font.render(self.text6, True, self.text_color)
+		# display.blit(text_surface, (275, 320))
+		#
+		# text_surface = self.font.render(self.text7, True, self.text_color)
+		# display.blit(text_surface, (275, 340))
+		# text_surface = self.font.render(self.text8, True, self.text_color)
+		# display.blit(text_surface, (275, 380))
+		#
+		# text_surface = self.font.render(self.text9, True, self.text_color)
+		# display.blit(text_surface, (275, 400))
 		self.ExitButton.draw(display)
+
 

@@ -25,8 +25,8 @@ imgs = {
     BOX: Box.image,
     WALL: Wall.image,
     EMPTY: "UI/grass_tile2.png",
-    PLAYER1 : "sprites/players/g1.png",
-    PLAYER2 : "sprites/players/g2.png",
+    PLAYER1 : "UI/thane_grass.png",
+    PLAYER2 : "UI/mira_grass.png",
     BASE_MONSTER : "sprites/monsters/m1b.png",
     GHOST_MONSTER : "sprites/monsters/m2.png",
     FAST_MONSTER : "sprites/monsters/m3.png",
@@ -58,74 +58,16 @@ class LevelEditor(Screen):
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
 
+
         self.backButton = Button(
-            10, 10, 30, 30, text="Back",
-            callBack=lambda: self.go_back()
-            ,
-            center=False
-        )
-        self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
-                                 callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
-
-        self.boxButton = Button(
-            110, 110, self.boxWidth, self.boxHeight, img=imgs[BOX],
-            callBack=lambda: self.setSelected(BOX),
-            center=False
-        )
-
-        self.background_image = pygame.image.load('UI/holder.png')
-        self.background_image = pygame.transform.scale(self.background_image, (80, 70))
-
-        self.wallButton = Button(
-            110, 190, self.boxWidth, self.boxHeight, img=imgs[WALL],
-            callBack=lambda: self.setSelected(WALL),
-            center=False
-        )
-
-        self.emptyButton = Button(
-            110, 280, self.boxWidth, self.boxHeight, img=imgs[EMPTY],
-            callBack=lambda: self.setSelected(EMPTY),
-            center=False
-        )
-
-        self.P1Button = Button(
-            110, 370, self.boxWidth, self.boxHeight, img=imgs[PLAYER1],
-            callBack=lambda:self.setSelected(PLAYER1),
-            center=False
-        )
-
-        self.P2Button = Button(
-            110, 460, self.boxWidth, self.boxHeight, img=imgs[PLAYER2],
-            callBack=lambda:self.setSelected(PLAYER2),
-            center=False
-        )
-
-        self.baseMButton = Button(
-            820, 110, self.boxWidth, self.boxHeight, img=imgs[BASE_MONSTER],
-            callBack=lambda: self.setSelected(BASE_MONSTER),
-            center=False
-        )
-
-        self.ghostMButton = Button(
-            820, 190, self.boxWidth, self.boxHeight, img=imgs[GHOST_MONSTER],
-            callBack=lambda: self.setSelected(GHOST_MONSTER),
-            center=False
-        )
-
-        self.fastMButton = Button(
-            820, 280, self.boxWidth, self.boxHeight, img=imgs[FAST_MONSTER],
-            callBack=lambda: self.setSelected(FAST_MONSTER),
-            center=False
-        )
-
-        self.pseudoIntMButton = Button(
-            820, 370, self.boxWidth, self.boxHeight, img=imgs[PSEUDOINTELLIGENT_MONSTER],
-            callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
+            85, 475, 30, 30,
+            callBack=lambda: self.go_back(),
+            img = "UI/wizard2.png",
             center=False
         )
 
         self.resetButton = Button(
-            x=200, y=40, width=30, height=35,
+            x=135, y=475, width=30, height=30,
             callBack=lambda: self.reset(),
             center=False,
             img = "UI/delete.png",
@@ -133,19 +75,75 @@ class LevelEditor(Screen):
             textColor=BLACK,
         )
 
-        self.menuBtn = Button(
-            190, 90, 30, 35,
-            callBack=lambda: (self.gameMgr.setState(MAIN_WINDOW)), img="UI/wizard2.png"
+        self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
+                                 callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
+
+
+
+        self.background_image = pygame.image.load('UI/holder.png')
+        self.background_image = pygame.transform.scale(self.background_image, (80, 70))
+
+
+
+        self.boxButton = Button(
+            820, 280, self.boxWidth, self.boxHeight, img=imgs[BOX],
+            callBack=lambda: self.setSelected(BOX),
+            center=False
         )
 
+        self.P1Button = Button(
+            820, 460, self.boxWidth, self.boxHeight, img="UI/p1.png",
+            callBack=lambda:self.setSelected(PLAYER1),
+            center=False
+        )
+
+        self.P2Button = Button(
+            820, 370, self.boxWidth, self.boxHeight, img="UI/p2.png",
+            callBack=lambda:self.setSelected(PLAYER2),
+            center=False
+        )
+
+        self.wallButton = Button(
+            820, 110, self.boxWidth, self.boxHeight, img=imgs[WALL],
+            callBack=lambda: self.setSelected(WALL),
+            center=False
+        )
+
+        self.emptyButton = Button(
+            820, 190, self.boxWidth, self.boxHeight, img=imgs[EMPTY],
+            callBack=lambda: self.setSelected(EMPTY),
+            center=False
+        )
+
+        self.baseMButton = Button(
+            110, 190, self.boxWidth, self.boxHeight, img="UI/monster_new_1.png",
+            callBack=lambda: self.setSelected(BASE_MONSTER),
+            center=False
+        )
+
+        self.ghostMButton = Button(
+            110, 280, self.boxWidth, self.boxHeight, img="UI/monster_new_2.png",
+            callBack=lambda: self.setSelected(GHOST_MONSTER),
+            center=False
+        )
+
+        self.fastMButton = Button(
+            110, 370, self.boxWidth, self.boxHeight, img="UI/monster_new_3.png",
+            callBack=lambda: self.setSelected(FAST_MONSTER),
+            center=False
+        )
+
+        self.pseudoIntMButton = Button(
+            110, 110, self.boxWidth, self.boxHeight, img="UI/monster_new_4.png",
+            callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
+            center=False
+        )
+
+
+
         self.startButton = Button(
-            400, 510, 180, 40,
-            callBack=lambda: self.handleInitialStart(),
-            center=False,
-            text="Start",
-            img="UI/button.png",
-            textSize=15,
-            textColor=BLACK,
+            W / 2, 520, 180, 40, text="Start", color=BLACK, textColor=BLACK,
+            callBack=lambda: (self.handleInitialStart()), img='UI/button.png', textSize=10
         )
 
         self.oKButton = Button(
@@ -371,9 +369,6 @@ class LevelEditor(Screen):
 
             self.clicked=False
 
-
-
-
     def handleMousePos(self):
         if self.evMgr.mousePressed:
             if self.selected in ("m", "f", "g", "p"):
@@ -386,7 +381,6 @@ class LevelEditor(Screen):
                 self.clicked = False
 
     def update(self):
-        self.menuBtn.update()
         self.ExitButton.update()
         if self.nameMapWindow:
             self.startGameButton.update()
@@ -457,17 +451,19 @@ class LevelEditor(Screen):
     def draw(self, display):
 
         display.fill((114, 125, 104))
+
         display.blit(self.background_image, (90, 90))
         display.blit(self.background_image, (90, 170))
         display.blit(self.background_image, (90, 260))
         display.blit(self.background_image, (90, 350))
-        display.blit(self.background_image, (90, 440))
+
 
 
         display.blit(self.background_image, (800, 90))
         display.blit(self.background_image, (800, 170))
         display.blit(self.background_image, (800, 260))
         display.blit(self.background_image, (800, 350))
+        display.blit(self.background_image, (800, 440))
 
         x_increment = 50
         frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
@@ -499,7 +495,6 @@ class LevelEditor(Screen):
         self.fastMButton.draw(display)
         self.pseudoIntMButton.draw(display)
         self.ExitButton.draw(display)
-        self.menuBtn.draw(display)
 
         # Draws the rectangular lines
         for i in range(NUM_BOXES):
@@ -507,11 +502,7 @@ class LevelEditor(Screen):
                 x = self.offSetX + j * self.boxWidth
                 y = self.offSetY + i * self.boxHeight
 
-                display.blit(self.load(imgs[EMPTY]), (x,y))
-
-                if i in borders or j in borders:
-                    print("hello")
-                else:
+                if i not in borders and j not in borders:
                     display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
                     pygame.draw.rect(display, BLACK, (x, y, self.boxWidth, self.boxHeight), 1)
 
@@ -524,13 +515,6 @@ class LevelEditor(Screen):
                 img.set_alpha(255)
 
         if self.nameMapWindow:
-            # x = 270
-            # y = 220
-            # width = 300
-            # height = 300
-            # font_size = 20
-            # text_color = BLACK
-            # bg_color = WHITE
             pygame.draw.rect(self.nameMapSurface, (238, 238, 238, 240), self.nameMapSurface.get_rect())
             display.blit(self.nameMapSurface, (270, 220))
 
@@ -538,14 +522,6 @@ class LevelEditor(Screen):
             self.nameButton.draw(display,Border=True,BorderWidth=1)
             self.startGameButton.draw(display)
             self.backGameButton.draw(display)
-
-            # rect = pygame.Rect(x, y, width, height)
-            # pygame.draw.rect(display, bg_color, rect)
-            # font = pygame.font.SysFont(None, font_size)
-            # text_surface = font.render("Name Window", True, text_color)
-            # text_rect = text_surface.get_rect(center=rect.center)
-            # display.blit(text_surface, text_rect)
-
 
         if self.popUpWindow:
             x = 270

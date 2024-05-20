@@ -15,21 +15,21 @@ class ControlsWindow(Screen):
                                  callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
 
         self.saveBtn = Button(
-            250, 85, 30, 35,
+            250, 89, 20, 25,
             callBack=lambda: (self.saveKeys()), img="UI/save.png"
         )
 
         self.defaultBtn = Button(
-            200, 85, 30, 35,
+            200, 89, 20, 25,
             callBack=lambda: (self.defaultKeys()), img="UI/delete.png"
         )
 
         self.menuBtn = Button(
-            150, 85, 30, 35,
+            150, 89, 27, 32,
             callBack=lambda: (self.setUp(), self.gameMgr.setState(MAIN_WINDOW)), img="UI/wizard2.png"
         )
 
-        button_img = os.path.join('UI/key.png')
+        button_img = os.path.join('UI/key2.png')
         self.curr_pressed_key = None
         self.curr_pressed_button = None
         self.keys = loadKeys()
@@ -38,25 +38,34 @@ class ControlsWindow(Screen):
 
         self.players_command = {
             "p1": {
-                "UP": Button(650, 160, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "DOWN": Button(650, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "RIGHT": Button(705, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "LEFT": Button(595, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
-                "BOMB": Button(650, 270, 200, 40, img=button_img, textColor=BLACK, textSize=18)
+                "UP": Button(670, 160, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "DOWN": Button(670, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "RIGHT": Button(725, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "LEFT": Button(615, 215, 50, 50, img=button_img, textColor=BLACK, textSize=20),
+                "BOMB": Button(670, 270, 200, 40, img=button_img, textColor=BLACK, textSize=18)
             },
             "p2": {
-                "UP": Button(650, 385, 50, 50, img=button_img, textColor=BLACK, textSize=10),
-                "DOWN": Button(650, 440, 50, 50, img=button_img, textColor=BLACK, textSize=10),
-                "RIGHT": Button(705, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
-                "LEFT": Button(595, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
-                "BOMB": Button(650, 495, 200, 40, img=button_img, textColor=BLACK, textSize=18)
+                "UP": Button(670, 385, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "DOWN": Button(670, 440, 50, 50, img=button_img, textColor=BLACK, textSize=10),
+                "RIGHT": Button(725, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "LEFT": Button(615, 440, 50, 50, img=button_img, textColor=BLACK, textSize=9),
+                "BOMB": Button(670, 495, 200, 40, img=button_img, textColor=BLACK, textSize=18)
             }
         }
         self.frame_image = pygame.image.load('UI/frame.png')
         self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
+        self.mira_image = pygame.image.load('UI/Mira.png')
+        self.mira_image = pygame.transform.scale(self.mira_image, (125, 165))
+
+        self.thane_image = pygame.image.load('UI/Thane.png')
+        self.thane_image = pygame.transform.scale(self.thane_image, (125, 165))
+
+        # self.Tha_image = pygame.image.load('UI/Mira.png')
+        # self.mira_image = pygame.transform.scale(self.frame_image, (60, 80))
+
         self.control_image = pygame.image.load('UI/controls_panel.png')
-        self.control_image = pygame.transform.scale(self.control_image, (760, 220))
+        self.control_image = pygame.transform.scale(self.control_image, (730, 220))
 
         for player, playerDiction in self.players_command.items():
             for key, button in playerDiction.items():
@@ -138,8 +147,8 @@ class ControlsWindow(Screen):
 
     def draw(self, display): # Draw is called every frame
         display.fill((114, 125, 104))
-        display.blit(self.control_image, (105, 325))
-        display.blit(self.control_image, (105, 100))
+        display.blit(self.control_image, (125, 325))
+        display.blit(self.control_image, (125, 100))
 
         for player_commands in self.players_command.values():
             for button in player_commands.values():
@@ -170,6 +179,8 @@ class ControlsWindow(Screen):
             display.blit(self.frame_image, (950, -15 + i * y_increment))
 
         self.ExitButton.draw(display)
+        display.blit(self.mira_image, (230, 130))
+        display.blit(self.thane_image, (230, 355))
 
 
 

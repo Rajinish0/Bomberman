@@ -18,7 +18,11 @@ from gamelevel import GameLevel
 
 class GameWindow(Screen):
     def __init__(self, file_path=None):
-
+        self.background_image = pygame.image.load(os.path.join('UI', 'background2.png')).convert()
+        self.background_image = pygame.transform.scale(self.background_image, (W, H))
+        self.background_surface = pygame.Surface((W, H), pygame.SRCALPHA)
+        self.background_surface.blit(self.background_image, (0, 0))
+        self.background_surface.set_alpha(70)  # 50% transparency
 
         self.file_path = file_path
         self.offSetX = 200
@@ -32,20 +36,33 @@ class GameWindow(Screen):
         self.infosurface = pygame.Surface((self.gameWidth, (H-self.gameHeight+70)))
         self.pWidth, self.pHeight = int(self.gameWidth*0.75), self.gameHeight//2
         self.popUpWindow = pygame.Surface(  (self.pWidth, self.pHeight), pygame.SRCALPHA )
-        self.pl1Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70) )
-        self.pl2Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70) )
+
+        # self.pl1Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70) )
+        # self.pl2Image = self.imgHandler.load( os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70) )
+        self.pl1Image = self.imgHandler.load(os.path.join('UI', 'Mira_player.png'), (50, 70))
+        self.pl2Image = self.imgHandler.load(os.path.join('UI', 'Thane_player.png'), (50, 70))
         self.timer=5
         self.timeList=[3,2,1]
 
+        self.frame_image = pygame.image.load('UI/frame.png')
+        self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
+        self.button_image = pygame.image.load('UI/button.png')
+        self.button_image = pygame.transform.scale(self.button_image, (270, 100))
 
+        self.mira_image = pygame.image.load('UI/Mira.png')
+        self.mira_image = pygame.transform.scale(self.mira_image, (125, 165))
+
+        self.thane_image = pygame.image.load('UI/Thane.png')
+        self.thane_image = pygame.transform.scale(self.thane_image, (125, 165))
 
 
        # self.battleTimer = 14 * 14
 
         self.backButton = Button(
-            30, 30, 30, 30, text="Back",
-            callBack=lambda: self.gameMgr.setState(MAP_WINDOW)
+            50, 500, 90, 100,
+            callBack=lambda: self.gameMgr.setState(MAP_WINDOW),
+            img="UI/wizard2.png"
         )
 
         # self.nextButton=Button(
@@ -104,14 +121,20 @@ class GameWindow(Screen):
 
 
     def draw(self, display):
-        display.fill((110, 161, 100))
-        self.gamesurface.fill((110, 161, 100))
-        self.infosurface.fill((110, 161, 100))
-        self.infosurface.blit(self.pl1Image, (0, 0))
+        display.fill((114, 125, 104))
+        display.blit(self.background_surface, (0, 0))
+
+        self.gamesurface.fill((114, 125, 104))
+        # self.infosurface.fill((114, 125, 104))
+        # self.infosurface.blit(self.pl1Image, (0, 0))
         self.infosurface.blit(self.pl2Image, ((self.gameWidth)-50, 0))
         self.backButton.draw(display)
         timer = self.getTimer()
         drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
+
+        display.blit(self.mira_image, (30, 50))
+        display.blit(self.thane_image, (700, 50))
+        display.blit(self.button_image, (450, 50))
         # if not self.level.brTimer <= 0:
         #     timer=self.getTimer()
         #     drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
@@ -128,8 +151,8 @@ class GameWindow(Screen):
             pygame.draw.rect(self.popUpWindow, (238, 238, 238, 240), self.popUpWindow.get_rect(), border_radius=8)
             text=self.level.players[0].name+ " has won the game!!!"
             self.level.draw(self.gamesurface)
-            display.blit(self.infosurface, (98, 0))
-            display.blit(self.gamesurface, (98, 70))
+            display.blit(self.infosurface, (200, 5))
+            display.blit(self.gamesurface, (200, 80))
             display.blit(self.popUpWindow, (W/2 - self.pWidth/2, H/2 - self.pHeight/2) )
             drawText(display, text, W / 2, H / 2 - self.pHeight/2 + 30, color=BLACK)
             self.menuButton.draw(display)
@@ -142,8 +165,8 @@ class GameWindow(Screen):
             if self.level.players:
                 text = self.level.players[0].name+" has won the round!!!"
 
-            display.blit(self.infosurface, (98, 0))
-            display.blit(self.gamesurface, (98, 70))
+            # display.blit(self.infosurface, (200, 5))
+            display.blit(self.gamesurface, (200, 80))
             drawText(display,text,W/2,H/2,color=WHITE,size=30)
             drawText(display,math.ceil(self.timer), W / 2, H / 2 +100,color=WHITE,size=50)
 
@@ -151,8 +174,8 @@ class GameWindow(Screen):
             # self.nextButton.draw(display)
         else:
             self.level.draw(self.gamesurface)
-            display.blit(self.infosurface, (98, 0))
-            display.blit(self.gamesurface, (98, 70))
+            # display.blit(self.infosurface, (200, 5))
+            display.blit(self.gamesurface, (200, 80))
 
 
 

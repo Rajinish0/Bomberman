@@ -194,9 +194,6 @@ class MapWindow(Screen):
 		self.frame_image = pygame.image.load('UI/frame.png')
 		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
-		self.key_image = pygame.image.load('UI/key2.png')
-		self.key_image = pygame.transform.scale(self.key_image, (135, 130))
-
 		for filename in os.listdir(directory_name):
 			map_path = os.path.join(directory_name, filename)
 			map_name = os.path.splitext(filename)[0]
@@ -348,7 +345,6 @@ class MapWindow(Screen):
 
 		self.btnBack.draw(display)
 		for button in self.buttons:
-			display.blit(self.key_image, (button.x-18, button.y-15))
 			button.draw(display)
 			drawText(display,button.text[15:-4],button.x+button.w/2,button.y+button.h+20,size=10,color=BLACK)
 

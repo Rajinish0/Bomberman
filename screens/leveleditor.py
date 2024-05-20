@@ -51,7 +51,7 @@ class LevelEditor(Screen):
 
     def __init__(self):
         self.offSetX = 180
-        self.offSetY = 60
+        self.offSetY = 40
         self.boxWidth = ((W - self.offSetX) // NUM_BOXES) - 13
         self.boxHeight = ((H - self.offSetY) // NUM_BOXES) - 5
 
@@ -78,12 +78,8 @@ class LevelEditor(Screen):
         self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
                                  callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
 
-
-
         self.background_image = pygame.image.load('UI/holder.png')
         self.background_image = pygame.transform.scale(self.background_image, (80, 70))
-
-
 
         self.boxButton = Button(
             820, 280, self.boxWidth, self.boxHeight, img=imgs[BOX],
@@ -139,10 +135,8 @@ class LevelEditor(Screen):
             center=False
         )
 
-
-
         self.startButton = Button(
-            W / 2, 520, 180, 40, text="Start", color=BLACK, textColor=BLACK,
+            W / 2 - 20, 530, 180, 40, text="Start", color=BLACK, textColor=BLACK,
             callBack=lambda: (self.handleInitialStart()), img='UI/button.png', textSize=10
         )
 
@@ -241,7 +235,7 @@ class LevelEditor(Screen):
             print(row)
 
         if self.player1 and self.player2:
-            background = Image.open("sprites/Solid_white.png")
+            background = Image.open("UI/map_frame.png")
             background = background.resize((195, 195))
             image = Image.open(imgs[WALL])
             resized_image = image.resize((13, 13))
@@ -456,9 +450,6 @@ class LevelEditor(Screen):
         display.blit(self.background_image, (90, 170))
         display.blit(self.background_image, (90, 260))
         display.blit(self.background_image, (90, 350))
-
-
-
         display.blit(self.background_image, (800, 90))
         display.blit(self.background_image, (800, 170))
         display.blit(self.background_image, (800, 260))

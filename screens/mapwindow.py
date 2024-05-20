@@ -48,12 +48,12 @@ class MapWindow(Screen):
 			textColor=BLACK,drawRect=True)
 
 		self.start = Button(
-			270 + W / 3 - 70,150+H/2+30,50,25,text="Start",textColor=BLACK, center=True,
+			270 + W / 3 - 70,150+H/2+30,120,35,text="Start",textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda: (self.start_game(self.currMap["map_file"]))
 		)
 
 		self.back=Button(
-			270+70,150+H/2+30,50,25,text="Back", textColor=BLACK, center=True,
+			270+70,150+H/2+30,120,35,text="Back", textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda : self.remove_popup()
 		)
 		self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
@@ -193,6 +193,9 @@ class MapWindow(Screen):
 		total_window = 0
 		self.frame_image = pygame.image.load('UI/frame.png')
 		self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
+
+		self.key_image = pygame.image.load('UI/key2.png')
+		self.key_image = pygame.transform.scale(self.key_image, (135, 130))
 
 		for filename in os.listdir(directory_name):
 			map_path = os.path.join(directory_name, filename)
@@ -345,8 +348,10 @@ class MapWindow(Screen):
 
 		self.btnBack.draw(display)
 		for button in self.buttons:
+			display.blit(self.key_image, (button.x-18, button.y-15))
 			button.draw(display)
 			drawText(display,button.text[15:-4],button.x+button.w/2,button.y+button.h+20,size=10,color=BLACK)
+
 
 		if self.currInd:
 			self.currInd.draw(display,Border=True,BorderWidth=4)

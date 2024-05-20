@@ -27,10 +27,10 @@ imgs = {
     EMPTY: "UI/grass_tile2.png",
     PLAYER1 : "UI/thane_grass.png",
     PLAYER2 : "UI/mira_grass.png",
-    BASE_MONSTER : "sprites/monsters/m1b.png",
-    GHOST_MONSTER : "sprites/monsters/m2.png",
-    FAST_MONSTER : "sprites/monsters/m3.png",
-    PSEUDOINTELLIGENT_MONSTER : "sprites/monsters/m4.png"
+    BASE_MONSTER : "UI/monster_new_1.png",
+    GHOST_MONSTER : "UI/monster_new_2.png",
+    FAST_MONSTER : "UI/monster_new_3.png",
+    PSEUDOINTELLIGENT_MONSTER : "UI/monster_new_4.png"
 }
 
 # The surrounding borders
@@ -39,8 +39,8 @@ borders = [0, NUM_BOXES - 1]
 
 # Checks whether the mouse click was within a rectangular grid or not
 def inBound(x, y, lx, ly, w, h):
-    return (lx <= x <= lx + w and
-            ly <= y <= ly + h)
+    return (lx < x < lx + w and
+            ly < y < ly + h)
 
 
 # Converts the co-ordinates of the mouse click to indices of the grid
@@ -112,25 +112,25 @@ class LevelEditor(Screen):
         )
 
         self.baseMButton = Button(
-            110, 190, self.boxWidth, self.boxHeight, img="UI/monster_new_1.png",
+            110, 190, self.boxWidth, self.boxHeight, img=imgs[BASE_MONSTER],
             callBack=lambda: self.setSelected(BASE_MONSTER),
             center=False
         )
 
         self.ghostMButton = Button(
-            110, 280, self.boxWidth, self.boxHeight, img="UI/monster_new_2.png",
+            110, 280, self.boxWidth, self.boxHeight, img=imgs[GHOST_MONSTER],
             callBack=lambda: self.setSelected(GHOST_MONSTER),
             center=False
         )
 
         self.fastMButton = Button(
-            110, 370, self.boxWidth, self.boxHeight, img="UI/monster_new_3.png",
+            110, 370, self.boxWidth, self.boxHeight, img=imgs[FAST_MONSTER],
             callBack=lambda: self.setSelected(FAST_MONSTER),
             center=False
         )
 
         self.pseudoIntMButton = Button(
-            110, 110, self.boxWidth, self.boxHeight, img="UI/monster_new_4.png",
+            110, 110, self.boxWidth, self.boxHeight, img=imgs[PSEUDOINTELLIGENT_MONSTER],
             callBack=lambda: self.setSelected(PSEUDOINTELLIGENT_MONSTER),
             center=False
         )
@@ -190,7 +190,7 @@ class LevelEditor(Screen):
     def handlePlayer(self):
         if self.selected in ("a", "c"):
             (mx, my) = pygame.mouse.get_pos()
-            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+            if self.inBound(mx, my):
                 (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
 
                 if (self.selected == "a" and not self.player1):
@@ -321,7 +321,7 @@ class LevelEditor(Screen):
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()
-            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+            if self.inBound(mx, my):
                 (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
                 # Check if the grid cell is not already occupied by the same monster and count limit not exceeded
                 if self.grid[i][j] != self.selected and self.calculateMonsterCount() < self.maxMonster:
@@ -342,9 +342,12 @@ class LevelEditor(Screen):
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
 
+    def inBound(self, x, y):
+        return inBound(x, y, self.offSetX, self.offSetY, self.boxWidth*NUM_BOXES, self.boxHeight*NUM_BOXES)
+
     def getHoveredCell(self):
         (mx, my) = pygame.mouse.get_pos()
-        if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+        if self.inBound(mx, my):
             (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
             return (i, j)
         else:
@@ -369,7 +372,7 @@ class LevelEditor(Screen):
                 self.handleMonsterMouse()
             if not self.clicked:
                 (mx, my) = pygame.mouse.get_pos()
-                if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+                if self.inBound(mx, my):
                     self.clicked = True
             else:
                 self.clicked = False
@@ -499,7 +502,7 @@ class LevelEditor(Screen):
 
         if self.selected is not None:
             (mx, my) = pygame.mouse.get_pos()
-            if inBound(mx, my, self.offSetX, self.offSetY, W - self.offSetX, H - self.offSetY):
+            if self.inBound(mx, my):
                 img = self.load(imgs[self.selected])
                 img.set_alpha(150)
                 display.blit(img, (mx - self.boxWidth / 2, my - self.boxHeight / 2))

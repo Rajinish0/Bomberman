@@ -112,11 +112,11 @@ class MapWindow(Screen):
 		flag = False
 
 		if os.path.exists(file_name):
-			if picture_name[0] not in ["defaultMap", "secondMap", "thirdMap"]:
+			if picture_name[0] not in ["maze", "forest", "valley"]:
 				flag = True
 				os.remove(file_name)
 
-		picture_file_name = "sprites/map_pictures/" + picture_name[0] + ".jpg"
+		picture_file_name = "sprites/map_pictures/" + picture_name[0] + ".png"
 		if flag:
 			if os.path.exists(picture_file_name):
 				os.remove(picture_file_name)
@@ -198,7 +198,7 @@ class MapWindow(Screen):
 			map_path = os.path.join(directory_name, filename)
 			map_name = os.path.splitext(filename)[0]
 
-			img_path = os.path.join(directory_name_img, f"{map_name}.jpg")
+			img_path = os.path.join(directory_name_img, f"{map_name}.png")
 
 			if button_index > 5:
 				button_index = 0
@@ -228,7 +228,7 @@ class MapWindow(Screen):
 		for data in self.button_data:
 			if self.currWindow == data["page"]:
 				button = Button(data["x"], data["y"], 100, 100,
-								img=os.path.join(data["img"]), text=data["map_file"], textSize=1, color=(0, 0, 0, 0))
+								img=os.path.join(data["img"]), text=data["map_file"], textSize=1, textColor=(114, 125, 104))
 				self.buttons.append(button)
 
 

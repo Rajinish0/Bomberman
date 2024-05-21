@@ -274,7 +274,7 @@ class LevelEditor(Screen):
             self.nameButton.text+=str(cnt)
             cnt+=1
         with open(f'sprites/levels/{self.nameButton.text}.txt', 'w') as f:
-            name = f'{self.nameButton.text}.jpg'
+            name = f'{self.nameButton.text}.png'
             background.save(f'sprites/map_pictures/{name}')
             for row in self.map:
                 f.write(''.join(row) + '\n')

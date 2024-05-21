@@ -12,7 +12,7 @@ from handlers import SpriteSheet
 class Player(GameCharacter):
     def __init__(self,n,position,speed,image,keys,w,h):
         super().__init__(position, speed)
-        self.spriteSheet = SpriteSheet(image, 32, 32, numActions = 4, numImagesPerAction = 7,
+        self.spriteSheet = SpriteSheet(image, 24, 32, numActions = 4, numImagesPerAction = 3,
                                        scaleSize = (w, h), defaultAction = 2 )
         self.image=self.imgHandler.load(image,(w,h))
         self.rw = .7

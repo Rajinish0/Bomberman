@@ -190,30 +190,35 @@ class LevelEditor(Screen):
     def handlePlayer(self):
         if self.selected in ("a", "c"):
             (mx, my) = pygame.mouse.get_pos()
-            if self.inBound(mx, my):
-                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+            (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+            if self.inBound(mx, my) and (i not in borders and j not in borders):
 
                 if (self.selected == "a" and not self.player1):
                     self.grid[i][j] = self.selected
                     self.player1Coordinates = (i,j)
                     self.player1 = True
+                    self.player2 = (self.player2 and self.player2Coordinates != self.player1Coordinates)
                 elif ((self.selected == "a" and self.player1)):
                     (k, l) = self.player1Coordinates
                     # print(self.player1Coordinates)
                     self.grid[k][l] = " "
                     self.grid[i][j] = self.selected
                     self.player1Coordinates = (i, j)
+                    self.player2 = (self.player2 and self.player2Coordinates != self.player1Coordinates)
 
                 if (self.selected == "c" and not self.player2):
                     self.grid[i][j] = self.selected
                     self.player2Coordinates = (i,j)
                     self.player2 = True
+                    self.player1 = (self.player1 and self.player1Coordinates != self.player2Coordinates)
+
                 elif ((self.selected == "c" and self.player2)):
                     (k, l) = self.player2Coordinates
                     print(self.player2Coordinates)
                     self.grid[k][l] = " "
                     self.grid[i][j] = self.selected
                     self.player2Coordinates = (i, j)
+                    self.player1 = (self.player1 and self.player1Coordinates != self.player2Coordinates)
         return True
 
 
@@ -321,8 +326,8 @@ class LevelEditor(Screen):
     def handleMonsterMouse(self):
         if self.selected in ("m", "f", "g", "p"):
             (mx, my) = pygame.mouse.get_pos()
-            if self.inBound(mx, my):
-                (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+            (i, j) = ScreenCrdToIdx(mx - self.offSetX, my - self.offSetY, self.boxWidth, self.boxHeight)
+            if self.inBound(mx, my) and (i not in borders and j not in borders):
                 # Check if the grid cell is not already occupied by the same monster and count limit not exceeded
                 if self.grid[i][j] != self.selected and self.calculateMonsterCount() < self.maxMonster:
                     if self.evMgr.mousePressed:  # Ensure that the mouse button is pressed
@@ -341,6 +346,11 @@ class LevelEditor(Screen):
     def reset(self):
         self.grid = [[EMPTY for i in range(NUM_BOXES)]
                      for j in range(NUM_BOXES)]
+        self.player1 = False
+        self.player2 = False
+        self.player1Coordinates = " "
+        self.player2Coordinates = " "
+        self.monsterCount = 0
 
     def inBound(self, x, y):
         return inBound(x, y, self.offSetX, self.offSetY, self.boxWidth*NUM_BOXES, self.boxHeight*NUM_BOXES)
@@ -497,6 +507,7 @@ class LevelEditor(Screen):
                 y = self.offSetY + i * self.boxHeight
 
                 if i not in borders and j not in borders:
+                    display.blit(self.load(imgs[EMPTY]), (x, y))
                     display.blit(self.load(imgs[self.grid[i][j]]), (x, y))
                     pygame.draw.rect(display, BLACK, (x, y, self.boxWidth, self.boxHeight), 1)
 

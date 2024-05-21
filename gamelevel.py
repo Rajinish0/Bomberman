@@ -45,26 +45,26 @@ def init(map_, bw, bh):
                 case game_elements.BORDER_WALL:
                     elem = BorderWall(p, bw, bh);
                 case game_elements.PLAYER1:
-                    players.append(Player(game_elements.PLAYER1_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'bomber-sprite2.png'),keys["p1"],bw,bh))
+                    players.append(Player(game_elements.PLAYER1_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'fighter2.png'),keys["p1"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PLAYER2:
-                    players.append(Player(game_elements.PLAYER2_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'bomber-sprite.png'),keys["p2"],bw,bh))
+                    players.append(Player(game_elements.PLAYER2_NAME,p,0.075,os.path.join(IMG_PATH, 'players', 'fighter.png'),keys["p2"],bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.BASE_MONSTER:
-                    monsters.append(Monster(p,0.05,os.path.join(IMG_PATH, 'monsters', 'm1b.png'),default_direction,bw,bh))
+                    monsters.append(Monster(p,0.05,os.path.join("UI", 'monster_new_1.png'),default_direction,bw,bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.GHOST_MONSTER:
                     monsters.append(
-                        GhostMonster(p, 0.025, os.path.join(IMG_PATH, 'monsters', 'm2.png'), default_direction, bw, bh))
+                        GhostMonster(p, 0.025, os.path.join("UI", 'monster_new_4.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.FAST_MONSTER:
                     monsters.append(
-                        FastMonster(p, 0.066, os.path.join(IMG_PATH, 'monsters', 'm3.png'), default_direction, bw, bh))
+                        FastMonster(p, 0.066, os.path.join("UI", 'monster_new_2.png'), default_direction, bw, bh))
                     elem = EmptySpace(p, bw, bh)
                 case game_elements.PSEUDOINTELLIGENT_MONSTER:
                     monsters.append(
 
-                        PseudoIntelligentMonster(p, 0.05, os.path.join(IMG_PATH, 'monsters', 'm4.png'), default_direction, bw, bh))
+                        PseudoIntelligentMonster(p, 0.05, os.path.join("UI", 'monster_new_3.png'), default_direction, bw, bh))
 
                     elem = EmptySpace(p, bw, bh)
                 case _:
@@ -301,10 +301,10 @@ class GameLevel:
 
 
         f=random.choices(spots,k=4)
-        monsters.append(Monster(Point(f[0][1],f[0][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m1b.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join(IMG_PATH,'monsters' ,'m2.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.066, os.path.join(IMG_PATH,'monsters' ,'m3.png'),Point(0,1),self.bw,self.bh))
-        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.05, os.path.join(IMG_PATH,'monsters' ,'m4.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(Monster(Point(f[0][1],f[0][0]),0.05, os.path.join("UI", 'monster_new_1.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(GhostMonster(Point(f[1][1],f[1][0]),0.025, os.path.join("UI", 'monster_new_4.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(FastMonster(Point(f[2][1],f[2][0]),0.066, os.path.join("UI", 'monster_new_2.png'),Point(0,1),self.bw,self.bh))
+        monsters.append(PseudoIntelligentMonster(Point(f[3][1],f[3][0]),0.05, os.path.join("UI", 'monster_new_3.png'),Point(0,1),self.bw,self.bh))
 
 
 

@@ -15,14 +15,14 @@ from utils import *
 class MapWindow(Screen):
 
 	def __init__(self):
-		self.caps=False
+		#self.caps=False
 		self.currWindow = 0
 		self.create_buttons()
-		self.currPressedName = None
+		# self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
-		self.pl1Image = self.imgHandler.load(os.path.join(IMG_PATH, 'players', 'g1.png'), (50, 70))
-		self.pl2Image = self.imgHandler.load(os.path.join(IMG_PATH, 'players', 'g2.png'), (50, 70))
+		self.pl1Image = self.imgHandler.load(os.path.join( 'UI', 'Mira_player.png'), (50, 70))
+		self.pl2Image = self.imgHandler.load(os.path.join( 'UI', 'Thane_player.png'), (50, 70))
 		self.totalWindow=0
 		self.currMap=self.button_data[0]
 		self.currInd=None
@@ -31,29 +31,29 @@ class MapWindow(Screen):
 			self.data = pickle.load(f)
 
 		self.create_buttons()
-		self.pl1Name = Button(
-			270 + 70, 150 + 90, 100, 25, text=self.data["p1"],color=WHITE,center=True,textSize=15,
-			textColor=BLACK,drawRect=True
-		)
-		self.pl2Name = Button(
-			270 + W / 3 - 70, 150 + 90, 100, 25, text=self.data["p2"],color=WHITE,center=True,textSize=15,
-			textColor=BLACK,drawRect=True)
+		# self.pl1Name = Button(
+		# 	W/2-W/6-50+ 100, 170 + 90, 100, 25, text=self.data["p1"],color=WHITE,center=True,textSize=15,
+		# 	textColor=BLACK,drawRect=True
+		# )
+		# self.pl2Name = Button(
+		# 	W/2-W/6 - 50+W / 3 - 100, 170 + 90, 100, 25, text=self.data["p2"],color=WHITE,center=True,textSize=15,
+		# 	textColor=BLACK,drawRect=True)
 
 		self.time = Button(
-			(270 + W / 6), 150 + 170, 50, 25, text=self.getTimer(self.data["timer"]),color=WHITE,textSize=15,
+			(W/2), 170 + 170, 100, 25, text=self.getTimer(self.data["timer"]),color=WHITE,textSize=15,
 			textColor=BLACK,drawRect=True)
 
 		self.rounds = Button(
-			(270 + W / 6), 150 + 245, 30, 25, text=str(self.data["rounds"]),color=WHITE,
+			(W/2), 170 + 245, 30, 25, text=str(self.data["rounds"]),color=WHITE,
 			textColor=BLACK,drawRect=True)
 
 		self.start = Button(
-			270 + W / 3 - 70,150+H/2+30,120,35,text="Start",textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
+			W/2+W/10,170+H/2,120,35,text="Start",textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda: (self.start_game(self.currMap["map_file"]))
 		)
 
 		self.back=Button(
-			270+70,150+H/2+30,120,35,text="Back", textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
+			W/2-W/10,170+H/2,120,35,text="Back", textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda : self.remove_popup()
 		)
 		self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
@@ -63,7 +63,8 @@ class MapWindow(Screen):
 
 		self.map_frame_image = pygame.image.load('UI/map_frame.png')
 		self.map_frame_image = pygame.transform.scale(self.map_frame_image, (700, 400))
-
+		self.data_frame_image =pygame.image.load('UI/map_frame.png')
+		self.data_frame_image=pygame.transform.scale(self.data_frame_image,(W / 3+100, (H / 2)+100))
 		self.btnBack = Button(
 			30, 30, 30, 30, text="Back",
 			callBack=lambda: (self.go_back())
@@ -134,7 +135,7 @@ class MapWindow(Screen):
 
 	def remove_popup(self):
 		self.showData = False
-		self.currPressedName=None
+		#self.currPressedName=None
 		self.currPressedTime=None
 		self.currPressedRounds=None
 		self.data["p1"] = "MIRA"
@@ -148,7 +149,7 @@ class MapWindow(Screen):
 
 	def start_game(self, file_path):
 		self.showData=False
-		self.currPressedName = None
+		#self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
 		self.data["p1"] = "MIRA"
@@ -168,7 +169,7 @@ class MapWindow(Screen):
 			self.gameMgr.setState(GAME_WINDOW)
 
 	def go_back(self):
-		self.currPressedName = None
+		#self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
 		self.gameMgr.setState(MAIN_WINDOW)
@@ -233,26 +234,26 @@ class MapWindow(Screen):
 
 
 	def handleEvent(self, event):
-		if self.currPressedName:
-			text = self.currPressedName.text
-			if event.type == pygame.KEYDOWN:
-				if pygame.key.name(event.key) == "left shift":
-					self.caps = True
-				if pygame.key.name(event.key) == "backspace":
-					text = text[:-1]
-				elif pygame.key.name(event.key) == "enter":
-					self.currPressedName = None
-				elif pygame.key.name(event.key) == "space" and len(text)<12:
-					text += " "
-				elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)) and len(text)<12:
-					if self.caps:
-						text += pygame.key.name(event.key).upper()
-					else:
-						text += pygame.key.name(event.key)
-
-			if self.currPressedName:
-				self.currPressedName.text = text
-		elif self.currPressedTime:
+		# if self.currPressedName:
+		# 	text = self.currPressedName.text
+		# 	if event.type == pygame.KEYDOWN:
+		# 		if pygame.key.name(event.key) == "left shift":
+		# 			self.caps = True
+		# 		if pygame.key.name(event.key) == "backspace":
+		# 			text = text[:-1]
+		# 		elif pygame.key.name(event.key) == "enter":
+		# 			self.currPressedName = None
+		# 		elif pygame.key.name(event.key) == "space" and len(text)<12:
+		# 			text += " "
+		# 		elif re.search("^[a-z]{0,1}[A-Z]{0,1}[0-9]{0,1}-{0,1}_{0,1}$", pygame.key.name(event.key)) and len(text)<12:
+		# 			if self.caps:
+		# 				text += pygame.key.name(event.key).upper()
+		# 			else:
+		# 				text += pygame.key.name(event.key)
+		#
+		# 	if self.currPressedName:
+		# 		self.currPressedName.text = text
+		if self.currPressedTime:
 			text = self.currPressedTime.text.split(":")
 			if event.type == pygame.KEYDOWN:
 				if pygame.key.name(event.key)=="backspace":
@@ -284,9 +285,9 @@ class MapWindow(Screen):
 
 			if self.currPressedRounds:
 				self.currPressedRounds.text=text
-		if event.type == pygame.KEYUP:
-			if pygame.key.name(event.key) == "left shift":
-				self.caps = False
+		# if event.type == pygame.KEYUP:
+		# 	if pygame.key.name(event.key) == "left shift":
+		# 		self.caps = False
 
 	def update(self):
 		self.menuBtn.update()
@@ -295,25 +296,25 @@ class MapWindow(Screen):
 			self.start.update()
 			self.back.update()
 
-			self.pl1Name.update()
-			self.pl2Name.update()
-			if self.pl1Name.pressed:
-				self.currPressedRounds=False
-				self.currPressedTime=False
-				self.currPressedName=self.pl1Name
-			elif self.pl2Name.pressed:
-				self.currPressedName = self.pl2Name
+			# self.pl1Name.update()
+			# self.pl2Name.update()
+			# if self.pl1Name.pressed:
+			# 	self.currPressedRounds=False
+			# 	self.currPressedTime=False
+			# 	self.currPressedName=self.pl1Name
+			# elif self.pl2Name.pressed:
+			# 	self.currPressedName = self.pl2Name
 
 			self.time.update()
 
 			if self.time.pressed:
 				self.currPressedRounds = False
-				self.currPressedName = False
+				#self.currPressedName = False
 				self.currPressedTime=self.time
 
 			self.rounds.update()
 			if self.rounds.pressed:
-				self.currPressedName = False
+				#self.currPressedName = False
 				self.currPressedTime = False
 				self.currPressedRounds=self.rounds
 		else:
@@ -334,24 +335,8 @@ class MapWindow(Screen):
 
 
 	def draw(self, display):
+
 		display.fill((114, 125, 104))
-
-		display.blit(self.map_frame_image, (150, 100))
-
-		self.btnStart.draw(display)
-		self.forwardStart.draw(display)
-		self.backwardStart.draw(display)
-		self.deleteBtn.draw(display)
-
-		self.btnBack.draw(display)
-		for button in self.buttons:
-			button.draw(display)
-			drawText(display,button.text[15:-4],button.x+button.w/2,button.y+button.h+20,size=10,color=BLACK)
-
-
-		if self.currInd:
-			self.currInd.draw(display,Border=True,BorderWidth=4)
-
 		x_increment = 50
 		frame_rotated_image = pygame.transform.rotate(self.frame_image, +90)
 		for i in range(20):
@@ -369,24 +354,48 @@ class MapWindow(Screen):
 		for i in range(12):
 			display.blit(self.frame_image, (950, -15 + i * y_increment))
 
+		if not self.showData:
+			display.blit(self.map_frame_image, (150, 100))
 
-		if self.showData:
-			pygame.draw.rect(self.dataSurface, (238, 238, 238, 240), self.dataSurface.get_rect())
-			display.blit(self.dataSurface, (270, 150))
-			display.blit(self.pl1Image, (270+70-25, 150))
-			display.blit(self.pl2Image, (270 + W / 3 - 70-25, 150))
-			drawText(display,"Battle Royale Time", 270+W/6,150+135,size=18,color=BLACK)
-			drawText(display, "Win Rounds", 270 + W / 6, 150 + 210, size=18, color=BLACK)
-			self.pl1Name.draw(display,Border=True)
-			self.pl2Name.draw(display,Border=True)
-			self.time.draw(display,Border=True)
-			self.rounds.draw(display,Border=True)
+			self.btnStart.draw(display)
+			self.forwardStart.draw(display)
+			self.backwardStart.draw(display)
+			self.deleteBtn.draw(display)
+
+			#self.btnBack.draw(display)
+			for button in self.buttons:
+				button.draw(display)
+				drawText(display,button.text[15:-4],button.x+button.w/2,button.y+button.h+20,size=10,color=BLACK)
+
+
+			if self.currInd:
+				self.currInd.draw(display,Border=True,BorderWidth=4)
+
+
+
+			self.btnStart.draw(display)
+
+		else:
+			#pygame.draw.rect(self.dataSurface, (238, 238, 238, 240), self.dataSurface.get_rect())
+			#display.blit(self.dataSurface, (W/2-W/6, 130))
+			display.blit(self.data_frame_image,(W/2-W/6- 50, 130))
+
+			display.blit(self.pl1Image, (W/2-W/12-50, 170))
+			display.blit(self.pl2Image, (W/2+W/12, 170))
+			drawText(display,"MIRA",W/2-W/12-25,170+90,size = 18, color=BLACK,center=True)
+			drawText(display, "THANE", W / 2 + W / 12 + 25,170+90, size=18, color=BLACK, center=True);
+			drawText(display,"Battle Royale Time", W/2,170+135,size=18,color=BLACK,center=True)
+			drawText(display, "Win Rounds", W/2, 170 + 210, size=18, color=BLACK,center=True)
+			#self.pl1Name.draw(display)
+			#self.pl2Name.draw(display)
+			self.time.draw(display)
+			self.rounds.draw(display)
 			self.back.draw(display)
 			self.start.draw(display)
 
 		self.ExitButton.draw(display)
 		self.menuBtn.draw(display)
-		self.btnStart.draw(display)
+
 
 
 

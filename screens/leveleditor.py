@@ -80,7 +80,12 @@ class LevelEditor(Screen):
 
         self.background_image = pygame.image.load('UI/holder.png')
         self.background_image = pygame.transform.scale(self.background_image, (80, 70))
-
+        self.data_frame_image = pygame.image.load('UI/description.png')
+        self.data_frame_image = pygame.transform.scale(self.data_frame_image, (W / 4-20, H / 4-30))
+        #self.data_frame_image=pygame.transform.rotate(self.data_frame_image,180)
+        self.data_frame_image=pygame.transform.flip(self.data_frame_image,False,True)
+        self.name_fame_image=pygame.image.load('UI/button_clear.png')
+        self.name_fame_image=pygame.transform.scale(self.name_fame_image,(W/3,H/3))
         self.boxButton = Button(
             820, 280, self.boxWidth, self.boxHeight, img=imgs[BOX],
             callBack=lambda: self.setSelected(BOX),
@@ -141,16 +146,16 @@ class LevelEditor(Screen):
         )
 
         self.oKButton = Button(
-            420, 300, 30, 30, text="Ok",
+            W/2+70+W/8-5,530-H/4+30+80, 50, 25, text="Ok", img='UI/button_clear.png',color=BLACK, textColor=BLACK,textSize=12,
             callBack=lambda: self.removePopUp()
         )
         self.frame_image = pygame.image.load('UI/frame.png')
         self.frame_image = pygame.transform.scale(self.frame_image, (60, 80))
 
-        self.nameButton=Button(270+150, 220+65, 120, 25, text="Enter Name",textColor=BLACK,color=WHITE,drawRect=True,center=True,textSize=15)
-        self.startGameButton=Button(270+300-70, 220+150-25, 50, 25, text="Start",textColor=BLACK,
+        self.nameButton=Button(W/2,H/2-H/6+95, 140, 40, text="Enter Name",textColor=BLACK,color=WHITE,drawRect=True,center=True,textSize=10)
+        self.startGameButton=Button(W/2+75,H/2-H/6+140, 50, 25, text="Start",textColor=BLACK,textSize=15,
                                     callBack=lambda : self.handleStartButton())
-        self.backGameButton=Button(270+70, 220+150-25, 50, 25, text="Back",textColor=BLACK,
+        self.backGameButton=Button(W/2-75,H/2-H/6+140, 50, 25, text="Back",textColor=BLACK,textSize=15,
                                     callBack=lambda : self.handleBackButton())
         self.currPressedName=False
         self.selected = None
@@ -520,10 +525,10 @@ class LevelEditor(Screen):
                 img.set_alpha(255)
 
         if self.nameMapWindow:
-            pygame.draw.rect(self.nameMapSurface, (238, 238, 238, 240), self.nameMapSurface.get_rect())
-            display.blit(self.nameMapSurface, (270, 220))
-
-            drawText(display,"Name the map",270+150,220+15,size=25,color=BLACK)
+            # pygame.draw.rect(self.nameMapSurface, (238, 238, 238, 240), self.nameMapSurface.get_rect())
+            # display.blit(self.nameMapSurface, (270, 220))
+            display.blit(self.name_fame_image, (W / 2 -W/6, H/2-H/6))
+            drawText(display,"Name the map",W/2,H/2-H/6+50,size=20,color=BLACK)
             self.nameButton.draw(display,Border=True,BorderWidth=1)
             self.startGameButton.draw(display)
             self.backGameButton.draw(display)
@@ -537,10 +542,16 @@ class LevelEditor(Screen):
             text_color = (255, 255, 255)
             bg_color = (255, 0, 0)
 
-            rect = pygame.Rect(x, y, width, height)
-            pygame.draw.rect(display, bg_color, rect)
-            font = pygame.font.SysFont(None, font_size)
-            text_surface = font.render("2 Players Should Be Placed", True, text_color)
-            text_rect = text_surface.get_rect(center=rect.center)
-            display.blit(text_surface, text_rect)
+            # rect = pygame.Rect(x, y, width, height)
+            # pygame.draw.rect(display, bg_color, rect)
+
+            display.blit(self.data_frame_image, (W / 2 +70,530-H/4+30))
+
+            drawText(display,"2 Players Should",W/2+70+W/8-5,530-H/4+30+30,size=12,color=BLACK)
+            drawText(display,"Be Placed",W/2+70+W/8-5,530-H/4+30+30+20,size=12,color=BLACK)
+
+            # font = pygame.font.SysFont(None, font_size)
+            # text_surface = font.render("2 Players Should Be Placed", True, text_color)
+            # text_rect = text_surface.get_rect(center=rect.center)
+            # display.blit(text_surface, text_rect)
             self.oKButton.draw(display)

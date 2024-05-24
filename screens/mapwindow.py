@@ -383,13 +383,13 @@ class MapWindow(Screen):
 			display.blit(self.pl1Image, (W/2-W/12-50, 170))
 			display.blit(self.pl2Image, (W/2+W/12, 170))
 			drawText(display,"MIRA",W/2-W/12-25,170+90,size = 18, color=BLACK,center=True)
-			drawText(display, "THANE", W / 2 + W / 12 + 25,170+90, size=18, color=BLACK, center=True);
+			drawText(display, "THANE", W / 2 + W / 12 + 25,170+90, size=18, color=BLACK, center=True)
 			drawText(display,"Battle Royale Time", W/2,170+135,size=18,color=BLACK,center=True)
 			drawText(display, "Win Rounds", W/2, 170 + 210, size=18, color=BLACK,center=True)
 			#self.pl1Name.draw(display)
 			#self.pl2Name.draw(display)
-			self.time.draw(display)
-			self.rounds.draw(display)
+			self.time.draw(display,Border=True)
+			self.rounds.draw(display,Border=True)
 			self.back.draw(display)
 			self.start.draw(display)
 

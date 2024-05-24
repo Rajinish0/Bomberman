@@ -21,8 +21,8 @@ class MapWindow(Screen):
 		# self.currPressedName = None
 		self.currPressedTime = None
 		self.currPressedRounds = None
-		self.pl1Image = self.imgHandler.load(os.path.join( 'UI', 'Mira_player.png'), (50, 70))
-		self.pl2Image = self.imgHandler.load(os.path.join( 'UI', 'Thane_player.png'), (50, 70))
+		self.pl1Image = self.imgHandler.load(os.path.join( 'UI', 'Mira_player.png'), (60, 70))
+		self.pl2Image = self.imgHandler.load(os.path.join( 'UI', 'Thane_player.png'), (60, 70))
 		self.totalWindow=0
 		self.currMap=self.button_data[0]
 		self.currInd=None
@@ -40,20 +40,20 @@ class MapWindow(Screen):
 		# 	textColor=BLACK,drawRect=True)
 
 		self.time = Button(
-			(W/2), 170 + 170, 100, 25, text=self.getTimer(self.data["timer"]),color=WHITE,textSize=15,
+			(W/2), 170 + 140, 100, 25, text=self.getTimer(self.data["timer"]),color=(192, 192, 192),textSize=15,
 			textColor=BLACK,drawRect=True)
 
 		self.rounds = Button(
-			(W/2), 170 + 245, 30, 25, text=str(self.data["rounds"]),color=WHITE,
+			(W/2), 140 + 245, 30, 25, text=str(self.data["rounds"]),color=(192, 192, 192),
 			textColor=BLACK,drawRect=True)
 
 		self.start = Button(
-			W/2+W/10,170+H/2,120,35,text="Start",textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
+			W/2+W/10,140+H/2,120,35,text="Start",textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda: (self.start_game(self.currMap["map_file"]))
 		)
 
 		self.back=Button(
-			W/2-W/10,170+H/2,120,35,text="Back", textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
+			W/2-W/10,140+H/2,120,35,text="Back", textColor=BLACK, center=True, img="UI/button_clear.png", textSize=10,
 			callBack=lambda : self.remove_popup()
 		)
 		self.ExitButton = Button(920, 70, 30, 30, textColor=BLACK,
@@ -378,18 +378,18 @@ class MapWindow(Screen):
 		else:
 			#pygame.draw.rect(self.dataSurface, (238, 238, 238, 240), self.dataSurface.get_rect())
 			#display.blit(self.dataSurface, (W/2-W/6, 130))
-			display.blit(self.data_frame_image,(W/2-W/6- 50, 130))
+			display.blit(self.data_frame_image,(W/2-W/6- 50, 100))
 
-			display.blit(self.pl1Image, (W/2-W/12-50, 170))
-			display.blit(self.pl2Image, (W/2+W/12, 170))
-			drawText(display,"MIRA",W/2-W/12-25,170+90,size = 18, color=BLACK,center=True)
-			drawText(display, "THANE", W / 2 + W / 12 + 25,170+90, size=18, color=BLACK, center=True)
-			drawText(display,"Battle Royale Time", W/2,170+135,size=18,color=BLACK,center=True)
-			drawText(display, "Win Rounds", W/2, 170 + 210, size=18, color=BLACK,center=True)
+			display.blit(self.pl1Image, (W/2-W/12-50, 140))
+			display.blit(self.pl2Image, (W/2+W/12, 140))
+			drawText(display,"MIRA",W/2-W/12-25,140+90,size = 18, color=BLACK,center=True)
+			drawText(display, "THANE", W / 2 + W / 12 + 25,140+90, size=18, color=BLACK, center=True);
+			drawText(display,"Battle Royale Time", W/2,140+135,size=18,color=BLACK,center=True)
+			drawText(display, "Win Rounds", W/2, 140 + 210, size=18, color=BLACK,center=True)
 			#self.pl1Name.draw(display)
 			#self.pl2Name.draw(display)
-			self.time.draw(display,Border=True)
-			self.rounds.draw(display,Border=True)
+			self.time.draw(display)
+			self.rounds.draw(display)
 			self.back.draw(display)
 			self.start.draw(display)
 

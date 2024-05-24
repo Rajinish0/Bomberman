@@ -58,7 +58,8 @@ class GameWindow(Screen):
 
         self.cat_image = pygame.image.load('UI/cat.png')
         self.cat_image = pygame.transform.scale(self.cat_image, (30, 25))
-
+        self.name_fame_image = pygame.image.load('UI/button_clear.png')
+        self.name_fame_image = pygame.transform.scale(self.name_fame_image, (W / 3, H / 3+100))
         self.ExitButton = Button(950, 20, 30, 30, textColor=BLACK,
                                  callBack=lambda: pygame.quit(), img='UI/exit.png', textSize=25)
 
@@ -75,12 +76,12 @@ class GameWindow(Screen):
         #                       resetCursor())
         # )
         self.menuButton=Button(
-            W / 2, H / 2 + 40, 30, 30, text="Go to Menu",
+            W / 2, H / 2 + 40, 140, 30, text="Go to Menu", textSize=10,img="UI/button_clear.png",center=True,
             callBack=lambda: self.gameMgr.setState(MAIN_WINDOW),
             textColor = BLACK
         )
         self.restartButton=Button(
-            W / 2, H / 2 + 80, 30, 30, text="Restart Game",
+            W / 2, H / 2 + 80, 140, 30, text="Restart Game", textSize=10,img="UI/button_clear.png",center=True,
             callBack=lambda: (self.level.restart(),
                               resetCursor()),
             textColor = BLACK
@@ -113,7 +114,7 @@ class GameWindow(Screen):
                 # print(self.level.brTimer)
                 return (text,RED)
             else:
-                return (text,WHITE)
+                return (text,BLACK)
 
     def getBattleTimer(self):
         if self.level.battleTimer<=0:
@@ -133,14 +134,17 @@ class GameWindow(Screen):
         # self.infosurface.fill((114, 125, 104))
         # self.infosurface.blit(self.pl1Image, (0, 0))
 
-        self.infosurface.blit(self.pl2Image, ((self.gameWidth)-50, 0))
+       #self.infosurface.blit(self.pl2Image, ((self.gameWidth)-50, 0))
         self.backButton.draw(display)
         timer = self.getTimer()
-        drawText(self.infosurface,timer[0],self.gameWidth/2,30,size=50,color=timer[1],center=True)
+        display.blit(self.button_image, (390, 10))
+        drawText(display,timer[0],390+115,35,size=18,color=timer[1],center=True)
 
         display.blit(self.mira_image, (30, 100))
         display.blit(self.thane_image, (840, 100))
-        display.blit(self.button_image, (390, 10))
+        drawText(display,self.level.player1Wins,30+125/2,300,size=40,center=True,color=WHITE)
+        drawText(display,self.level.player2Wins,840+125/2,300,size=40,center=True,color=WHITE)
+
         display.blit(self.cat_image, (615, 44))
         self.ExitButton.draw(display)
 
@@ -153,19 +157,24 @@ class GameWindow(Screen):
         #     timer = self.getBattleTimer()
         #     drawText(self.infosurface, timer[0], self.gameWidth / 2, 30, size=50, color=timer[1], center=True)
 
-        drawText(self.infosurface,self.level.pl1Name,55,10,size=18,color=WHITE,center=False)
-        drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
-        drawText(self.infosurface, self.level.pl2Name, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
-        drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
+        # drawText(self.infosurface,self.level.pl1Name,55,10,size=18,color=WHITE,center=False)
+        # drawText(self.infosurface, self.level.player1Wins, 55, 30, size=18, color=WHITE, center=False)
+        # drawText(self.infosurface, self.level.pl2Name, (self.gameWidth)-55, 10, size=18, color=WHITE, center=False, right=True)
+        # drawText(self.infosurface, self.level.player2Wins, (self.gameWidth)-55, 30, size=18, color=WHITE, center=False,right=True)
         if self.level.finished:
             self.timer=5
-            pygame.draw.rect(self.popUpWindow, (238, 238, 238, 240), self.popUpWindow.get_rect(), border_radius=8)
-            text=self.level.players[0].name+ " has won the game!!!"
+           # pygame.draw.rect(self.popUpWindow, (238, 238, 238, 240), self.popUpWindow.get_rect(), border_radius=8)
+
+            display.blit(self.name_fame_image,(W/2-W/6,H/2-H/6))
+            text=self.level.players[0].name+ " has won!!!"
+
             self.level.draw(self.gamesurface)
-            display.blit(self.infosurface, (200, 5))
+            #display.blit(self.infosurface, (200, 5))
             display.blit(self.gamesurface, (200, 70))
-            display.blit(self.popUpWindow, (W/2 - self.pWidth/2, H/2 - self.pHeight/2) )
-            drawText(display, text, W / 2, H / 2 - self.pHeight/2 + 30, color=BLACK)
+            #display.blit(self.popUpWindow, (W/2 - self.pWidth/2, H/2 - self.pHeight/2) )
+
+            display.blit(self.name_fame_image, (W / 2 - W / 6, H / 2 - H / 6-50))
+            drawText(display, text, W / 2, H / 2 - 50, color=BLACK,size=18)
             self.menuButton.draw(display)
             self.restartButton.draw(display)
 
@@ -178,7 +187,7 @@ class GameWindow(Screen):
 
             # display.blit(self.infosurface, (200, 5))
             display.blit(self.gamesurface, (200, 70))
-            drawText(display,text,W/2,H/2,color=WHITE,size=30)
+            drawText(display,text,W/2,H/2,color=WHITE,size=20)
             drawText(display,math.ceil(self.timer), W / 2, H / 2 +100,color=WHITE,size=50)
 
 

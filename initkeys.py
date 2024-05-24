@@ -22,8 +22,8 @@ key_dic = {
 
 
 data_dic={
-    "p1": "Aunt May",
-    "p2": "Uncle Ben",
+    "p1": "MIRA",
+    "p2": "THANE",
     "timer": 45,
     "rounds": 2}
 

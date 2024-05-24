@@ -235,7 +235,7 @@ class GameLevel:
             if(self.endStart):
                 if(self.winTimer<=0):
 
-                    if(self.players[0].name=="Aunt May"):
+                    if(self.players[0].name=="MIRA"):
                         self.player1Wins+=1
 
                     else:

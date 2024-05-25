@@ -80,8 +80,8 @@ class LevelEditor(Screen):
 
         self.background_image = pygame.image.load('UI/holder.png')
         self.background_image = pygame.transform.scale(self.background_image, (80, 70))
-        self.data_frame_image = pygame.image.load('UI/description.png')
-        self.data_frame_image = pygame.transform.scale(self.data_frame_image, (W / 4-20, H / 4-30))
+        self.data_frame_image = pygame.image.load('UI/info_box.png')
+        self.data_frame_image = pygame.transform.scale(self.data_frame_image, (W / 4-10, H / 4-30))
         #self.data_frame_image=pygame.transform.rotate(self.data_frame_image,180)
         self.data_frame_image=pygame.transform.flip(self.data_frame_image,False,True)
         self.name_fame_image=pygame.image.load('UI/button_clear.png')
@@ -545,10 +545,10 @@ class LevelEditor(Screen):
             # rect = pygame.Rect(x, y, width, height)
             # pygame.draw.rect(display, bg_color, rect)
 
-            display.blit(self.data_frame_image, (W / 2 +70,530-H/4+30))
+            display.blit(self.data_frame_image, (W / 2 +63,530-H/4+30))
 
-            drawText(display,"2 Players Should",W/2+70+W/8-5,530-H/4+30+30,size=12,color=BLACK)
-            drawText(display,"Be Placed",W/2+70+W/8-5,530-H/4+30+30+20,size=12,color=BLACK)
+            drawText(display,"2 Players Should",W/2+70+W/8-5,530-H/4+30+30,size=11,color=BLACK)
+            drawText(display,"Be Placed",W/2+70+W/8-5,530-H/4+30+30+20,size=11,color=BLACK)
 
             # font = pygame.font.SysFont(None, font_size)
             # text_surface = font.render("2 Players Should Be Placed", True, text_color)

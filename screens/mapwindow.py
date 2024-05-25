@@ -64,7 +64,7 @@ class MapWindow(Screen):
 		self.map_frame_image = pygame.image.load('UI/map_frame.png')
 		self.map_frame_image = pygame.transform.scale(self.map_frame_image, (700, 400))
 		self.data_frame_image =pygame.image.load('UI/map_frame.png')
-		self.data_frame_image=pygame.transform.scale(self.data_frame_image,(W / 3+100, (H / 2)+100))
+		self.data_frame_image=pygame.transform.scale(self.data_frame_image,(W / 3+200, (H / 2)+100))
 		self.btnBack = Button(
 			30, 30, 30, 30, text="Back",
 			callBack=lambda: (self.go_back())
@@ -76,12 +76,12 @@ class MapWindow(Screen):
 		)
 
 		self.forwardStart=Button(
-			W/2 + 20, 450, 30, 30,color=BLACK,textColor=BLACK,
+			W/2 + 20, 450, 20, 20,color=BLACK,textColor=BLACK,
 			callBack=lambda : self.increasePage(), img='UI/right_arrow.png'
 		)
 
 		self.backwardStart=Button(
-			W/2 - 20 , 450, 30, 30,color=BLACK,textColor=BLACK,
+			W/2 - 20 , 450, 20, 20,color=BLACK,textColor=BLACK,
 			callBack=lambda : self.decreasePage(), img='UI/left_arrow.png'
 		)
 
@@ -378,7 +378,7 @@ class MapWindow(Screen):
 		else:
 			#pygame.draw.rect(self.dataSurface, (238, 238, 238, 240), self.dataSurface.get_rect())
 			#display.blit(self.dataSurface, (W/2-W/6, 130))
-			display.blit(self.data_frame_image,(W/2-W/6- 50, 100))
+			display.blit(self.data_frame_image,(W/2-W/6- 99, 100))
 
 			display.blit(self.pl1Image, (W/2-W/12-50, 140))
 			display.blit(self.pl2Image, (W/2+W/12, 140))
